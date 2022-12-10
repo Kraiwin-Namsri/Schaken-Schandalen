@@ -15,16 +15,6 @@ public class Pieces : MonoBehaviour
     {
         
     }
-
-    static int _NONE = 0;
-    static int _KING = 1;
-    static int _QUEEN = 2;
-    static int _ROOK = 3;
-    static int _BISCHOP = 4;
-    static int _KNIGHT = 5;
-    static int _PAWN = 6;
-    static int _WHITE = 8;
-    static int _BLACK = 16;
     static List<Pieces> instances = new List<Pieces>();
 
     static bool IsWhite()
@@ -32,22 +22,12 @@ public class Pieces : MonoBehaviour
         return true;
     }
 
-    public Position position;
-    public int pieceValue;
+    public Vector2 position;
+    public GameObject gameObject;
 
     public Pieces()
     {
         instances.Add(this);
-    }
-    public struct Position
-    {
-        int x;
-        int y;
-        public Position(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
     }
 
 
@@ -56,84 +36,84 @@ public class Pieces : MonoBehaviour
     {
         public White_King()
         {
-            this.pieceValue = _WHITE + _KING;
+            gameObject = GameObject.Instantiate(GameManager.instance.WHITEKING);
         }
     }
     public class White_Queen : Pieces
     {
         public White_Queen()
         {
-            this.pieceValue = _WHITE + _QUEEN;
+            gameObject = GameObject.Instantiate(GameManager.instance.WHITEQUEEN);
         }
     }
     public class White_Rook : Pieces
     {
         public White_Rook()
         {
-            this.pieceValue = _WHITE + _ROOK;
+            gameObject = GameObject.Instantiate(GameManager.instance.WHITEROOK);
         }
     }
     public class White_Bischop : Pieces
     {
         public White_Bischop()
         {
-            this.pieceValue = _WHITE + _BISCHOP;
+            gameObject = GameObject.Instantiate(GameManager.instance.WHITEBISCHOP);
         }
     }
     public class White_Knight : Pieces
     {
         public White_Knight()
         {
-            this.pieceValue = _WHITE + _KNIGHT;
+            gameObject = GameObject.Instantiate(GameManager.instance.WHITEKNIGHT);
         }
     }
     public class White_Pawn : Pieces
     {
         public White_Pawn()
         {
-            this.pieceValue = _WHITE + _PAWN;
+            gameObject = GameObject.Instantiate(GameManager.instance.WHITEPAWN);
         }
     }
     public class Black_King : Pieces
     {
         public Black_King()
         {
-            this.pieceValue = _BLACK + _KING;
+            gameObject = GameObject.Instantiate(GameManager.instance.BLACKKING);
         }
     }
     public class Black_Queen : Pieces
     {
         public Black_Queen()
         {
-            this.pieceValue = _BLACK + _QUEEN;
+            gameObject = GameObject.Instantiate(GameManager.instance.BLACKQUEEN);
         }
     }
     public class Black_Rook : Pieces
     {
         public Black_Rook()
         {
-            this.pieceValue = _BLACK + _ROOK;
+            gameObject = GameObject.Instantiate(GameManager.instance.BLACKROOK);
         }
     }
     public class Black_Bischop : Pieces
     {
         public Black_Bischop()
         {
-            this.pieceValue = _BLACK + _BISCHOP;
+            gameObject = GameObject.Instantiate(GameManager.instance.BLACKBISCHOP);
         }
     }
     public class Black_Knight : Pieces
     {
         public Black_Knight()
         {
-            this.pieceValue = _BLACK + _KNIGHT;
+            gameObject = GameObject.Instantiate(GameManager.instance.BLACKKNIGHT);
         }
     }
     public class Black_Pawn : Pieces
     {
         public Black_Pawn()
         {
-            this.pieceValue = _BLACK + _PAWN;
+            gameObject = GameObject.Instantiate(GameManager.instance.BLACKPAWN);
         }
     }
 }
