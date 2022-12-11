@@ -28,13 +28,19 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Board.CreateBoard();
+        Board myBoard = new Board();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void GetChessBoardOrigin()
+    {
+        Vector3 boardOrigin;
+        boardOrigin = new Vector3(chessBoard.transform.position.x - 0.21f, 0, chessBoard.transform.position.y + 0.21f);
     }
     public Vector3 InternToExtern(Vector2 coordinate)
     {
