@@ -46,8 +46,16 @@ public class GameManager : MonoBehaviour
         {
             for (int x = 0; x < 8; x++)
             {
-                Vector3 position = new Vector3 (board.externBoard.boardOrigin.x - 0.06f * x, board.externBoard.boardOrigin.y, board.externBoard.boardOrigin.z + 0.06f * y);
-                board.internBoard.board[x, y].externPiece.pieceGameObject.transform.position = position;
+                if (board.internBoard.board[x, y].GetType() == typeof(Pieces.Black_Pawn) || board.internBoard.board[x,y].GetType() == typeof(Pieces.White_Pawn))
+                {
+                    Vector3 position = new Vector3(board.externBoard.boardOrigin.x - 0.06f * x, board.externBoard.boardOrigin.y + 0.01f, board.externBoard.boardOrigin.z + 0.06f * y);
+                    board.internBoard.board[x, y].externPiece.pieceGameObject.transform.position = position;
+                }
+                else
+                {
+                    Vector3 position = new Vector3(board.externBoard.boardOrigin.x - 0.06f * x, board.externBoard.boardOrigin.y, board.externBoard.boardOrigin.z + 0.06f * y);
+                    board.internBoard.board[x, y].externPiece.pieceGameObject.transform.position = position;
+                }
             }
         }
     }
