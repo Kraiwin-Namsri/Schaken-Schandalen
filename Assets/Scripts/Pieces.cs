@@ -1,119 +1,149 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
-public class Pieces : MonoBehaviour
+public class Pieces
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     static List<Pieces> instances = new List<Pieces>();
-
-    static bool IsWhite()
-    {
-        return true;
-    }
-
-    public Vector2 position;
-    public GameObject gameObject;
+    public Pieces.Intern internPiece;
+    public Pieces.Extern externPiece;
+    public GameObject prefabPiece;
 
     public Pieces()
     {
         instances.Add(this);
     }
-
-
-    //Classes for instantiating pieces.
+    public void CreateExtern(GameObject parent)
+    {
+        this.externPiece = new Pieces.Extern(this, parent);
+    }
+    public class None : Pieces
+    {
+        public None()
+        {
+            internPiece = new Pieces.Intern();
+            prefabPiece = null;
+        }
+    }
     public class White_King : Pieces
     {
         public White_King()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.WHITEKING);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.WHITEKING;
         }
     }
     public class White_Queen : Pieces
     {
         public White_Queen()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.WHITEQUEEN);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.WHITEQUEEN;
         }
     }
     public class White_Rook : Pieces
     {
         public White_Rook()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.WHITEROOK);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.WHITEROOK;
         }
     }
     public class White_Bischop : Pieces
     {
         public White_Bischop()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.WHITEBISCHOP);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.WHITEBISCHOP;
         }
     }
     public class White_Knight : Pieces
     {
         public White_Knight()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.WHITEKNIGHT);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.WHITEKNIGHT;
         }
     }
     public class White_Pawn : Pieces
     {
         public White_Pawn()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.WHITEPAWN);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.WHITEPAWN;
         }
     }
     public class Black_King : Pieces
     {
         public Black_King()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.BLACKKING);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.BLACKKING;
         }
     }
     public class Black_Queen : Pieces
     {
         public Black_Queen()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.BLACKQUEEN);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.BLACKQUEEN;
         }
     }
     public class Black_Rook : Pieces
     {
         public Black_Rook()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.BLACKROOK);
+            //internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.BLACKROOK;
         }
     }
     public class Black_Bischop : Pieces
     {
         public Black_Bischop()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.BLACKBISCHOP);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.BLACKBISCHOP;
         }
     }
     public class Black_Knight : Pieces
     {
         public Black_Knight()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.BLACKKNIGHT);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.BLACKKNIGHT;
         }
     }
     public class Black_Pawn : Pieces
     {
         public Black_Pawn()
         {
-            gameObject = GameObject.Instantiate(GameManager.instance.BLACKPAWN);
+            internPiece = new Pieces.Intern();
+            prefabPiece = GameManager.instance.BLACKPAWN;
+        }
+    }
+    public class Intern
+    {
+        Vector2Int position;
+        public Intern()
+        {
+            
+        }
+    }
+    public class Extern
+    {
+        public GameObject pieceGameObject;
+        public Extern(Pieces piece, GameObject parent)
+        {
+            if (piece.prefabPiece != null)
+            {
+                pieceGameObject = MonoBehaviour.Instantiate(piece.prefabPiece, parent.transform);
+                pieceGameObject.SetActive(true);
+            } else
+            {
+                pieceGameObject = GameManager.instance.NONE;
+            }
         }
     }
 }

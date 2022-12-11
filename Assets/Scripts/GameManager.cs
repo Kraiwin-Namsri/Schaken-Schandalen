@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject chessBoard;
+    public GameObject CHESSBOARD;
+
+    public GameObject NONE;
 
     public GameObject WHITEKING;
     public GameObject WHITEQUEEN;
@@ -28,7 +31,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Board myBoard = new Board();
+        Board board = new Board();
+        UpdateExtern(board); 
     }
 
     // Update is called once per frame
@@ -36,18 +40,19 @@ public class GameManager : MonoBehaviour
     {
         
     }
-
-    public void GetChessBoardOrigin()
+    public void UpdateExtern(Board board)
     {
-        Vector3 boardOrigin;
-        boardOrigin = new Vector3(chessBoard.transform.position.x - 0.21f, 0, chessBoard.transform.position.y + 0.21f);
+        for(int y = 0; y < 8; y++)
+        {
+            for (int x = 0; x < 8; x++)
+            {
+                Vector3 position = new Vector3 (board.externBoard.boardOrigin.x - 0.06f * x, board.externBoard.boardOrigin.y, board.externBoard.boardOrigin.z + 0.06f * y);
+                board.internBoard.board[x, y].externPiece.pieceGameObject.transform.position = position;
+            }
+        }
     }
-    public Vector3 InternToExtern(Vector2 coordinate)
+    public void UpdateIntern(Board board)
     {
-        return coordinate.normalized;
-    }
-    public Vector2 ExternToIntern(Vector3 coordinate)
-    {
-        return coordinate;
+ 
     }
 }

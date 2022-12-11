@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chess Queen White
       objectReference: {fileID: 0}
+    - target: {fileID: 1000011613667446, guid: c9476b5c23fb4634485fcb52734c04d5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4000010991507056, guid: c9476b5c23fb4634485fcb52734c04d5, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -207,6 +211,10 @@ PrefabInstance:
     - target: {fileID: 1000011492277074, guid: 99331e88befbef94bbad253e659776ba, type: 3}
       propertyPath: m_Name
       value: Chess Queen Black
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000011492277074, guid: 99331e88befbef94bbad253e659776ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000011137980350, guid: 99331e88befbef94bbad253e659776ba, type: 3}
       propertyPath: m_RootOrder
@@ -366,6 +374,20 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnMovement: 2
   useLocalSpaceForConstraint: 0
+--- !u!114 &84868861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84868852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1001 &252402714
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -376,6 +398,10 @@ PrefabInstance:
     - target: {fileID: 1000014234871720, guid: cb0afc2bcef746940a57b9fff95cf079, type: 3}
       propertyPath: m_Name
       value: Chess Knight White
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000014234871720, guid: cb0afc2bcef746940a57b9fff95cf079, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000012074148752, guid: cb0afc2bcef746940a57b9fff95cf079, type: 3}
       propertyPath: m_RootOrder
@@ -548,6 +574,20 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnMovement: 2
   useLocalSpaceForConstraint: 0
+--- !u!114 &358147123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358147113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1001 &365649746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -558,6 +598,10 @@ PrefabInstance:
     - target: {fileID: 1000014291839912, guid: e2e9e589ac51bdb48bcae102d4799914, type: 3}
       propertyPath: m_Name
       value: Chess Bishop White
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000014291839912, guid: e2e9e589ac51bdb48bcae102d4799914, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000010786065248, guid: e2e9e589ac51bdb48bcae102d4799914, type: 3}
       propertyPath: m_RootOrder
@@ -708,7 +752,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1355362954}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 11.11, y: -171.41, z: 0}
+  m_LocalEulerAnglesHint: {x: 1.949, y: -3.735, z: -1.636}
 --- !u!114 &417673656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -777,6 +821,10 @@ PrefabInstance:
     - target: {fileID: 1000013557280178, guid: d992acfff4e84c44e97513dc227b06b7, type: 3}
       propertyPath: m_Name
       value: Chess King White
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000013557280178, guid: d992acfff4e84c44e97513dc227b06b7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000011301568552, guid: d992acfff4e84c44e97513dc227b06b7, type: 3}
       propertyPath: m_RootOrder
@@ -851,6 +899,10 @@ PrefabInstance:
     - target: {fileID: 1000012089885188, guid: 6771efaae8343104b88ef1dd839fd639, type: 3}
       propertyPath: m_Name
       value: Chess Rook White
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012089885188, guid: 6771efaae8343104b88ef1dd839fd639, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000013312474350, guid: 6771efaae8343104b88ef1dd839fd639, type: 3}
       propertyPath: m_RootOrder
@@ -1142,6 +1194,20 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnMovement: 2
   useLocalSpaceForConstraint: 0
+--- !u!114 &662570392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662570382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &675274893
 GameObject:
   m_ObjectHideFlags: 0
@@ -1171,7 +1237,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4d6241692a35cb48ba211da8120c41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chessBoard: {fileID: 1609970011}
+  CHESSBOARD: {fileID: 1232541252}
+  NONE: {fileID: 1903932940}
   WHITEKING: {fileID: 584187448}
   WHITEQUEEN: {fileID: 1895441826}
   WHITEROOK: {fileID: 662570382}
@@ -1239,6 +1306,7 @@ Transform:
   - {fileID: 778483407}
   - {fileID: 1658694321}
   - {fileID: 1421283048}
+  - {fileID: 1903932941}
   m_Father: {fileID: 1305341713}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1346,6 +1414,10 @@ PrefabInstance:
     - target: {fileID: 1000012633253314, guid: 8c44c8a6238ea0148bc07d2371dedc74, type: 3}
       propertyPath: m_Name
       value: Chess Bishop Black
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012633253314, guid: 8c44c8a6238ea0148bc07d2371dedc74, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000013856553714, guid: 8c44c8a6238ea0148bc07d2371dedc74, type: 3}
       propertyPath: m_RootOrder
@@ -1606,6 +1678,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chess Rook Black
       objectReference: {fileID: 0}
+    - target: {fileID: 1000013351177638, guid: 411f5295934dd1c4eb5916e3c649f0a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4000012489383122, guid: 411f5295934dd1c4eb5916e3c649f0a7, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -1725,6 +1801,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chess Pawn White
       objectReference: {fileID: 0}
+    - target: {fileID: 1000013277376148, guid: 3605a6e4fde7d594aa08481185959edb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4000012297859478, guid: 3605a6e4fde7d594aa08481185959edb, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -1747,11 +1827,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000012297859478, guid: 3605a6e4fde7d594aa08481185959edb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.15000002
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 4000012297859478, guid: 3605a6e4fde7d594aa08481185959edb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.0089
       objectReference: {fileID: 0}
     - target: {fileID: 4000012297859478, guid: 3605a6e4fde7d594aa08481185959edb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1891,6 +1971,25 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnMovement: 2
   useLocalSpaceForConstraint: 0
+--- !u!114 &1194959468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627984292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
+--- !u!1 &1232541252 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1000011581524622, guid: 857381d11efac0a4d91a3b3b8b94a827, type: 3}
+  m_PrefabInstance: {fileID: 1305341712}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1305341712
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1901,6 +2000,10 @@ PrefabInstance:
     - target: {fileID: 1000011581524622, guid: 857381d11efac0a4d91a3b3b8b94a827, type: 3}
       propertyPath: m_Name
       value: Chess Board
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000011581524622, guid: 857381d11efac0a4d91a3b3b8b94a827, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000012986792146, guid: 857381d11efac0a4d91a3b3b8b94a827, type: 3}
       propertyPath: m_RootOrder
@@ -1965,6 +2068,105 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000012986792146, guid: 857381d11efac0a4d91a3b3b8b94a827, type: 3}
   m_PrefabInstance: {fileID: 1305341712}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1305341714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232541252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff5df7a2c3b5b4843bdc23997f95edc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
+  executionOrder: 0
+--- !u!114 &1305341715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232541252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
+--- !u!114 &1305341716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232541252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 181cd563a8349c34ea8978b0bc8d9c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hostTransform: {fileID: 1305341713}
+  manipulationType: 3
+  twoHandedManipulationType: 7
+  allowFarManipulation: 1
+  useForcesForNearManipulation: 0
+  oneHandRotationModeNear: 1
+  oneHandRotationModeFar: 1
+  releaseBehavior: 3
+  transformSmoothingLogicType:
+    reference: Microsoft.MixedReality.Toolkit.Utilities.DefaultTransformSmoothingLogic,
+      Microsoft.MixedReality.Toolkit.SDK
+  smoothingFar: 1
+  smoothingNear: 1
+  moveLerpTime: 0.001
+  rotateLerpTime: 0.001
+  scaleLerpTime: 0.001
+  enableConstraints: 1
+  constraintsManager: {fileID: 1305341717}
+  elasticsManager: {fileID: 0}
+  onManipulationStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onManipulationEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1305341717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232541252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a98de877dee5fc341b4eb59dfdab266c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoConstraintSelection: 1
+  selectedConstraints: []
+--- !u!65 &1305341718
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232541252}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6816321, y: 0.68401784, z: 0.041426096}
+  m_Center: {x: -0.015492171, y: 0.014493808, z: -0.059999995}
 --- !u!1 &1355362953
 GameObject:
   m_ObjectHideFlags: 0
@@ -2012,6 +2214,10 @@ PrefabInstance:
     - target: {fileID: 1000014207659374, guid: 61ed95d5d9afc0842b0c4d0c96678d38, type: 3}
       propertyPath: m_Name
       value: Chess Pawn Black
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000014207659374, guid: 61ed95d5d9afc0842b0c4d0c96678d38, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000010292491684, guid: 61ed95d5d9afc0842b0c4d0c96678d38, type: 3}
       propertyPath: m_RootOrder
@@ -2086,6 +2292,10 @@ PrefabInstance:
     - target: {fileID: 1000013427829390, guid: 1700328aaf96fd243a71d862897619a4, type: 3}
       propertyPath: m_Name
       value: Chess King Black
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000013427829390, guid: 1700328aaf96fd243a71d862897619a4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000011383913036, guid: 1700328aaf96fd243a71d862897619a4, type: 3}
       propertyPath: m_RootOrder
@@ -2240,6 +2450,20 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnMovement: 2
   useLocalSpaceForConstraint: 0
+--- !u!114 &1435202784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392672249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1480915988 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000014207659374, guid: 61ed95d5d9afc0842b0c4d0c96678d38, type: 3}
@@ -2335,15 +2559,24 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnMovement: 2
   useLocalSpaceForConstraint: 0
+--- !u!114 &1480915997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1480915988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1498538341 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000010201698906, guid: edd10668f6a183d4180f8dc7b94f9e5c, type: 3}
   m_PrefabInstance: {fileID: 1658694320}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1609970011 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1000011581524622, guid: 857381d11efac0a4d91a3b3b8b94a827, type: 3}
-  m_PrefabInstance: {fileID: 1305341712}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1640642961 stripped
 GameObject:
@@ -2440,6 +2673,20 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnMovement: 2
   useLocalSpaceForConstraint: 0
+--- !u!114 &1640642970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640642961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1001 &1658694320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2450,6 +2697,10 @@ PrefabInstance:
     - target: {fileID: 1000010201698906, guid: edd10668f6a183d4180f8dc7b94f9e5c, type: 3}
       propertyPath: m_Name
       value: Chess Knight Black
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000010201698906, guid: edd10668f6a183d4180f8dc7b94f9e5c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000012325096086, guid: edd10668f6a183d4180f8dc7b94f9e5c, type: 3}
       propertyPath: m_RootOrder
@@ -2604,6 +2855,20 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnMovement: 2
   useLocalSpaceForConstraint: 0
+--- !u!114 &1658694330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1498538341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1733513512 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000014291839912, guid: e2e9e589ac51bdb48bcae102d4799914, type: 3}
@@ -2712,6 +2977,20 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnMovement: 2
   useLocalSpaceForConstraint: 0
+--- !u!114 &1733513522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1733513512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afd5316c63705643b3daba5a6e923bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTetherWhenManipulating: 0
+  IsBoundsHandles: 0
 --- !u!1 &1895441826 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000011613667446, guid: c9476b5c23fb4634485fcb52734c04d5, type: 3}
@@ -2834,3 +3113,34 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnMovement: 2
   useLocalSpaceForConstraint: 0
+--- !u!1 &1903932940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1903932941}
+  m_Layer: 0
+  m_Name: None
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1903932941
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903932940}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 713869867}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
