@@ -95,7 +95,7 @@ public class Pieces
     {
         public Black_Rook()
         {
-            //internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern();
             prefabPiece = GameManager.instance.BLACKROOK;
         }
     }
