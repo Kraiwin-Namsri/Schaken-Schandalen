@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class Pieces
 {
-    public Dictionary<Pieces.Intern, Pieces.Extern> lookupTableInternToExtern = new Dictionary<Pieces.Intern, Pieces.Extern>();
-    public Dictionary<Pieces.Extern, Pieces.Intern> lookupTableExternToIntern = new Dictionary<Pieces.Extern, Pieces.Intern>();
+    public static Dictionary<Pieces.Intern, Pieces.Extern> lookupTableInternToExtern = new Dictionary<Pieces.Intern, Pieces.Extern>();
+    public static Dictionary<Pieces.Extern, Pieces.Intern> lookupTableExternToIntern = new Dictionary<Pieces.Extern, Pieces.Intern>();
     static List<Pieces> instances = new List<Pieces>();
     public Pieces.Intern internPiece;
     public Pieces.Extern externPiece;
