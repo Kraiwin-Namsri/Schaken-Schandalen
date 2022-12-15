@@ -16,12 +16,12 @@ public class Pieces
     public Pieces()
     {
         instances.Add(this);
-        lookupTableInternToExtern.Add(this.internPiece, this.externPiece);
-        lookupTableExternToIntern.Add(this.externPiece, this.internPiece);
     }
     public void CreateExtern(GameObject parent)
     {
         this.externPiece = new Pieces.Extern(this, parent);
+        lookupTableInternToExtern.Add(this.internPiece, this.externPiece);
+        lookupTableExternToIntern.Add(this.externPiece, this.internPiece);
     }
     public class None : Pieces
     {

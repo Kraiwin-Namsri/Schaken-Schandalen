@@ -372,7 +372,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &84868861
 MonoBehaviour:
@@ -515,7 +515,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 358147117}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -587,7 +587,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &358147123
 MonoBehaviour:
@@ -1031,7 +1031,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 584187452}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -1104,7 +1104,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &584187458
 MonoBehaviour:
@@ -1165,7 +1165,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 662570386}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -1237,7 +1237,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &662570392
 MonoBehaviour:
@@ -1588,7 +1588,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 778483410}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -1630,7 +1630,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &778483416
 MonoBehaviour:
@@ -1937,7 +1937,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 1194959462}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -2009,7 +2009,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &1194959468
 MonoBehaviour:
@@ -2220,8 +2220,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.6816321, y: 0.68401784, z: 0.041426096}
-  m_Center: {x: -0.015492171, y: 0.014493808, z: -0.059999995}
+  m_Size: {x: 0.6816321, y: 0.68401784, z: 0.075620756}
+  m_Center: {x: -0.015492171, y: 0.014493823, z: 1}
 --- !u!1 &1355362953
 GameObject:
   m_ObjectHideFlags: 0
@@ -2444,7 +2444,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 1435202779}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -2503,7 +2503,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &1435202784
 MonoBehaviour:
@@ -2568,7 +2568,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 1480915992}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -2627,7 +2627,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &1480915997
 MonoBehaviour:
@@ -2697,7 +2697,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 1640642965}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -2756,7 +2756,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &1640642970
 MonoBehaviour:
@@ -2894,7 +2894,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 1658694325}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -2953,7 +2953,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &1658694330
 MonoBehaviour:
@@ -3018,7 +3018,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 1733513516}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -3090,7 +3090,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &1733513522
 MonoBehaviour:
@@ -3155,7 +3155,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 1895441830}
+  constraintsManager: {fileID: 84868856}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -3241,7 +3241,7 @@ MonoBehaviour:
   handType: 3
   proximityType: 3
   executionOrder: 0
-  constraintOnMovement: 2
+  constraintOnMovement: 0
   useLocalSpaceForConstraint: 0
 --- !u!114 &1895441837
 MonoBehaviour:
