@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Pieces
 {
+    public Dictionary<Pieces.Intern, Pieces.Extern> lookupTableInternToExtern = new Dictionary<Pieces.Intern, Pieces.Extern>();
+    public Dictionary<Pieces.Extern, Pieces.Intern> lookupTableExternToIntern = new Dictionary<Pieces.Extern, Pieces.Intern>();
     static List<Pieces> instances = new List<Pieces>();
     public Pieces.Intern internPiece;
     public Pieces.Extern externPiece;
@@ -14,6 +16,8 @@ public class Pieces
     public Pieces()
     {
         instances.Add(this);
+        lookupTableInternToExtern.Add(this.internPiece, this.externPiece);
+        lookupTableExternToIntern.Add(this.externPiece, this.internPiece);
     }
     public void CreateExtern(GameObject parent)
     {

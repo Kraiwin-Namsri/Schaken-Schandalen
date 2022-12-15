@@ -197,6 +197,10 @@ public class Board
                     {
                         switch (letter)
                         {
+                            case '-':
+                                board.enPassant.column = -1;
+                                enPassantDone = true;
+                                break;
                             case 'a':
                                 board.enPassant.column = 0;
                                 break;
@@ -231,15 +235,13 @@ public class Board
                                 enPassantDone = true;
                                 break;
                             default:
-                                Debug.LogError("Fen String is malformed!");
+                                Debug.LogError($"Fen String is malformed! {letter}");
                                 break;
                         }
                     } else if (!halfCounterDone)
                     {
                         if (int.TryParse(letter.ToString(), out board.halfMoveCounter))
                             halfCounterDone = true;
-                        else
-                            Debug.LogError("Fen String is malformed!");
 
                     } else if (!fullCounterDone)
                     {
