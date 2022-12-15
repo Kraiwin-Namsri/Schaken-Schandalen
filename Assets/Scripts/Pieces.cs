@@ -6,22 +6,21 @@ using UnityEngine;
 
 public class Pieces
 {
-    public static Dictionary<Pieces.Intern, Pieces.Extern> lookupTableInternToExtern = new Dictionary<Pieces.Intern, Pieces.Extern>();
-    public static Dictionary<Pieces.Extern, Pieces.Intern> lookupTableExternToIntern = new Dictionary<Pieces.Extern, Pieces.Intern>();
     static List<Pieces> instances = new List<Pieces>();
+
+    public Pieces pieceObject;
     public Pieces.Intern internPiece;
     public Pieces.Extern externPiece;
     public GameObject prefabPiece;
 
     public Pieces()
     {
+        pieceObject = this;
         instances.Add(this);
     }
     public void CreateExtern(GameObject parent)
     {
         this.externPiece = new Pieces.Extern(this, parent);
-        lookupTableInternToExtern.Add(this.internPiece, this.externPiece);
-        lookupTableExternToIntern.Add(this.externPiece, this.internPiece);
     }
     public class None : Pieces
     {
