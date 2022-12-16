@@ -309,8 +309,6 @@ public class Board
                     internBoard.board[x, y].CreateExtern(this.board);
                 }
             }
-            boardScale = new Vector3(this.board.transform.localScale.x, this.board.transform.localScale.y, this.board.transform.localScale.z);
-            boardOrigin = new Vector3(this.board.transform.position.x + 3.5f * 0.06f * this.board.transform.localScale.x, this.board.transform.position.z, this.board.transform.position.y - 3.5f * 0.06f * this.board.transform.localScale.y);
         }
     }
 }
