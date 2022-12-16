@@ -32,7 +32,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Board board = new Board();
-        UpdateExtern(board); 
+        UpdateExtern(board);
+        Move.Legal.Generate(board.internBoard);
+        Debug.Log(board.internBoard.board[1,0].internPiece.legalMoves.Count);
     }
 
     // Update is called once per frame

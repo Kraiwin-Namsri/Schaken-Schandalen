@@ -59,51 +59,62 @@ public class Board
                         {
                             case 'K':
                                 board.board[x, y] = new Pieces.White_King();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'Q':
                                 board.board[x, y] = new Pieces.White_Queen();
-
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'R':
                                 board.board[x, y] = new Pieces.White_Rook();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'B':   
                                 board.board[x, y] = new Pieces.White_Bischop();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'N':
                                 board.board[x, y] = new Pieces.White_Knight();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'P':
                                 board.board[x, y] = new Pieces.White_Pawn();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'k':
                                 board.board[x, y] = new Pieces.Black_King();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'q':
                                 board.board[x, y] = new Pieces.Black_Queen();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'r':
                                 board.board[x, y] = new Pieces.Black_Rook();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'b':
                                 board.board[x, y] = new Pieces.Black_Bischop();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'n':
                                 board.board[x, y] = new Pieces.Black_Knight();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'p':
                                 board.board[x, y] = new Pieces.Black_Pawn();
+                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case '1':

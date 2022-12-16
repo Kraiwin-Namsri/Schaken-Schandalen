@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -35,6 +36,18 @@ public class Pieces
         public White_King()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = true;
+
+            internPiece.isSlidingPiece = false;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 0));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 0));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 1));
+
             prefabPiece = GameManager.instance.WHITEKING;
         }
     }
@@ -43,6 +56,19 @@ public class Pieces
         public White_Queen()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = true;
+
+
+            internPiece.isSlidingPiece = true;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 0));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 0));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 1));
+
             prefabPiece = GameManager.instance.WHITEQUEEN;
         }
     }
@@ -51,6 +77,15 @@ public class Pieces
         public White_Rook()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = true;
+
+
+            internPiece.isSlidingPiece = true;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 0));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 0));
+
             prefabPiece = GameManager.instance.WHITEROOK;
         }
     }
@@ -59,6 +94,15 @@ public class Pieces
         public White_Bischop()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = true;
+
+
+            internPiece.isSlidingPiece = true;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 1));
+
             prefabPiece = GameManager.instance.WHITEBISCHOP;
         }
     }
@@ -67,6 +111,19 @@ public class Pieces
         public White_Knight()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = true;
+
+
+            internPiece.isSlidingPiece = false;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 2));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(2, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(2, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, -2));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, -2));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-2, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-2, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 2));
+
             prefabPiece = GameManager.instance.WHITEKNIGHT;
         }
     }
@@ -75,6 +132,12 @@ public class Pieces
         public White_Pawn()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = true;
+
+
+            internPiece.isSlidingPiece = false;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, -1));
+
             prefabPiece = GameManager.instance.WHITEPAWN;
         }
     }
@@ -83,6 +146,19 @@ public class Pieces
         public Black_King()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = false;
+
+
+            internPiece.isSlidingPiece = false;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 0));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 0));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 1));
+
             prefabPiece = GameManager.instance.BLACKKING;
         }
     }
@@ -91,6 +167,18 @@ public class Pieces
         public Black_Queen()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = false;
+
+            internPiece.isSlidingPiece = true;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 0));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 0));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 1));
+
             prefabPiece = GameManager.instance.BLACKQUEEN;
         }
     }
@@ -99,6 +187,14 @@ public class Pieces
         public Black_Rook()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = false;
+
+            internPiece.isSlidingPiece = true;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 0));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 0));
+
             prefabPiece = GameManager.instance.BLACKROOK;
         }
     }
@@ -107,6 +203,14 @@ public class Pieces
         public Black_Bischop()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = false;
+
+            internPiece.isSlidingPiece = true;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 1));
+
             prefabPiece = GameManager.instance.BLACKBISCHOP;
         }
     }
@@ -115,6 +219,18 @@ public class Pieces
         public Black_Knight()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = false;
+
+            internPiece.isSlidingPiece = false;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, 2));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(2, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(2, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(1, -2));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, -2));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-2, -1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-2, 1));
+            internPiece.moveOffsets.Add(new Tuple<int, int>(-1, 2));
+
             prefabPiece = GameManager.instance.BLACKKNIGHT;
         }
     }
@@ -123,12 +239,23 @@ public class Pieces
         public Black_Pawn()
         {
             internPiece = new Pieces.Intern();
+            internPiece.isWhite = false;
+
+            internPiece.isSlidingPiece = false;
+            internPiece.moveOffsets.Add(new Tuple<int, int>(0,1));
+
             prefabPiece = GameManager.instance.BLACKPAWN;
         }
     }
     public class Intern
     {
-        Vector2Int position;
+        public bool isWhite;
+        public Vector2Int position;
+
+        public bool isSlidingPiece;
+        public List<Tuple<int, int>> moveOffsets = new List<Tuple<int, int>>();
+
+        public List<Move> legalMoves;
         public Intern()
         {
             
