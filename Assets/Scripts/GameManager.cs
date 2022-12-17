@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.XR.OpenXR.Input;
@@ -41,7 +42,6 @@ public class GameManager : MonoBehaviour
         Board board = new Board();
         GameManager.board = board;
         GameManager.UpdateExtern(board);
-        Move.Legal.Generate(board.internBoard);
     }
 
     // Update is called once per frame
@@ -89,9 +89,30 @@ public class GameManager : MonoBehaviour
         return externDestination;
     }
 
+    static List<GameObject> visualizeGameobject = new List<GameObject>();
+    static void VisualizeLegalMoves(Pieces piece)
+    {
+        foreach (GameObject go in visualizeGameobject)
+        {
+            Destroy(go);
+        }
+        visualizeGameobject.Clear();
+
+        Move.Legal.Generate(board.internBoard);
+        foreach (Move legalMove in piece.internPiece.legalMoves)
+        {
+            Vector3 destination = ConvertInternToExternPosition(legalMove.endPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+            GameObject marker = Instantiate(GameManager.instance.BLACKPAWN, board.externBoard.playSurface.transform);
+            marker.SetActive(true);
+            visualizeGameobject.Add(marker);
+            marker.transform.localPosition = destination;
+        }
+    }
+
     public static void OnGrab(GameObject gameobject)
     {
-
+        Pieces grabedPiece = Pieces.lookupTable[gameobject];
+        VisualizeLegalMoves(grabedPiece);
     }
     public static void OnRelease(GameObject gameobject)
     {

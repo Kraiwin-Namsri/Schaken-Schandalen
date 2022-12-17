@@ -25,6 +25,7 @@ public class Board
         public EnPassant enPassant;
         public int halfMoveCounter;
         public int fullMoveCounter;
+
         public List<Move> moves = new List<Move>();
         
         public Intern(Board board)
