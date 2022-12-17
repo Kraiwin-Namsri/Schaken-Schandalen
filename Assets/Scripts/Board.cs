@@ -10,12 +10,12 @@ using UnityEngine.UIElements;
 
 public class Board
 {
-    public Board.Intern internBoard;
-    public Board.Extern externBoard;
+    public Intern internBoard;
+    public Extern externBoard;
     public Board()
     {
-        internBoard = new Board.Intern(this);
-        externBoard = new Board.Extern(this);
+        internBoard = new Intern(this);
+        externBoard = new Extern(this);
     }
     public class Intern
     {
@@ -41,7 +41,7 @@ public class Board
                 move.isCapture = (board[move.startPosition.x, move.startPosition.y].internPiece.isWhite != board[move.endPosition.x, move.endPosition.y].internPiece.isWhite);
             ExecuteMoves();
         }
-        void ExecuteMoves()
+        public void ExecuteMoves()
         {
             foreach (Move move in moves)
             {
@@ -71,7 +71,6 @@ public class Board
                 }
             }
             moves.Clear();
-            GameManager.instance.UpdateExtern(GameManager.board);
         }
 
         public static class Fen
@@ -338,6 +337,8 @@ public class Board
     public class Extern
     {
         public GameObject board;
+        public GameObject playSurface;
+
         public Vector3 boardOrigin;
         public Vector3 boardScale;
         
@@ -345,6 +346,7 @@ public class Board
         {
             this.board = MonoBehaviour.Instantiate(GameManager.instance.CHESSBOARD);
             this.board.SetActive(true);
+            this.playSurface = this.board.transform.GetChild(0).gameObject;
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)

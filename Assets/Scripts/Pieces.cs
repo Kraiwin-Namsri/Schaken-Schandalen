@@ -7,19 +7,17 @@ using UnityEngine;
 
 public class Pieces
 {
-    static List<Pieces> instances = new List<Pieces>();
     public static Dictionary<GameObject, Pieces> lookupTable = new Dictionary<GameObject, Pieces>();
 
     public Board board;
     public Pieces pieceObject;
     public Pieces.Intern internPiece;
     public Pieces.Extern externPiece;
-    public GameObject prefabPiece;
+    private GameObject prefabPiece;
 
     public Pieces(Board board)
     {
         pieceObject = this;
-        instances.Add(this);
         this.board = board;
     }
     public void CreateExtern(GameObject parent)
@@ -253,13 +251,14 @@ public class Pieces
     }
     public class Intern
     {
-        public bool isWhite;
         public Vector2Int position;
 
+        public bool isWhite;
         public bool isSlidingPiece;
-        public List<Vector2Int> moveOffsets = new List<Vector2Int>();
 
+        public readonly List<Vector2Int> moveOffsets = new List<Vector2Int>();
         public List<Move> legalMoves;
+
         public Intern()
         {
             
@@ -272,6 +271,11 @@ public class Pieces
         {
             pieceGameObject = MonoBehaviour.Instantiate(piece.prefabPiece, parent.transform);
             pieceGameObject.SetActive(true);
+        }
+        public void Move(Vector3 destination)
+        {
+            pieceGameObject.transform.localPosition = destination;
+            pieceGameObject.transform.localRotation = Quaternion.identity;
         }
     }
 }

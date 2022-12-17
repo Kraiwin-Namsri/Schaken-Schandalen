@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     public GameObject BLACKPAWN;
 
     public static GameManager instance;
-    public static Board board;
+    private static Board board;
     GameManager() { 
         instance = this;
     }
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     {
         Board board = new Board();
         GameManager.board = board;
-        UpdateExtern(board);
+        GameManager.UpdateExtern(board);
         Move.Legal.Generate(board.internBoard);
     }
 
@@ -49,62 +49,63 @@ public class GameManager : MonoBehaviour
     {
         
     }
-    public void UpdateExtern(Board board)
+    public static void UpdateExtern(Board board)
     {
         for (int y = 0; y < board.internBoard.board.GetLength(1); y++)
         {
             for (int x = 0; x < board.internBoard.board.GetLength(0); x++)
             {
                 Pieces piece = board.internBoard.board[x, y];
-                MovePiece(piece, new Vector2Int(x, y));
+                UpdateExternPosition(piece, new Vector2Int(x, y));
             }
         }
     }
 
-    public static void MovePiece(Pieces piece, Vector2Int internDestination)
+    private static void UpdateExternPosition(Pieces piece, Vector2Int internDestination)
     {
         if (piece.GetType() == typeof(Pieces.Black_Pawn) || piece.GetType() == typeof(Pieces.White_Pawn))
         {
             //To Do: Update position in intern Piece
-            Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size);
+            Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
             externDestination.z = 0.01f;
-            board.internBoard.board[internDestination.x, internDestination.y].externPiece.pieceGameObject.transform.localPosition = externDestination;
-            board.internBoard.board[internDestination.x, internDestination.y].externPiece.pieceGameObject.transform.localRotation = Quaternion.identity;
+            piece.externPiece.Move(externDestination);
         }
         else
         {
-            Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size);
-            board.internBoard.board[internDestination.x, internDestination.y].externPiece.pieceGameObject.transform.localPosition = externDestination;
+            Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+            piece.externPiece.Move(externDestination);
+
         }
     }
-    
-    public static void OnGrab(GameObject gameobject)
-    {
-        Pieces holdingPiece = Pieces.lookupTable[gameobject];
-    }
-    public static void OnRelease(GameObject gameobject)
-    {
-        Pieces releasedPiece = Pieces.lookupTable[gameobject];
-        Vector2Int releasePosition = ConvertExternToInternPosition(gameobject.transform.localPosition, board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size);
-        Debug.Log(releasePosition);
-        if (releasePosition.x >= 0 && releasePosition.y >= 0 && releasePosition.x < board.internBoard.board.GetLength(0) && releasePosition.y < board.internBoard.board.GetLength(1)) 
-        {
-            board.internBoard.AddMove(new Move(releasedPiece.internPiece.position, releasePosition));
-        }
-        // Tijdelijk
-        GameManager.instance.UpdateExtern(GameManager.board);
-    }
-    
-    public static Vector2Int ConvertExternToInternPosition(Vector3 externPosition, Vector3 parentSize)
+    private static Vector2Int ConvertExternToInternPosition(Vector3 externPosition, Vector3 parentSize)
     {
         Vector2 internPosition = (((Vector2)externPosition) - ((Vector2)parentSize / 16) + ((Vector2)parentSize / 2)) / ((Vector2)parentSize / 8);
         return Vector2Int.RoundToInt(internPosition);
     }
-    public static Vector3 ConvertInternToExternPosition(Vector2Int internDestination, Vector3 parentSize)
+    private static Vector3 ConvertInternToExternPosition(Vector2Int internDestination, Vector3 parentSize)
     {
         Vector3 externDestination = (((Vector2)internDestination * (Vector2)parentSize/8) + ((Vector2)parentSize / 16) - ((Vector2)parentSize / 2));
         externDestination.z = 0;
         return externDestination;
+    }
+
+    public static void OnGrab(GameObject gameobject)
+    {
+
+    }
+    public static void OnRelease(GameObject gameobject)
+    {
+        if (Pieces.lookupTable.ContainsKey(gameobject))
+        {
+            Pieces releasedPiece = Pieces.lookupTable[gameobject];
+            Vector2Int releasePosition = ConvertExternToInternPosition(gameobject.transform.localPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+            if (releasePosition.x >= 0 && releasePosition.y >= 0 && releasePosition.x < board.internBoard.board.GetLength(0) && releasePosition.y < board.internBoard.board.GetLength(1))
+            {
+                board.internBoard.AddMove(new Move(releasedPiece.internPiece.position, releasePosition));
+            }
+            // Tijdelijk
+            GameManager.UpdateExtern(GameManager.board);
+        }
     }
 }
 
