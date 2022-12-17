@@ -15,6 +15,7 @@ public class Pieces
     public Pieces.Intern internPiece;
     public Pieces.Extern externPiece;
     public GameObject prefabPiece;
+    public bool taken;
 
     public Pieces(Board board)
     {
