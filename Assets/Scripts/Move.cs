@@ -5,9 +5,12 @@ using UnityEngine;
 
 public class Move
 {
-    public Tuple<int, int> startPosition;
-    public Tuple<int, int> endPosition;
-    public Move(Tuple<int, int> startPosition, Tuple<int, int> endPosition)
+    public Vector2Int startPosition;
+    public Vector2Int endPosition;
+
+    // isCapture is assigned when calling Board.Addmove(move)
+    public bool isCapture;
+    public Move(Vector2Int startPosition, Vector2Int endPosition)
     {
         this.startPosition = startPosition;
         this.endPosition = endPosition;
@@ -26,23 +29,23 @@ public class Move
                         piece.internPiece.legalMoves = new List<Move>();
                         if (piece.internPiece.isSlidingPiece)
                         {
-                            Tuple<int, int> startPosition = new Tuple<int, int>(x, y);
+                            Vector2Int startPosition = new Vector2Int(x, y);
                             for (int i = 0; i < piece.internPiece.moveOffsets.Count; i++)
                             {
-                                Tuple<int, int> moveOffset = piece.internPiece.moveOffsets[i];
-                                int xMoveIndex = x + moveOffset.Item1;
-                                int yMoveIndex = y + moveOffset.Item2;
+                                Vector2Int moveOffset = piece.internPiece.moveOffsets[i];
+                                int xMoveIndex = x + moveOffset.x;
+                                int yMoveIndex = y + moveOffset.y;
                                 while (xMoveIndex < internBoard.board.GetLength(0) && yMoveIndex < internBoard.board.GetLength(1) && xMoveIndex >= 0 && yMoveIndex >= 0)
                                 {
-                                    if (internBoard.board[x, y].internPiece.isWhite != internBoard.board[x + moveOffset.Item1, y + moveOffset.Item2].internPiece.isWhite)
+                                    if (internBoard.board[x, y].internPiece.isWhite != internBoard.board[x + moveOffset.x, y + moveOffset.y].internPiece.isWhite)
                                     {
                                         //Propably a bug here but will fix later
-                                        if (internBoard.board[x, y].internPiece.isWhite != internBoard.board[x + moveOffset.Item1, y + moveOffset.Item2].internPiece.isWhite | internBoard.board[x + moveOffset.Item1, y + moveOffset.Item2].GetType() == typeof(Pieces.None))
+                                        if (internBoard.board[x, y].internPiece.isWhite != internBoard.board[x + moveOffset.x, y + moveOffset.y].internPiece.isWhite | internBoard.board[x + moveOffset.x, y + moveOffset.y].GetType() == typeof(Pieces.None))
                                         {
-                                            Tuple<int, int> endPosition = new Tuple<int, int>(x + moveOffset.Item1, y + moveOffset.Item2);
+                                            Vector2Int endPosition = new Vector2Int(x + moveOffset.x, y + moveOffset.y);
                                             piece.internPiece.legalMoves.Add(new Move(startPosition, endPosition));
-                                            xMoveIndex += moveOffset.Item1;
-                                            yMoveIndex += moveOffset.Item2;
+                                            xMoveIndex += moveOffset.x;
+                                            yMoveIndex += moveOffset.y;
                                         }
                                     } else
                                     {
@@ -52,15 +55,15 @@ public class Move
                             }
                         } else
                         {
-                            Tuple<int, int> startPosition = new Tuple<int, int>(x, y);
+                            Vector2Int startPosition = new Vector2Int(x, y);
                             for (int i = 0; i < piece.internPiece.moveOffsets.Count; i++) 
                             {
-                                Tuple<int, int> moveOffset = piece.internPiece.moveOffsets[i];
-                                if (x+moveOffset.Item1 < internBoard.board.GetLength(0) && y+moveOffset.Item2 < internBoard.board.GetLength(1) && x + moveOffset.Item1 >= 0 && y + moveOffset.Item2 >= 0)
+                                Vector2Int moveOffset = piece.internPiece.moveOffsets[i];
+                                if (x+moveOffset.x < internBoard.board.GetLength(0) && y+moveOffset.y < internBoard.board.GetLength(1) && x + moveOffset.x >= 0 && y + moveOffset.y >= 0)
                                 {
-                                    if (internBoard.board[x, y].internPiece.isWhite != internBoard.board[x + moveOffset.Item1, y + moveOffset.Item2].internPiece.isWhite | internBoard.board[x + moveOffset.Item1, y + moveOffset.Item2].GetType() == typeof(Pieces.None))
+                                    if (internBoard.board[x, y].internPiece.isWhite != internBoard.board[x + moveOffset.x, y + moveOffset.y].internPiece.isWhite | internBoard.board[x + moveOffset.x, y + moveOffset.y].GetType() == typeof(Pieces.None))
                                     {
-                                        Tuple<int, int> endPosition = new Tuple<int, int>(x + moveOffset.Item1, y + moveOffset.Item2);
+                                        Vector2Int endPosition = new Vector2Int(x + moveOffset.x, y + moveOffset.y);
                                         piece.internPiece.legalMoves.Add(new Move(startPosition, endPosition));
                                     }
                                 }

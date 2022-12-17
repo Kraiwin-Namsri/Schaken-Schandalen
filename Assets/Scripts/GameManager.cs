@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.XR.OpenXR.Input;
 
+
 public class GameManager : MonoBehaviour
 {
     public GameObject CHESSBOARD;
@@ -38,11 +39,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Board board = new Board();
+        GameManager.board = board;
         UpdateExtern(board);
         Move.Legal.Generate(board.internBoard);
-        Debug.Log(board.internBoard.board[1,0].internPiece.legalMoves.Count);
-        GameManager.board = board;
-        UpdateExtern(board); 
     }
 
     // Update is called once per frame
@@ -52,70 +51,59 @@ public class GameManager : MonoBehaviour
     }
     public void UpdateExtern(Board board)
     {
-        float posx = (board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size.x) / 8;
-        float posy = (board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size.y) / 8;
-        for (int y = 0; y < 8; y++)
+        for (int y = 0; y < board.internBoard.board.GetLength(1); y++)
         {
-            for (int x = 0; x < 8; x++)
+            for (int x = 0; x < board.internBoard.board.GetLength(0); x++)
             {
-                if (board.internBoard.board[x, y].GetType() == typeof(Pieces.Black_Pawn) || board.internBoard.board[x,y].GetType() == typeof(Pieces.White_Pawn))
-                {
-                    Vector3 position = new Vector3((posx*x)+posx/2 - (posx*4), (posy * y) + posy/2 - (posy * 4), 0.01f);
-                    board.internBoard.board[x, y].externPiece.pieceGameObject.transform.localPosition = position;
-                }
-                else
-                {
-                    Vector3 position = new Vector3((posx * x) + posx/2 - (posx * 4), (posy * y) + posy / 2 - (posy * 4),0);
-                    board.internBoard.board[x, y].externPiece.pieceGameObject.transform.localPosition = position;
-                }
+                Pieces piece = board.internBoard.board[x, y];
+                MovePiece(piece, new Vector2Int(x, y));
             }
+        }
+    }
+
+    public static void MovePiece(Pieces piece, Vector2Int internDestination)
+    {
+        if (piece.GetType() == typeof(Pieces.Black_Pawn) || piece.GetType() == typeof(Pieces.White_Pawn))
+        {
+            //To Do: Update position in intern Piece
+            Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size);
+            externDestination.z = 0.01f;
+            board.internBoard.board[internDestination.x, internDestination.y].externPiece.pieceGameObject.transform.localPosition = externDestination;
+        }
+        else
+        {
+            Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size);
+            board.internBoard.board[internDestination.x, internDestination.y].externPiece.pieceGameObject.transform.localPosition = externDestination;
         }
     }
     
-    public static List<Pieces> holding = new List<Pieces>();
     public static void OnGrab(GameObject gameobject)
     {
-        float posx = (board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size.x) / 8;
-        float posy = (board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size.y) / 8;
-
-        int coordinateX = (int)Math.Round((gameobject.transform.localPosition.x - (posx / 2) + (posx * 4)) / posx);
-        int coordinateY = (int)Math.Round((gameobject.transform.localPosition.x - (posy / 2) + (posy * 4)) / posy);
-
-        holding.Add(board.internBoard.board[coordinateX, coordinateY]);
-        board.internBoard.board[coordinateX, coordinateY] = new Pieces.None();
-
+        Pieces holdingPiece = Pieces.lookupTable[gameobject];
     }
     public static void OnRelease(GameObject gameobject)
     {
-        float posx = (board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size.x) / 8;
-        float posy = (board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size.y) / 8;
-
-        int coordinateX = (int)Math.Round((gameobject.transform.localPosition.x - (posx / 2) + (posx * 4)) / posx);
-        int coordinateY = (int)Math.Round((gameobject.transform.localPosition.y - (posy / 2) + (posy * 4)) / posy);
-
-
-        Debug.Log("x" + coordinateX);
-        Debug.Log("y" + coordinateY);
-
-        foreach (Pieces piece in holding)
+        Pieces releasedPiece = Pieces.lookupTable[gameobject];
+        Vector2Int releasePosition = ConvertExternToInternPosition(gameobject.transform.localPosition, board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size);
+        Debug.Log(releasePosition);
+        if (releasePosition.x >= 0 && releasePosition.y >= 0 && releasePosition.x < board.internBoard.board.GetLength(0) && releasePosition.y < board.internBoard.board.GetLength(1)) 
         {
-            Debug.Log("Before if");
-            if (piece.externPiece.pieceGameObject = gameobject)
-            {
-                Debug.Log("If opened");
-                board.internBoard.board[coordinateX, coordinateY] = piece;
-                Debug.Log("after = piece");
-                gameobject.transform.localPosition = new Vector3((posx * coordinateX) + posx / 2 - (posx * 4), (posy * coordinateY) + posy / 2 - (posy * 4), 0);
-                Debug.Log("After transform");
-                holding.Remove(piece);
-                Debug.Log("After assign");
-            }
+            board.internBoard.AddMove(new Move(releasedPiece.internPiece.position, releasePosition));
         }
+        // Tijdelijk
+        GameManager.instance.UpdateExtern(GameManager.board);
     }
-
-    public void Snapping()
+    
+    public static Vector2Int ConvertExternToInternPosition(Vector3 externPosition, Vector3 parentSize)
     {
-
+        Vector2 internPosition = (((Vector2)externPosition) - ((Vector2)parentSize / 16) + ((Vector2)parentSize / 2)) / ((Vector2)parentSize / 8);
+        return Vector2Int.FloorToInt(internPosition);
     }
-
+    public static Vector3 ConvertInternToExternPosition(Vector2Int internDestination, Vector3 parentSize)
+    {
+        Vector3 externDestination = (((Vector2)internDestination * (Vector2)parentSize/8) + ((Vector2)parentSize / 16) - ((Vector2)parentSize / 2));
+        externDestination.z = 0;
+        return externDestination;
+    }
 }
+

@@ -14,8 +14,8 @@ public class Board
     public Board.Extern externBoard;
     public Board()
     {
-        internBoard = new Board.Intern();
-        externBoard = new Board.Extern(this.internBoard);
+        internBoard = new Board.Intern(this);
+        externBoard = new Board.Extern(this);
     }
     public class Intern
     {
@@ -25,19 +25,62 @@ public class Board
         public EnPassant enPassant;
         public int halfMoveCounter;
         public int fullMoveCounter;
+        public List<Move> moves = new List<Move>();
         
-        public Intern()
+        public Intern(Board board)
         {
-            Fen.Apply(this, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+            Fen.Apply(this, board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         }
 
-        public class Fen
+        public void AddMove(Move move)
+        {
+            moves.Add(move);
+            if (board[move.endPosition.x, move.endPosition.y].GetType() == typeof(Pieces.None))
+                move.isCapture = false;
+            else
+                move.isCapture = (board[move.startPosition.x, move.startPosition.y].internPiece.isWhite != board[move.endPosition.x, move.endPosition.y].internPiece.isWhite);
+            ExecuteMoves();
+        }
+        void ExecuteMoves()
+        {
+            foreach (Move move in moves)
+            {
+                //Debug.Log($"{move.startPosition.x}, {move.startPosition.y}: {board[move.startPosition.x, move.startPosition.y]}, {move.endPosition.x}, {move.endPosition.y} : {board[move.endPosition.x, move.endPosition.y]}, {move.isCapture}");
+                if (move.isCapture)
+                {
+                    Pieces buffer1 = board[move.startPosition.x, move.startPosition.y];
+                    Pieces buffer2 = new Pieces.None(board[move.startPosition.x, move.startPosition.y].board);
+                    
+                    buffer1.internPiece.position = move.endPosition;
+                    buffer2.internPiece.position = move.startPosition;
+                    buffer2.CreateExtern(buffer1.board.externBoard.board);
+
+                    board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
+                    board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
+                }
+                else
+                {
+                    Pieces buffer1 = board[move.startPosition.x, move.startPosition.y];
+                    Pieces buffer2 = board[move.endPosition.x, move.endPosition.y];
+
+                    buffer1.internPiece.position = move.endPosition;
+                    buffer2.internPiece.position = move.startPosition;
+
+                    board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
+                    board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
+                }
+            }
+            moves.Clear();
+            GameManager.instance.UpdateExtern(GameManager.board);
+        }
+
+        public static class Fen
         {
             // To Do: If there is no piece to place. Put a None Piece in its place. (Piece.None)
-            public static void Apply(Board.Intern board, string fenString)
+            public static void Apply(Board.Intern internBoard, Board board, string fenString)
             {
-                board.castleAbility = new CastleAbility();
-                board.enPassant = new EnPassant();
+                internBoard.castleAbility = new CastleAbility();
+                internBoard.enPassant = new EnPassant();
 
                 int x = 0;
                 int y = 0;
@@ -58,63 +101,63 @@ public class Board
                         switch (letter)
                         {
                             case 'K':
-                                board.board[x, y] = new Pieces.White_King();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.White_King(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'Q':
-                                board.board[x, y] = new Pieces.White_Queen();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.White_Queen(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'R':
-                                board.board[x, y] = new Pieces.White_Rook();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.White_Rook(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'B':   
-                                board.board[x, y] = new Pieces.White_Bischop();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.White_Bischop(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'N':
-                                board.board[x, y] = new Pieces.White_Knight();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.White_Knight(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'P':
-                                board.board[x, y] = new Pieces.White_Pawn();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.White_Pawn(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'k':
-                                board.board[x, y] = new Pieces.Black_King();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.Black_King(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'q':
-                                board.board[x, y] = new Pieces.Black_Queen();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.Black_Queen(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'r':
-                                board.board[x, y] = new Pieces.Black_Rook();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.Black_Rook(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'b':
-                                board.board[x, y] = new Pieces.Black_Bischop();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.Black_Bischop(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'n':
-                                board.board[x, y] = new Pieces.Black_Knight();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.Black_Knight(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case 'p':
-                                board.board[x, y] = new Pieces.Black_Pawn();
-                                board.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                                internBoard.board[x, y] = new Pieces.Black_Pawn(board);
+                                internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
                                 x++;
                                 break;
                             case '1':
@@ -154,7 +197,7 @@ public class Board
                         }
                         for(int u = 0; u < i; u++)
                         {
-                            board.board[x, y] = new Pieces.None();
+                            internBoard.board[x, y] = new Pieces.None(board);
                             x++;
                         }
                         i = 0;
@@ -163,10 +206,10 @@ public class Board
                         switch (letter)
                         {
                             case 'w':
-                                board.whiteToMove = true;
+                                internBoard.whiteToMove = true;
                                 break;
                             case 'b':
-                                board.whiteToMove = false;
+                                internBoard.whiteToMove = false;
                                 break;
                             case ' ':
                                 toMoveDone = true;
@@ -180,22 +223,22 @@ public class Board
                         switch (letter)
                         {
                             case 'K':
-                                board.castleAbility.whiteKingSide = true;
+                                internBoard.castleAbility.whiteKingSide = true;
                                 break;
                             case 'Q':
-                                board.castleAbility.whiteQueenSide = true;
+                                internBoard.castleAbility.whiteQueenSide = true;
                                 break;
                             case 'k':
-                                board.castleAbility.blackKingSide = true;
+                                internBoard.castleAbility.blackKingSide = true;
                                 break;
                             case 'q':
-                                board.castleAbility.blackQueenSide = true;
+                                internBoard.castleAbility.blackQueenSide = true;
                                 break;
                             case '-':
-                                board.castleAbility.whiteKingSide = false;
-                                board.castleAbility.whiteQueenSide = false;
-                                board.castleAbility.whiteKingSide = false;
-                                board.castleAbility.whiteKingSide = false;
+                                internBoard.castleAbility.whiteKingSide = false;
+                                internBoard.castleAbility.whiteQueenSide = false;
+                                internBoard.castleAbility.whiteKingSide = false;
+                                internBoard.castleAbility.whiteKingSide = false;
                                 break;
                             case ' ':
                                 castleDone = true;
@@ -209,38 +252,38 @@ public class Board
                         switch (letter)
                         {
                             case '-':
-                                board.enPassant.column = -1;
+                                internBoard.enPassant.column = -1;
                                 enPassantDone = true;
                                 break;
                             case 'a':
-                                board.enPassant.column = 0;
+                                internBoard.enPassant.column = 0;
                                 break;
                             case 'b':
-                                board.enPassant.column = 1;
+                                internBoard.enPassant.column = 1;
                                 break;
                             case 'c':
-                                board.enPassant.column = 2;
+                                internBoard.enPassant.column = 2;
                                 break;
                             case 'd':
-                                board.enPassant.column = 3;
+                                internBoard.enPassant.column = 3;
                                 break;
                             case 'e':
-                                board.enPassant.column = 4;
+                                internBoard.enPassant.column = 4;
                                 break;
                             case 'f':
-                                board.enPassant.column = 5;
+                                internBoard.enPassant.column = 5;
                                 break;
                             case 'g':
-                                board.enPassant.column = 6;
+                                internBoard.enPassant.column = 6;
                                 break;
                             case 'h':
-                                board.enPassant.column = 7;
+                                internBoard.enPassant.column = 7;
                                 break;
                             case '6':
-                                board.enPassant.forWhite = false;
+                                internBoard.enPassant.forWhite = false;
                                 break;
                             case '3':
-                                board.enPassant.forWhite = true;
+                                internBoard.enPassant.forWhite = true;
                                 break;
                             case ' ':
                                 enPassantDone = true;
@@ -251,14 +294,14 @@ public class Board
                         }
                     } else if (!halfCounterDone)
                     {
-                        if (int.TryParse(letter.ToString(), out board.halfMoveCounter))
+                        if (int.TryParse(letter.ToString(), out internBoard.halfMoveCounter))
                             halfCounterDone = true;
 
                     } else if (!fullCounterDone)
                     {
                         if (letter == ' ')
                             break;
-                        if (int.TryParse(letter.ToString(), out board.fullMoveCounter))
+                        if (int.TryParse(letter.ToString(), out internBoard.fullMoveCounter))
                             fullCounterDone = true;
                         else
                             Debug.LogError("Fen String is malformed!");
@@ -298,7 +341,7 @@ public class Board
         public Vector3 boardOrigin;
         public Vector3 boardScale;
         
-        public Extern(Board.Intern internBoard) 
+        public Extern(Board board) 
         {
             this.board = MonoBehaviour.Instantiate(GameManager.instance.CHESSBOARD);
             this.board.SetActive(true);
@@ -306,7 +349,7 @@ public class Board
             {
                 for (int x = 0; x < 8; x++)
                 {
-                    internBoard.board[x, y].CreateExtern(this.board);
+                    board.internBoard.board[x, y].CreateExtern(this.board);
                 }
             }
         }
