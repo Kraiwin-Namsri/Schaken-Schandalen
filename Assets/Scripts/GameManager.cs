@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
             Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.board.transform.GetChild(0).GetComponent<MeshFilter>().mesh.bounds.size);
             externDestination.z = 0.01f;
             board.internBoard.board[internDestination.x, internDestination.y].externPiece.pieceGameObject.transform.localPosition = externDestination;
+            board.internBoard.board[internDestination.x, internDestination.y].externPiece.pieceGameObject.transform.localRotation = Quaternion.identity;
         }
         else
         {
@@ -97,7 +98,7 @@ public class GameManager : MonoBehaviour
     public static Vector2Int ConvertExternToInternPosition(Vector3 externPosition, Vector3 parentSize)
     {
         Vector2 internPosition = (((Vector2)externPosition) - ((Vector2)parentSize / 16) + ((Vector2)parentSize / 2)) / ((Vector2)parentSize / 8);
-        return Vector2Int.FloorToInt(internPosition);
+        return Vector2Int.RoundToInt(internPosition);
     }
     public static Vector3 ConvertInternToExternPosition(Vector2Int internDestination, Vector3 parentSize)
     {
