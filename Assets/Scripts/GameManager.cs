@@ -114,14 +114,9 @@ public class GameManager : MonoBehaviour
     }
 
     static List<GameObject> visualizeGameobject = new List<GameObject>();
-    static void VisualizeLegalMoves(Pieces piece)
+    private static void VisualizeLegalMoves(Pieces piece)
     {
-        foreach (GameObject go in visualizeGameobject)
-        {
-            Destroy(go);
-        }
-        visualizeGameobject.Clear();
-
+        DeleteVisualization();
         Move.Legal.Generate(board.internBoard);
         foreach (Move legalMove in piece.internPiece.legalMoves)
         {
@@ -133,6 +128,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private static void DeleteVisualization()
+    {
+        foreach (GameObject go in visualizeGameobject)
+        {
+            Destroy(go);
+        }
+        visualizeGameobject.Clear();
+    }
+
+
     public static void OnGrab(GameObject gameobject)
     {
         Pieces grabedPiece = Pieces.lookupTable[gameobject];
@@ -140,6 +145,8 @@ public class GameManager : MonoBehaviour
     }
     public static void OnRelease(GameObject gameobject)
     {
+        DeleteVisualization();
+
         if (Pieces.lookupTable.ContainsKey(gameobject))
         {
             Pieces releasedPiece = Pieces.lookupTable[gameobject];
