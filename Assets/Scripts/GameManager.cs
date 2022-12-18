@@ -86,16 +86,16 @@ public class GameManager : MonoBehaviour
         Pieces capturedPiece;
         int x = board.internBoard.captured.Count -1;
         int y = 0;
-        if(x >= 16)
+        if(x >= 2)
         {
             y = 1;
-            x -= 16;
+            x -= 2;
         }
 
         Debug.Log($"x: {x}, y: {y}");
         capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
-        Vector2 position = new Vector3((size.x / 32) - (8 * size.x / 16) + (x * size.x / 16), -size.y - (size.y * 2));
+        Vector2 position = new Vector3((size.x / 32) - (8 * size.x / 16) + (x * size.x / 16), -size.y + (y* size.y * 2));
 
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
         capturedPiece.externPiece.pieceGameObject.transform.localPosition = position;
