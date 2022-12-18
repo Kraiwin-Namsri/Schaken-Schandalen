@@ -78,24 +78,42 @@ public class GameManager : MonoBehaviour
 
         }
     }
-
     public static void UpdatePedestal()
     {
-        Vector2 size = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size * (Vector2) board.externBoard.pedestalPlaySurface.transform.localScale;
+        int x = board.internBoard.captured.Count - 1;
+        int y;
+        int amountOfPawns = 0;
+
+        Vector2 size = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size * (Vector2)board.externBoard.pedestalPlaySurface.transform.localScale;
 
         Pieces capturedPiece;
-        int x = board.internBoard.captured.Count -1;
-        int y = 0;
-        if(x >= 2)
+        capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
+
+        foreach (Pieces piece in board.internBoard.captured)
+        {
+            if (piece.GetType() == typeof(Pieces.Black_Pawn) || piece.GetType() == typeof(Pieces.White_Pawn))
+            {
+                amountOfPawns++;
+            }
+        }
+
+        if (capturedPiece.GetType() == typeof(Pieces.Black_Pawn) || capturedPiece.GetType() == typeof(Pieces.White_Pawn))
         {
             y = 1;
-            x -= 2;
+            x = 0;
+            amountOfPawns -= 1;
+        }
+        else
+        {
+            x -= amountOfPawns;
+            y = 0;
+            amountOfPawns = 0;
         }
 
         Debug.Log($"x: {x}, y: {y}");
         capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
-        Vector2 position = new Vector3((size.x / 32) - (8 * size.x / 16) + (x * size.x / 16), -size.y + (y* size.y * 2));
+        Vector2 position = new Vector3((size.x / 32) - (8 * size.x / 16) + ((x * size.x / 16) + (amountOfPawns * size.x / 16)), -size.y + (y * size.y * 2));
 
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
         capturedPiece.externPiece.pieceGameObject.transform.localPosition = position;
