@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        UpdatePedestal();
     }
     public static void UpdateExtern(Board board)
     {
@@ -79,26 +79,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    int x = 0;
-    int y = 0;
-    public void AddToPedestal(Pieces capturedPiece)
+    public static void UpdatePedestal()
     {
-        //pedestalSizeX =
-        //pedestalSizeY =
-        Vector2 position = new Vector3((pedestalSizeX/16) - (4* pedestalSizeX /8) + (x * pedestalSizeX / 8), (pedestalSizeY / 4) - ((y * pedestalSizeX / 8) * 2));
-        capturedPiece.externPiece.pieceGameObject.transform.parent = PEDESTAL.transform;
-        capturedPiece.externPiece.pieceGameObject.transform.localPosition = position;
+        Vector2 size = board.externBoard.pedestalPlaySurface.GetComponent<MeshFilter>().mesh.bounds.size;
+        Vector2 boardSize = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size;
 
-
-        x++;
-        if(x >= 7)
+        Debug.Log($"pedestal: ({size.x}, {size.y}), board: {boardSize.x}, {boardSize.y}");
+        foreach (Pieces capturedPiece in board.internBoard.captured)
         {
-            x = 0;
-            y = 1;
+            capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
+            //Vector2 position = new Vector3((pedestalSizeX / 16) - (4 * pedestalSizeX / 8) + (x * pedestalSizeX / 8), (pedestalSizeY / 4) - ((y * pedestalSizeX / 8) * 2));
+            //capturedPiece.externPiece.pieceGameObject.transform.parent = PEDESTAL.transform;
+            //capturedPiece.externPiece.pieceGameObject.transform.localPosition = position;
         }
-
-
-        Debug.Log(position);
     }
 
     private static Vector2Int ConvertExternToInternPosition(Vector3 externPosition, Vector3 parentSize)

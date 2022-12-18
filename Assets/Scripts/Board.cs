@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Microsoft.MixedReality.Toolkit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,7 +28,8 @@ public class Board
         public int fullMoveCounter;
 
         public List<Move> moves = new List<Move>();
-        
+        public List<Pieces> captured = new List<Pieces>();
+
         public Intern(Board board)
         {
             Fen.Apply(this, board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
@@ -60,7 +62,7 @@ public class Board
 
                     board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
                     board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
-                    GameManager.instance.AddToPedestal(buffer3);
+                    captured.Add(buffer3);
                 }
                 else
                 {
@@ -342,6 +344,7 @@ public class Board
     {
         public GameObject board;
         public GameObject playSurface;
+        public GameObject pedestalPlaySurface;
 
         public Vector3 boardOrigin;
         public Vector3 boardScale;
@@ -351,6 +354,7 @@ public class Board
             this.board = MonoBehaviour.Instantiate(GameManager.instance.CHESSBOARD);
             this.board.SetActive(true);
             this.playSurface = this.board.transform.GetChild(0).gameObject;
+            this.pedestalPlaySurface = this.board.transform.Find("Pedestal").Find("Pedestal Play Surface").gameObject;
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)
