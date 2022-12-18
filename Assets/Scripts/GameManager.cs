@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     {
         int x = board.internBoard.captured.Count - 1;
         int y;
-        int amountOfPawns = 0;
+        int amountOfPawns = -1;
 
         Vector2 size = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size * (Vector2)board.externBoard.pedestalPlaySurface.transform.localScale;
 
@@ -101,7 +101,6 @@ public class GameManager : MonoBehaviour
         {
             y = 1;
             x = 0;
-            amountOfPawns -= 1;
         }
         else
         {
