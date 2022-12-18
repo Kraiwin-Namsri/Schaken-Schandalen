@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            x -= amountOfPawns;
+            x -= amountOfPawns  + 1;
             y = 0;
             amountOfPawns = 0;
         }
@@ -112,6 +112,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"x: {x}, y: {y}");
         capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
+
         Vector2 position = new Vector3((size.x / 32) - (8 * size.x / 16) + ((x * size.x / 16) + (amountOfPawns * size.x / 16)), -size.y + (y * size.y * 2));
 
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
