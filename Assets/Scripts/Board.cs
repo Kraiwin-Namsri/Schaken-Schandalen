@@ -63,6 +63,7 @@ public class Board
                     board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
                     board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
                     captured.Add(buffer3);
+                    GameManager.UpdatePedestal();
                 }
                 else
                 {
@@ -354,7 +355,7 @@ public class Board
             this.board = MonoBehaviour.Instantiate(GameManager.instance.CHESSBOARD);
             this.board.SetActive(true);
             this.playSurface = this.board.transform.GetChild(0).gameObject;
-            this.pedestalPlaySurface = this.board.transform.Find("Pedestal").Find("Pedestal Play Surface").gameObject;
+            this.pedestalPlaySurface = this.board.transform.GetChild(3).GetChild(0).gameObject;
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)

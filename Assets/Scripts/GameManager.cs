@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdatePedestal();
+        
     }
     public static void UpdateExtern(Board board)
     {
@@ -81,17 +81,24 @@ public class GameManager : MonoBehaviour
 
     public static void UpdatePedestal()
     {
-        Vector2 size = board.externBoard.pedestalPlaySurface.GetComponent<MeshFilter>().mesh.bounds.size;
-        Vector2 boardSize = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size;
+        Vector2 size = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size * (Vector2) board.externBoard.pedestalPlaySurface.transform.localScale;
 
-        Debug.Log($"pedestal: ({size.x}, {size.y}), board: {boardSize.x}, {boardSize.y}");
-        foreach (Pieces capturedPiece in board.internBoard.captured)
+        Pieces capturedPiece;
+        int x = board.internBoard.captured.Count -1;
+        int y = 0;
+        if(x >= 16)
         {
-            capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
-            //Vector2 position = new Vector3((pedestalSizeX / 16) - (4 * pedestalSizeX / 8) + (x * pedestalSizeX / 8), (pedestalSizeY / 4) - ((y * pedestalSizeX / 8) * 2));
-            //capturedPiece.externPiece.pieceGameObject.transform.parent = PEDESTAL.transform;
-            //capturedPiece.externPiece.pieceGameObject.transform.localPosition = position;
+            y = 1;
+            x -= 16;
         }
+
+        Debug.Log($"x: {x}, y: {y}");
+        capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
+        capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
+        Vector2 position = new Vector3((size.x / 32) - (8 * size.x / 16) + (x * size.x / 16), -size.y - (size.y * 2));
+
+        capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
+        capturedPiece.externPiece.pieceGameObject.transform.localPosition = position;
     }
 
     private static Vector2Int ConvertExternToInternPosition(Vector3 externPosition, Vector3 parentSize)

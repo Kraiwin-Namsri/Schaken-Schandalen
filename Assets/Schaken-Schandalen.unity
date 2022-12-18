@@ -1418,7 +1418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CHESSBOARD: {fileID: 1000010571015582}
-  PEDESTAL: {fileID: 1000010558662050}
+  PEDESTAL: {fileID: 1000011013538514}
   NONE: {fileID: 1903932940}
   WHITEKING: {fileID: 584187448}
   WHITEQUEEN: {fileID: 1895441826}
@@ -3525,7 +3525,7 @@ GameObject:
   - component: {fileID: 33000011774349196}
   - component: {fileID: 23000011408470464}
   m_Layer: 0
-  m_Name: Chess Board Play Surface
+  m_Name: Pedestal Play Surface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3573,7 +3573,7 @@ Transform:
   m_GameObject: {fileID: 1000011013538514}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8898012, y: 0.2436136, z: 1}
+  m_LocalScale: {x: 0.86, y: 0.2436136, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4000013976131582}
@@ -3587,8 +3587,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010558662050}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.71, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.787, y: 0, z: 0}
+  m_LocalScale: {x: 1.63, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4000012502843776}
@@ -3622,8 +3622,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 19a7f7dd4f56bdb4cbbd019b9a6bbf26, type: 2}
-  - {fileID: 2100000, guid: 19a7f7dd4f56bdb4cbbd019b9a6bbf26, type: 2}
+  - {fileID: 2100000, guid: c7ba53a4b6745a342852498d501518dd, type: 2}
+  - {fileID: 2100000, guid: c7ba53a4b6745a342852498d501518dd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
