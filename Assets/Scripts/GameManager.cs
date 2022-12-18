@@ -13,6 +13,7 @@ using UnityEngine.XR.OpenXR.Input;
 public class GameManager : MonoBehaviour
 {
     public GameObject CHESSBOARD;
+    public GameObject PEDESTAL;
 
     public GameObject NONE;
 
@@ -77,6 +78,29 @@ public class GameManager : MonoBehaviour
 
         }
     }
+
+    int x = 0;
+    int y = 0;
+    public void AddToPedestal(Pieces capturedPiece)
+    {
+        //pedestalSizeX =
+        //pedestalSizeY =
+        Vector2 position = new Vector3((pedestalSizeX/16) - (4* pedestalSizeX /8) + (x * pedestalSizeX / 8), (pedestalSizeY / 4) - ((y * pedestalSizeX / 8) * 2));
+        capturedPiece.externPiece.pieceGameObject.transform.parent = PEDESTAL.transform;
+        capturedPiece.externPiece.pieceGameObject.transform.localPosition = position;
+
+
+        x++;
+        if(x >= 7)
+        {
+            x = 0;
+            y = 1;
+        }
+
+
+        Debug.Log(position);
+    }
+
     private static Vector2Int ConvertExternToInternPosition(Vector3 externPosition, Vector3 parentSize)
     {
         Vector2 internPosition = (((Vector2)externPosition) - ((Vector2)parentSize / 16) + ((Vector2)parentSize / 2)) / ((Vector2)parentSize / 8);

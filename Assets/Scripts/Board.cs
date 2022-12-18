@@ -51,13 +51,16 @@ public class Board
                 {
                     Pieces buffer1 = board[move.startPosition.x, move.startPosition.y];
                     Pieces buffer2 = new Pieces.None(board[move.startPosition.x, move.startPosition.y].board);
+                    Pieces buffer3 = board[move.endPosition.x,move.endPosition.y];
                     
                     buffer1.internPiece.position = move.endPosition;
                     buffer2.internPiece.position = move.startPosition;
+
                     buffer2.CreateExtern(buffer1.board.externBoard.board);
 
                     board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
                     board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
+                    GameManager.instance.AddToPedestal(buffer3);
                 }
                 else
                 {
