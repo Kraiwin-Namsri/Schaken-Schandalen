@@ -38,43 +38,41 @@ public class Board
         public void AddMove(Move move)
         {
             moves.Add(move);
-            if (board[move.endPosition.x, move.endPosition.y].GetType() == typeof(Pieces.None))
-                move.isCapture = false;
-            else
-                move.isCapture = (board[move.startPosition.x, move.startPosition.y].internPiece.isWhite != board[move.endPosition.x, move.endPosition.y].internPiece.isWhite);
-            ExecuteMoves();
+            ExecuteMoves(true);
         }
-        public void ExecuteMoves()
+        public void ExecuteMoves(bool legalOnly)
         {
             foreach (Move move in moves)
             {
-                //Debug.Log($"{move.startPosition.x}, {move.startPosition.y}: {board[move.startPosition.x, move.startPosition.y]}, {move.endPosition.x}, {move.endPosition.y} : {board[move.endPosition.x, move.endPosition.y]}, {move.isCapture}");
-                if (move.isCapture)
+                if (move.isLegal | !legalOnly)
                 {
-                    Pieces buffer1 = board[move.startPosition.x, move.startPosition.y];
-                    Pieces buffer2 = new Pieces.None(board[move.startPosition.x, move.startPosition.y].board);
-                    Pieces buffer3 = board[move.endPosition.x,move.endPosition.y];
-                    
-                    buffer1.internPiece.position = move.endPosition;
-                    buffer2.internPiece.position = move.startPosition;
+                    if (move.isCapture)
+                    {
+                        Pieces buffer1 = board[move.startPosition.x, move.startPosition.y];
+                        Pieces buffer2 = new Pieces.None(board[move.startPosition.x, move.startPosition.y].board);
+                        Pieces buffer3 = board[move.endPosition.x, move.endPosition.y];
 
-                    buffer2.CreateExtern(buffer1.board.externBoard.board);
+                        buffer1.internPiece.position = move.endPosition;
+                        buffer2.internPiece.position = move.startPosition;
 
-                    board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
-                    board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
-                    captured.Add(buffer3);
-                    GameManager.UpdatePedestal();
-                }
-                else
-                {
-                    Pieces buffer1 = board[move.startPosition.x, move.startPosition.y];
-                    Pieces buffer2 = board[move.endPosition.x, move.endPosition.y];
+                        buffer2.CreateExtern(buffer1.board.externBoard.board);
 
-                    buffer1.internPiece.position = move.endPosition;
-                    buffer2.internPiece.position = move.startPosition;
+                        board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
+                        board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
+                        captured.Add(buffer3);
+                        GameManager.UpdatePedestal();
+                    }
+                    else
+                    {
+                        Pieces buffer1 = board[move.startPosition.x, move.startPosition.y];
+                        Pieces buffer2 = board[move.endPosition.x, move.endPosition.y];
 
-                    board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
-                    board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
+                        buffer1.internPiece.position = move.endPosition;
+                        buffer2.internPiece.position = move.startPosition;
+
+                        board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
+                        board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
+                    }
                 }
             }
             moves.Clear();
