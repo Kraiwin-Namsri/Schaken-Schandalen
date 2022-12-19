@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdatePedestal();
+        
     }
     public static void UpdateExtern(Board board)
     {
@@ -78,20 +78,45 @@ public class GameManager : MonoBehaviour
 
         }
     }
-
     public static void UpdatePedestal()
     {
-        Vector2 size = board.externBoard.pedestalPlaySurface.GetComponent<MeshFilter>().mesh.bounds.size;
-        Vector2 boardSize = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size;
+        int x = board.internBoard.captured.Count - 1;
+        int y;
+        int amountOfPawns = 0;
 
-        Debug.Log($"pedestal: ({size.x}, {size.y}), board: {boardSize.x}, {boardSize.y}");
-        foreach (Pieces capturedPiece in board.internBoard.captured)
+        Vector2 size = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size * (Vector2)board.externBoard.pedestalPlaySurface.transform.localScale;
+
+        Pieces capturedPiece;
+        capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
+
+        foreach (Pieces piece in board.internBoard.captured)
         {
-            capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
-            //Vector2 position = new Vector3((pedestalSizeX / 16) - (4 * pedestalSizeX / 8) + (x * pedestalSizeX / 8), (pedestalSizeY / 4) - ((y * pedestalSizeX / 8) * 2));
-            //capturedPiece.externPiece.pieceGameObject.transform.parent = PEDESTAL.transform;
-            //capturedPiece.externPiece.pieceGameObject.transform.localPosition = position;
+            if (piece.GetType() == typeof(Pieces.Black_Pawn) || piece.GetType() == typeof(Pieces.White_Pawn))
+            {
+                amountOfPawns++;
+            }
         }
+
+        if (capturedPiece.GetType() == typeof(Pieces.Black_Pawn) || capturedPiece.GetType() == typeof(Pieces.White_Pawn))
+        {
+            amountOfPawns--;
+            y = 1;
+            x = amountOfPawns;
+        }
+        else
+        {
+            x -= amountOfPawns;
+            y = 0;
+        }
+
+        Debug.Log($"x: {x}, y: {y}");
+        capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
+        capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
+
+        Vector2 position = new Vector3((size.x / 32) - (8 * size.x / 16) + ((x * size.x / 16)), -size.y + (y * size.y * 2));
+
+        capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
+        capturedPiece.externPiece.pieceGameObject.transform.localPosition = position;
     }
 
     private static Vector2Int ConvertExternToInternPosition(Vector3 externPosition, Vector3 parentSize)
