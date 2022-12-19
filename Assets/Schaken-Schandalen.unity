@@ -3525,7 +3525,7 @@ GameObject:
   - component: {fileID: 33000011774349196}
   - component: {fileID: 23000011408470464}
   m_Layer: 0
-  m_Name: Chess Board Play Surface
+  m_Name: Pedestal Play Surface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3543,7 +3543,7 @@ GameObject:
   - component: {fileID: 33000011968467366}
   - component: {fileID: 23000011600695410}
   m_Layer: 0
-  m_Name: Chess Board Surround
+  m_Name: Pedestal Surround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
