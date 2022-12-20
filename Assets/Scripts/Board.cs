@@ -38,44 +38,7 @@ public class Board
         public void AddMove(Move move)
         {
             moves.Add(move);
-            ExecuteMoves(true);
-        }
-        public void ExecuteMoves(bool legalOnly)
-        {
-            foreach (Move move in moves)
-            {
-                if (move.isLegal | !legalOnly)
-                {
-                    if (move.isCapture)
-                    {
-                        Pieces buffer1 = board[move.startPosition.x, move.startPosition.y];
-                        Pieces buffer2 = new Pieces.None(board[move.startPosition.x, move.startPosition.y].board);
-                        Pieces buffer3 = board[move.endPosition.x, move.endPosition.y];
-
-                        buffer1.internPiece.position = move.endPosition;
-                        buffer2.internPiece.position = move.startPosition;
-
-                        buffer2.CreateExtern(buffer1.board.externBoard.board);
-
-                        board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
-                        board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
-                        captured.Add(buffer3);
-                        GameManager.UpdatePedestal();
-                    }
-                    else
-                    {
-                        Pieces buffer1 = board[move.startPosition.x, move.startPosition.y];
-                        Pieces buffer2 = board[move.endPosition.x, move.endPosition.y];
-
-                        buffer1.internPiece.position = move.endPosition;
-                        buffer2.internPiece.position = move.startPosition;
-
-                        board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
-                        board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
-                    }
-                }
-            }
-            moves.Clear();
+            Move.ExecuteMoves(moves, this, true);
         }
 
         public static class Fen
