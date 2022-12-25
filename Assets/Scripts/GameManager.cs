@@ -81,8 +81,14 @@ public class GameManager : MonoBehaviour
     public static void UpdatePedestal()
     {
         int x = board.internBoard.captured.Count - 1;
-        int y;
-        int amountOfPawns = 0;
+        int y = 0;
+        int totalAmountOfWhitePieces = 0;
+        int amountOfWhitePieces= 0;
+        int amountOfWhitePawns = 0;
+        int totalAmountOfBlackPieces = 0;
+        int amountOfBlackPieces = 0;
+        int amountOfBlackPawns = 0;
+
 
         Vector2 size = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size * (Vector2)board.externBoard.pedestalPlaySurface.transform.localScale;
 
@@ -91,23 +97,59 @@ public class GameManager : MonoBehaviour
 
         foreach (Pieces piece in board.internBoard.captured)
         {
-            if (piece.GetType() == typeof(Pieces.Black_Pawn) || piece.GetType() == typeof(Pieces.White_Pawn))
+            if(piece.internPiece.isWhite == true)
             {
-                amountOfPawns++;
+                totalAmountOfWhitePieces ++;
+            }
+            if(piece.GetType() == typeof(Pieces.White_Pawn))
+            {
+                amountOfWhitePawns++;
+            }
+            if (piece.GetType() == typeof(Pieces.Black_Pawn))
+            {
+                amountOfBlackPawns++;
             }
         }
+        amountOfWhitePieces = totalAmountOfWhitePieces - amountOfWhitePawns;
 
-        if (capturedPiece.GetType() == typeof(Pieces.Black_Pawn) || capturedPiece.GetType() == typeof(Pieces.White_Pawn))
+        totalAmountOfBlackPieces = board.internBoard.captured.Count - totalAmountOfWhitePieces;
+        amountOfBlackPieces = totalAmountOfBlackPieces - amountOfBlackPawns;
+
+        Debug.Log($"totalAmountOfWhitePieces: {totalAmountOfWhitePieces}");
+        Debug.Log($"amountOfWhitePieces: {amountOfWhitePieces}");
+        Debug.Log($"amountOfWhitePawns: {amountOfWhitePawns}");
+
+        Debug.Log($"totalAmountOfBlackPieces: {totalAmountOfBlackPieces}");
+        Debug.Log($"amountOfBlackPieces: {amountOfBlackPieces}");
+        Debug.Log($"amountOfBlackPawns: {amountOfBlackPawns}");
+
+        if (capturedPiece.internPiece.isWhite == true && capturedPiece.GetType() == typeof(Pieces.White_Pawn))
         {
-            amountOfPawns--;
+            x = amountOfWhitePawns -1;
             y = 1;
-            x = amountOfPawns;
+            Debug.Log("Is White Pawn");
         }
-        else
+        if(capturedPiece.internPiece.isWhite == true && capturedPiece.GetType() != typeof(Pieces.White_Pawn))
         {
-            x -= amountOfPawns;
+            x = amountOfWhitePieces - 1;
             y = 0;
+            Debug.Log("Is White Piece");
         }
+        if(capturedPiece.internPiece.isWhite == false && capturedPiece.GetType() == typeof(Pieces.Black_Pawn))
+        {
+            x = 8 + amountOfBlackPawns -1;
+            y = 1;
+            Debug.Log("Is Black Pawn");
+        }
+        if(capturedPiece.internPiece.isWhite == false && capturedPiece.GetType() != typeof(Pieces.Black_Pawn))
+        {
+            x = 8 + amountOfBlackPieces - 1;
+            y = 0;
+            Debug.Log("Is Black Piece");
+        }
+        
+
+
 
         Debug.Log($"x: {x}, y: {y}");
         capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
