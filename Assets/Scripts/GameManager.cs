@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public GameObject CHESSBOARD;
     public GameObject PEDESTAL;
 
+    public GameObject HIGHLIGHTSQUARE;
+    public GameObject HINT;
     public GameObject NONE;
 
     public GameObject WHITEKING;
@@ -114,43 +116,30 @@ public class GameManager : MonoBehaviour
         totalAmountOfBlackPieces = board.internBoard.captured.Count - totalAmountOfWhitePieces;
         amountOfBlackPieces = totalAmountOfBlackPieces - amountOfBlackPawns;
 
-        Debug.Log($"totalAmountOfWhitePieces: {totalAmountOfWhitePieces}");
-        Debug.Log($"amountOfWhitePieces: {amountOfWhitePieces}");
-        Debug.Log($"amountOfWhitePawns: {amountOfWhitePawns}");
-
-        Debug.Log($"totalAmountOfBlackPieces: {totalAmountOfBlackPieces}");
-        Debug.Log($"amountOfBlackPieces: {amountOfBlackPieces}");
-        Debug.Log($"amountOfBlackPawns: {amountOfBlackPawns}");
-
         if (capturedPiece.internPiece.isWhite == true && capturedPiece.GetType() == typeof(Pieces.White_Pawn))
         {
             x = amountOfWhitePawns -1;
             y = 1;
-            Debug.Log("Is White Pawn");
         }
         if(capturedPiece.internPiece.isWhite == true && capturedPiece.GetType() != typeof(Pieces.White_Pawn))
         {
             x = amountOfWhitePieces - 1;
             y = 0;
-            Debug.Log("Is White Piece");
         }
         if(capturedPiece.internPiece.isWhite == false && capturedPiece.GetType() == typeof(Pieces.Black_Pawn))
         {
             x = 8 + amountOfBlackPawns -1;
             y = 1;
-            Debug.Log("Is Black Pawn");
         }
         if(capturedPiece.internPiece.isWhite == false && capturedPiece.GetType() != typeof(Pieces.Black_Pawn))
         {
             x = 8 + amountOfBlackPieces - 1;
             y = 0;
-            Debug.Log("Is Black Piece");
         }
         
 
 
 
-        Debug.Log($"x: {x}, y: {y}");
         capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
 
@@ -180,10 +169,10 @@ public class GameManager : MonoBehaviour
         foreach (Move legalMove in piece.internPiece.legalMoves)
         {
             Vector3 destination = ConvertInternToExternPosition(legalMove.endPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
-            GameObject marker = Instantiate(GameManager.instance.BLACKPAWN, board.externBoard.playSurface.transform);
-            marker.SetActive(true);
-            visualizeGameobject.Add(marker);
-            marker.transform.localPosition = destination;
+            GameObject hint = Instantiate(GameManager.instance.HINT, board.externBoard.playSurface.transform);
+            hint.SetActive(true);
+            visualizeGameobject.Add(hint);
+            hint.transform.localPosition = destination;
         }
     }
 
@@ -201,6 +190,11 @@ public class GameManager : MonoBehaviour
     {
         Pieces grabedPiece = Pieces.lookupTable[gameobject];
         VisualizeLegalMoves(grabedPiece);
+
+        GameObject square = Instantiate(GameManager.instance.HIGHLIGHTSQUARE, board.externBoard.playSurface.transform);
+        square.transform.localPosition = new Vector3(gameobject.transform.localPosition.x, gameobject.transform.localPosition.y, 0.0f);
+        square.SetActive(true);
+        visualizeGameobject.Add(square);
     }
     public static void OnRelease(GameObject gameobject)
     {
