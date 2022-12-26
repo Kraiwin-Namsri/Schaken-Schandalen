@@ -68,7 +68,6 @@ public class GameManager : MonoBehaviour
     {
         if (piece.GetType() == typeof(Pieces.Black_Pawn) || piece.GetType() == typeof(Pieces.White_Pawn))
         {
-            //To Do: Update position in intern Piece
             Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
             externDestination.z = 0.01f;
             piece.externPiece.Move(externDestination);
@@ -112,7 +111,6 @@ public class GameManager : MonoBehaviour
             }
         }
         amountOfWhitePieces = totalAmountOfWhitePieces - amountOfWhitePawns;
-
         totalAmountOfBlackPieces = board.internBoard.captured.Count - totalAmountOfWhitePieces;
         amountOfBlackPieces = totalAmountOfBlackPieces - amountOfBlackPawns;
 
@@ -137,9 +135,6 @@ public class GameManager : MonoBehaviour
             y = 0;
         }
         
-
-
-
         capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
 
