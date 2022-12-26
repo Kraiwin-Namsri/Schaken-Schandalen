@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Unity.Collections.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.XR.OpenXR.Input;
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour
 {
     public GameObject CHESSBOARD;
     public GameObject PEDESTAL;
+
+    public GameObject PARENT;
 
     public GameObject NONE;
 
@@ -40,6 +43,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        CHESSBOARD.SetActive(false);
         Board board = new Board();
         GameManager.board = board;
         GameManager.UpdateExtern(board);
@@ -48,7 +52,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
     public static void UpdateExtern(Board board)
     {
@@ -64,18 +67,9 @@ public class GameManager : MonoBehaviour
 
     private static void UpdateExternPosition(Pieces piece, Vector2Int internDestination)
     {
-        if (piece.GetType() == typeof(Pieces.Black_Pawn) || piece.GetType() == typeof(Pieces.White_Pawn))
-        {
-            //To Do: Update position in intern Piece
-            Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
-            externDestination.z = 0.01f;
-            piece.externPiece.Move(externDestination);
-        }
-        else
-        {
-            Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
-            piece.externPiece.Move(externDestination);
-        }
+        Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+        //piece.externPiece.Move(externDestination);
+        instance.StartCoroutine(piece.externPiece.SmoothMove(externDestination, 0.05f));
     }
     public static void UpdatePedestal()
     {
@@ -108,7 +102,6 @@ public class GameManager : MonoBehaviour
             y = 0;
         }
 
-        Debug.Log($"x: {x}, y: {y}");
         capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
 
@@ -155,19 +148,23 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public static void OnGrab(GameObject gameobject)
+    public static void OnGrab(GameObject gameObject)
     {
-        Pieces grabedPiece = Pieces.lookupTable[gameobject];
-        VisualizeLegalMoves(grabedPiece);
+        Pieces grabedPiece = Pieces.Lookup(gameObject);
+        if (gameObject != null & grabedPiece != null)
+        {
+
+            VisualizeLegalMoves(grabedPiece);
+        }
     }
-    public static void OnRelease(GameObject gameobject)
+    public static void OnRelease(GameObject gameObject)
     {
         DeleteVisualization();
+        Pieces releasedPiece = Pieces.Lookup(gameObject);
 
-        if (Pieces.lookupTable.ContainsKey(gameobject))
+        if (gameObject != null & releasedPiece != null)
         {
-            Pieces releasedPiece = Pieces.lookupTable[gameobject];
-            Vector2Int releasePosition = ConvertExternToInternPosition(gameobject.transform.localPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+            Vector2Int releasePosition = ConvertExternToInternPosition(gameObject.transform.localPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
             if (releasePosition.x >= 0 && releasePosition.y >= 0 && releasePosition.x < board.internBoard.board.GetLength(0) && releasePosition.y < board.internBoard.board.GetLength(1))
             {
                 board.internBoard.AddMove(new Move(releasedPiece.internPiece.position, releasePosition, board.internBoard));
@@ -176,5 +173,6 @@ public class GameManager : MonoBehaviour
             GameManager.UpdateExtern(GameManager.board);
         }
     }
+
 }
 
