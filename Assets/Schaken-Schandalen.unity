@@ -217,7 +217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 220b76f3a314cfd479baff3a52ab4a96, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0563
+      value: -0.0008
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 220b76f3a314cfd479baff3a52ab4a96, type: 3}
       propertyPath: m_LocalPosition.y
@@ -744,7 +744,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 50231161}
+  constraintsManager: {fileID: 19983252}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -1315,7 +1315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0d807e91e0156cb41a51eca49a1fefcd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0748
+      value: -0.0325
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0d807e91e0156cb41a51eca49a1fefcd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1464,7 +1464,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 50231161}
+  constraintsManager: {fileID: 307453030}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -1928,7 +1928,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 414139470}
+  constraintsManager: {fileID: 19983252}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -2491,7 +2491,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 50231161}
+  constraintsManager: {fileID: 19983252}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -3087,7 +3087,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 545341506}
+  constraintsManager: {fileID: 19983252}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -3299,7 +3299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e56efd5d0c0faae438472da772e8e4a3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.2085
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e56efd5d0c0faae438472da772e8e4a3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3448,7 +3448,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 50231161}
+  constraintsManager: {fileID: 19983252}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -4917,7 +4917,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 688afabf984da4d4c8a8e226d1f268f5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.2005
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 688afabf984da4d4c8a8e226d1f268f5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5214,7 +5214,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 1310638376}
+  constraintsManager: {fileID: 19983252}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -5470,7 +5470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 688afabf984da4d4c8a8e226d1f268f5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.1527
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 688afabf984da4d4c8a8e226d1f268f5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5631,7 +5631,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 50231161}
+  constraintsManager: {fileID: 19983252}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -7127,7 +7127,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 50231161}
+  constraintsManager: {fileID: 19983252}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -7222,7 +7222,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e56efd5d0c0faae438472da772e8e4a3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.1988
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e56efd5d0c0faae438472da772e8e4a3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7230,7 +7230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e56efd5d0c0faae438472da772e8e4a3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.0248
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e56efd5d0c0faae438472da772e8e4a3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7507,7 +7507,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 2060376571}
+  constraintsManager: {fileID: 19983252}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
