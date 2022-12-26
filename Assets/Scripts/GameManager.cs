@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject PARENT;
 
+    public GameObject HIGHLIGHTSQUARE;
+    public GameObject HINT;
     public GameObject NONE;
 
     public GameObject WHITEKING;
@@ -74,8 +76,14 @@ public class GameManager : MonoBehaviour
     public static void UpdatePedestal()
     {
         int x = board.internBoard.captured.Count - 1;
-        int y;
-        int amountOfPawns = 0;
+        int y = 0;
+        int totalAmountOfWhitePieces = 0;
+        int amountOfWhitePieces= 0;
+        int amountOfWhitePawns = 0;
+        int totalAmountOfBlackPieces = 0;
+        int amountOfBlackPieces = 0;
+        int amountOfBlackPawns = 0;
+
 
         Vector2 size = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size * (Vector2)board.externBoard.pedestalPlaySurface.transform.localScale;
 
@@ -84,23 +92,47 @@ public class GameManager : MonoBehaviour
 
         foreach (Pieces piece in board.internBoard.captured)
         {
-            if (piece.GetType() == typeof(Pieces.Black_Pawn) || piece.GetType() == typeof(Pieces.White_Pawn))
+            if(piece.internPiece.isWhite == true)
             {
-                amountOfPawns++;
+                totalAmountOfWhitePieces ++;
+            }
+            if(piece.GetType() == typeof(Pieces.White_Pawn))
+            {
+                amountOfWhitePawns++;
+            }
+            if (piece.GetType() == typeof(Pieces.Black_Pawn))
+            {
+                amountOfBlackPawns++;
             }
         }
+        amountOfWhitePieces = totalAmountOfWhitePieces - amountOfWhitePawns;
 
-        if (capturedPiece.GetType() == typeof(Pieces.Black_Pawn) || capturedPiece.GetType() == typeof(Pieces.White_Pawn))
+        totalAmountOfBlackPieces = board.internBoard.captured.Count - totalAmountOfWhitePieces;
+        amountOfBlackPieces = totalAmountOfBlackPieces - amountOfBlackPawns;
+
+        if (capturedPiece.internPiece.isWhite == true && capturedPiece.GetType() == typeof(Pieces.White_Pawn))
         {
-            amountOfPawns--;
+            x = amountOfWhitePawns -1;
             y = 1;
-            x = amountOfPawns;
         }
-        else
+        if(capturedPiece.internPiece.isWhite == true && capturedPiece.GetType() != typeof(Pieces.White_Pawn))
         {
-            x -= amountOfPawns;
+            x = amountOfWhitePieces - 1;
             y = 0;
         }
+        if(capturedPiece.internPiece.isWhite == false && capturedPiece.GetType() == typeof(Pieces.Black_Pawn))
+        {
+            x = 8 + amountOfBlackPawns -1;
+            y = 1;
+        }
+        if(capturedPiece.internPiece.isWhite == false && capturedPiece.GetType() != typeof(Pieces.Black_Pawn))
+        {
+            x = 8 + amountOfBlackPieces - 1;
+            y = 0;
+        }
+        
+
+
 
         capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
@@ -131,10 +163,10 @@ public class GameManager : MonoBehaviour
         foreach (Move legalMove in piece.internPiece.legalMoves)
         {
             Vector3 destination = ConvertInternToExternPosition(legalMove.endPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
-            GameObject marker = Instantiate(GameManager.instance.BLACKPAWN, board.externBoard.playSurface.transform);
-            marker.SetActive(true);
-            visualizeGameobject.Add(marker);
-            marker.transform.localPosition = destination;
+            GameObject hint = Instantiate(GameManager.instance.HINT, board.externBoard.playSurface.transform);
+            hint.SetActive(true);
+            visualizeGameobject.Add(hint);
+            hint.transform.localPosition = destination;
         }
     }
 
@@ -156,6 +188,10 @@ public class GameManager : MonoBehaviour
 
             VisualizeLegalMoves(grabedPiece);
         }
+        GameObject square = Instantiate(GameManager.instance.HIGHLIGHTSQUARE, board.externBoard.playSurface.transform);
+        square.transform.localPosition = new Vector3(gameobject.transform.localPosition.x, gameobject.transform.localPosition.y, 0.0f);
+        square.SetActive(true);
+        visualizeGameobject.Add(square);
     }
     public static void OnRelease(GameObject gameObject)
     {
