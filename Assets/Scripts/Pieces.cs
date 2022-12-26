@@ -29,7 +29,7 @@ public class Pieces
     {
         public None(Board parent) : base (parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             prefabPiece = GameManager.instance.NONE;
         }
     }
@@ -37,7 +37,7 @@ public class Pieces
     {
         public White_King(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = true;
 
             internPiece.isSlidingPiece = false;
@@ -57,7 +57,7 @@ public class Pieces
     {
         public White_Queen(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = true;
 
 
@@ -78,7 +78,7 @@ public class Pieces
     {
         public White_Rook(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = true;
 
 
@@ -95,7 +95,7 @@ public class Pieces
     {
         public White_Bischop(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = true;
 
 
@@ -112,7 +112,7 @@ public class Pieces
     {
         public White_Knight(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = true;
 
 
@@ -133,12 +133,12 @@ public class Pieces
     {
         public White_Pawn(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = true;
-
 
             internPiece.isSlidingPiece = false;
             internPiece.moveOffsets.Add(new Vector2Int(0, -1));
+            internPiece.moveOffsets.Add(new Vector2Int(0, -2));
 
             prefabPiece = GameManager.instance.WHITEPAWN;
         }
@@ -147,7 +147,7 @@ public class Pieces
     {
         public Black_King(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = false;
 
 
@@ -168,7 +168,7 @@ public class Pieces
     {
         public Black_Queen(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = false;
 
             internPiece.isSlidingPiece = true;
@@ -188,7 +188,7 @@ public class Pieces
     {
         public Black_Rook(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = false;
 
             internPiece.isSlidingPiece = true;
@@ -204,7 +204,7 @@ public class Pieces
     {
         public Black_Bischop(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = false;
 
             internPiece.isSlidingPiece = true;
@@ -220,7 +220,7 @@ public class Pieces
     {
         public Black_Knight(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = false;
 
             internPiece.isSlidingPiece = false;
@@ -240,11 +240,12 @@ public class Pieces
     {
         public Black_Pawn(Board parent) : base(parent)
         {
-            internPiece = new Pieces.Intern();
+            internPiece = new Pieces.Intern(this);
             internPiece.isWhite = false;
 
             internPiece.isSlidingPiece = false;
             internPiece.moveOffsets.Add(new Vector2Int(0,1));
+            internPiece.moveOffsets.Add(new Vector2Int(0, 2));
 
             prefabPiece = GameManager.instance.BLACKPAWN;
         }
@@ -259,9 +260,10 @@ public class Pieces
         public readonly List<Vector2Int> moveOffsets = new List<Vector2Int>();
         public List<Move> legalMoves;
 
-        public Intern()
+        public bool isFirstMove = true;
+        public Intern(Pieces piece)
         {
-            
+
         }
     }
     public class Extern
