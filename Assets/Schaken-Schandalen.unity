@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &12840946 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1000012137082366, guid: 857381d11efac0a4d91a3b3b8b94a827, type: 3}
+  m_PrefabInstance: {fileID: 1305341712}
+  m_PrefabAsset: {fileID: 0}
 --- !u!54 &17458470
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3087,7 +3092,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 19983252}
+  constraintsManager: {fileID: 545341506}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -3298,8 +3303,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2665847548664129384, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
+      propertyPath: m_text
+      value: Reset Board
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665847548664129384, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
       propertyPath: m_textAlignment
       value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665847548664129384, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 2665847548664129384, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
       propertyPath: m_VerticalAlignment
@@ -3425,6 +3438,30 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4881328831635167291, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4881328831635167291, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 675274894}
+    - target: {fileID: 4881328831635167291, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetupBoard
+      objectReference: {fileID: 0}
+    - target: {fileID: 4881328831635167291, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4881328831635167291, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5677994848336125089, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
+      propertyPath: iconQuadTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 559e1da0e65611c4f93ec931e1e6a8a2, type: 3}
     - target: {fileID: 8201116937734736058, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
       propertyPath: m_textAlignment
       value: 65535
@@ -3607,7 +3644,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 19983252}
+  constraintsManager: {fileID: 598834847}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -3667,7 +3704,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 598834844}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.018
   m_Height: 0.065
@@ -4716,6 +4753,31 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000011245072044, guid: 857381d11efac0a4d91a3b3b8b94a827, type: 3}
   m_PrefabInstance: {fileID: 1305341712}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &1174960723
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12840946}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.48, y: 0.4800001, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1174960724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12840946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebd760dbaa1594f40ab78823aef12aa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1241872387 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2757655525767129471, guid: e56efd5d0c0faae438472da772e8e4a3, type: 3}

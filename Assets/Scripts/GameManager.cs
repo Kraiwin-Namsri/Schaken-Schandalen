@@ -45,6 +45,11 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetupBoard(CHESSBOARD);
+    }
+
+    public static void SetupBoard(GameObject CHESSBOARD)
+    {
         CHESSBOARD.SetActive(false);
         Board board = new Board();
         GameManager.board = board;
@@ -206,6 +211,16 @@ public class GameManager : MonoBehaviour
             GameManager.UpdateExtern(GameManager.board);
         }
     }
+    public static void OnPointerfingerCollision(GameObject hand)
+    {
+        MarkSquare(hand, board);
+        Debug.Log("COLISSSIONNN");
+    }
 
+    public static void MarkSquare(GameObject hand, Board board)
+    {
+        hand.transform.SetParent(board.externBoard.playSurface.transform);
+        ConvertExternToInternPosition(hand.transform.localPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+    }
 }
 
