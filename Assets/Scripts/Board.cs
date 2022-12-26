@@ -307,6 +307,7 @@ public class Board
         public GameObject board;
         public GameObject playSurface;
         public GameObject pedestalPlaySurface;
+        public GameObject piecesParent;
 
         public Vector3 boardOrigin;
         public Vector3 boardScale;
@@ -317,12 +318,23 @@ public class Board
             this.board.SetActive(true);
             this.playSurface = this.board.transform.GetChild(0).gameObject;
             this.pedestalPlaySurface = this.board.transform.GetChild(3).GetChild(0).gameObject;
+            this.piecesParent = this.board.transform.GetChild(2).gameObject;
+            ClearPieces();
+
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)
                 {
-                    board.internBoard.board[x, y].CreateExtern(this.board);
+                    board.internBoard.board[x, y].CreateExtern(this.piecesParent);
                 }
+            }
+        }
+
+        private void ClearPieces()
+        {
+            while (piecesParent.transform.childCount > 0)
+            {
+                MonoBehaviour.DestroyImmediate(piecesParent.transform.GetChild(0).gameObject);
             }
         }
     }

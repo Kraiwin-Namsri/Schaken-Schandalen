@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Pieces
 {
-    public static Dictionary<GameObject, Pieces> lookupTable = new Dictionary<GameObject, Pieces>();
+    private static Dictionary<GameObject, Pieces> lookupTable = new Dictionary<GameObject, Pieces>();
 
     public Board board;
     public Pieces pieceObject;
@@ -278,6 +278,40 @@ public class Pieces
         {
             pieceGameObject.transform.localPosition = destination;
             pieceGameObject.transform.localRotation = Quaternion.identity;
+        }
+
+        public IEnumerator SmoothMove(Vector3 destination, float journeyTime)
+        {
+            float startTime = Time.time;
+            Vector3 startPosition = pieceGameObject.transform.localPosition;
+            float fracComplete = (Time.time - startTime) / journeyTime;
+
+            while (fracComplete < 1f)
+            {
+                fracComplete = (Time.time - startTime) / journeyTime;
+                pieceGameObject.transform.localPosition = Vector3.Slerp(startPosition, destination, fracComplete);
+                yield return null;
+            }
+            pieceGameObject.transform.localPosition = destination;
+            yield return null;
+        }
+    }
+
+    public static Pieces Lookup(GameObject gameobject)
+    {
+        if (gameobject == null)
+        {
+            Debug.Log("Piece requested is null!");
+            return null;
+        }
+        if (Pieces.lookupTable.ContainsKey(gameobject))
+        {
+            return Pieces.lookupTable[gameobject];
+        }
+        else
+        {
+            Debug.LogError("Piece not in Lookuptable!");
+            return null;
         }
     }
 }

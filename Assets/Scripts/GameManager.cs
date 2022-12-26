@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Unity.Collections.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.XR.OpenXR.Input;
@@ -15,8 +16,8 @@ public class GameManager : MonoBehaviour
     public GameObject CHESSBOARD;
     public GameObject PEDESTAL;
 
-    public GameObject HIGHLIGHTSQUARE;
-    public GameObject HINT;
+    public GameObject PARENT;
+
     public GameObject NONE;
 
     public GameObject WHITEKING;
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        CHESSBOARD.SetActive(false);
         Board board = new Board();
         GameManager.board = board;
         GameManager.UpdateExtern(board);
@@ -50,7 +52,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
     public static void UpdateExtern(Board board)
     {
@@ -77,18 +78,15 @@ public class GameManager : MonoBehaviour
             Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
             piece.externPiece.Move(externDestination);
         }
+        Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+        //piece.externPiece.Move(externDestination);
+        instance.StartCoroutine(piece.externPiece.SmoothMove(externDestination, 0.05f));
     }
     public static void UpdatePedestal()
     {
         int x = board.internBoard.captured.Count - 1;
-        int y = 0;
-        int totalAmountOfWhitePieces = 0;
-        int amountOfWhitePieces= 0;
-        int amountOfWhitePawns = 0;
-        int totalAmountOfBlackPieces = 0;
-        int amountOfBlackPieces = 0;
-        int amountOfBlackPawns = 0;
-
+        int y;
+        int amountOfPawns = 0;
 
         Vector2 size = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size * (Vector2)board.externBoard.pedestalPlaySurface.transform.localScale;
 
@@ -97,17 +95,9 @@ public class GameManager : MonoBehaviour
 
         foreach (Pieces piece in board.internBoard.captured)
         {
-            if(piece.internPiece.isWhite == true)
+            if (piece.GetType() == typeof(Pieces.Black_Pawn) || piece.GetType() == typeof(Pieces.White_Pawn))
             {
-                totalAmountOfWhitePieces ++;
-            }
-            if(piece.GetType() == typeof(Pieces.White_Pawn))
-            {
-                amountOfWhitePawns++;
-            }
-            if (piece.GetType() == typeof(Pieces.Black_Pawn))
-            {
-                amountOfBlackPawns++;
+                amountOfPawns++;
             }
         }
         amountOfWhitePieces = totalAmountOfWhitePieces - amountOfWhitePawns;
@@ -115,13 +105,16 @@ public class GameManager : MonoBehaviour
         amountOfBlackPieces = totalAmountOfBlackPieces - amountOfBlackPawns;
 
         if (capturedPiece.internPiece.isWhite == true && capturedPiece.GetType() == typeof(Pieces.White_Pawn))
+
+        if (capturedPiece.GetType() == typeof(Pieces.Black_Pawn) || capturedPiece.GetType() == typeof(Pieces.White_Pawn))
         {
-            x = amountOfWhitePawns -1;
+            amountOfPawns--;
             y = 1;
+            x = amountOfPawns;
         }
-        if(capturedPiece.internPiece.isWhite == true && capturedPiece.GetType() != typeof(Pieces.White_Pawn))
+        else
         {
-            x = amountOfWhitePieces - 1;
+            x -= amountOfPawns;
             y = 0;
         }
         if(capturedPiece.internPiece.isWhite == false && capturedPiece.GetType() == typeof(Pieces.Black_Pawn))
@@ -135,6 +128,7 @@ public class GameManager : MonoBehaviour
             y = 0;
         }
         
+
         capturedPiece = board.internBoard.captured[board.internBoard.captured.Count - 1];
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
 
@@ -164,10 +158,10 @@ public class GameManager : MonoBehaviour
         foreach (Move legalMove in piece.internPiece.legalMoves)
         {
             Vector3 destination = ConvertInternToExternPosition(legalMove.endPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
-            GameObject hint = Instantiate(GameManager.instance.HINT, board.externBoard.playSurface.transform);
-            hint.SetActive(true);
-            visualizeGameobject.Add(hint);
-            hint.transform.localPosition = destination;
+            GameObject marker = Instantiate(GameManager.instance.BLACKPAWN, board.externBoard.playSurface.transform);
+            marker.SetActive(true);
+            visualizeGameobject.Add(marker);
+            marker.transform.localPosition = destination;
         }
     }
 
@@ -181,24 +175,23 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public static void OnGrab(GameObject gameobject)
+    public static void OnGrab(GameObject gameObject)
     {
-        Pieces grabedPiece = Pieces.lookupTable[gameobject];
-        VisualizeLegalMoves(grabedPiece);
+        Pieces grabedPiece = Pieces.Lookup(gameObject);
+        if (gameObject != null & grabedPiece != null)
+        {
 
-        GameObject square = Instantiate(GameManager.instance.HIGHLIGHTSQUARE, board.externBoard.playSurface.transform);
-        square.transform.localPosition = new Vector3(gameobject.transform.localPosition.x, gameobject.transform.localPosition.y, 0.0f);
-        square.SetActive(true);
-        visualizeGameobject.Add(square);
+            VisualizeLegalMoves(grabedPiece);
+        }
     }
-    public static void OnRelease(GameObject gameobject)
+    public static void OnRelease(GameObject gameObject)
     {
         DeleteVisualization();
+        Pieces releasedPiece = Pieces.Lookup(gameObject);
 
-        if (Pieces.lookupTable.ContainsKey(gameobject))
+        if (gameObject != null & releasedPiece != null)
         {
-            Pieces releasedPiece = Pieces.lookupTable[gameobject];
-            Vector2Int releasePosition = ConvertExternToInternPosition(gameobject.transform.localPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+            Vector2Int releasePosition = ConvertExternToInternPosition(gameObject.transform.localPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
             if (releasePosition.x >= 0 && releasePosition.y >= 0 && releasePosition.x < board.internBoard.board.GetLength(0) && releasePosition.y < board.internBoard.board.GetLength(1))
             {
                 board.internBoard.AddMove(new Move(releasedPiece.internPiece.position, releasePosition, board.internBoard));
@@ -207,5 +200,6 @@ public class GameManager : MonoBehaviour
             GameManager.UpdateExtern(GameManager.board);
         }
     }
+
 }
 
