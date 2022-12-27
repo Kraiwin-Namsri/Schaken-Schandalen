@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.XR.OpenXR.Input;
+using static Move;
 
 
 public class GameManager : MonoBehaviour
@@ -76,9 +77,8 @@ public class GameManager : MonoBehaviour
     {
 
         Vector3 externDestination = ConvertInternToExternPosition(internDestination, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
-        piece.externPiece.Move(externDestination);
         //piece.externPiece.Move(externDestination);
-        instance.StartCoroutine(piece.externPiece.SmoothMove(externDestination, 0.05f));
+        instance.StartCoroutine(piece.externPiece.SmoothMove(externDestination, 0.1f));
     }
     public static void UpdatePedestal()
     {
@@ -205,7 +205,15 @@ public class GameManager : MonoBehaviour
             Vector2Int releasePosition = ConvertExternToInternPosition(gameObject.transform.localPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
             if (releasePosition.x >= 0 && releasePosition.y >= 0 && releasePosition.x < board.internBoard.board.GetLength(0) && releasePosition.y < board.internBoard.board.GetLength(1))
             {
-                board.internBoard.AddMove(new Move(releasedPiece.internPiece.position, releasePosition, board.internBoard));
+                foreach (Move legalMove in releasedPiece.internPiece.legalMoves)
+                {
+                    if (legalMove == new Move(releasedPiece.internPiece.position, releasePosition, board.internBoard))
+                    {
+                        board.internBoard.AddMove(legalMove);
+                        break;
+                    }
+                }
+                
             }
             // Tijdelijk
             GameManager.UpdateExtern(GameManager.board);
