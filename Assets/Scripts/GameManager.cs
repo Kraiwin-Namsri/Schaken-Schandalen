@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour
 
     public static void setParentPointerfinger(Hand pointerfinger)
     {
-        pointerfinger.gameObject.transform.parent = board.externBoard.playSurface.transform; 
+        pointerfinger.gameObject.transform.parent = board.externBoard.piecesParent.transform; 
     }
     public static void OnPointerfingerCollisionEnter(Hand hand)
     {

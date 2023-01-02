@@ -187,9 +187,15 @@ public class Move
             {
                 pieceMoves = pieceMoves.Concat(GenerateNonSliding(move.startPosition, piece, internBoard)).ToList();
             }
+
             if (piece.GetType() == typeof(Pieces.White_King) | piece.GetType() == typeof(Pieces.Black_King) | piece.GetType() == typeof(Pieces.White_Rook) | piece.GetType() == typeof(Pieces.Black_Rook))
             {
                 pieceMoves = pieceMoves.Concat(GenerateCastling(move.startPosition, piece, internBoard)).ToList();
+            }
+
+            if (piece.GetType() == typeof(Pieces.White_Pawn) | piece.GetType() == typeof(Pieces.Black_Pawn))
+            {
+                pieceMoves = pieceMoves.Concat(GeneratePawnCapture(move.startPosition, piece, internBoard)).ToList();
             }
             return pieceMoves;
 
@@ -277,6 +283,58 @@ public class Move
                 else if (piece.GetType() == typeof(Pieces.Black_Rook))
                 {
                     legalMoves.Add(new Move(new Vector2Int(0, 0), new Vector2Int(3, 0), internBoard));
+                }
+            }
+            return legalMoves;
+        }
+
+        private static List<Move> GeneratePawnCapture(Vector2Int startPosition, Pieces piece, Board.Intern internBoard)
+        {
+            List<Move> legalMoves = new List<Move>();
+            if (piece.GetType() == typeof(Pieces.Black_Pawn))
+            {
+                Vector2Int blackOffset1 = new Vector2Int(1, 1);
+                Vector2Int blackOffset2 = new Vector2Int(-1, 1);
+
+                Vector2Int blackEndPosition1 = startPosition + blackOffset1;
+                Vector2Int blackEndPosition2 = startPosition + blackOffset2;
+
+                if (blackEndPosition1.x >= 0 && blackEndPosition1.y >= 0 && blackEndPosition1.x < internBoard.board.GetLength(0) && blackEndPosition1.y < internBoard.board.GetLength(1))
+                {
+                    if (internBoard.board[blackEndPosition1.x, blackEndPosition1.y].GetType() != typeof(Pieces.None))
+                    {
+                        legalMoves.Add(new Move(startPosition, blackEndPosition1, internBoard));
+                    }
+                }
+                if (blackEndPosition2.x >= 0 && blackEndPosition2.y >= 0 && blackEndPosition2.x < internBoard.board.GetLength(0) && blackEndPosition2.y < internBoard.board.GetLength(1))
+                {
+                    if (internBoard.board[blackEndPosition2.x, blackEndPosition2.y].GetType() != typeof(Pieces.None))
+                    {
+                        legalMoves.Add(new Move(startPosition, blackEndPosition2, internBoard));
+                    }
+                }
+            }
+            else if (piece.GetType() == typeof(Pieces.White_Pawn))
+            {
+                Vector2Int whiteOffset1 = new Vector2Int(-1, -1);
+                Vector2Int whiteOffset2 = new Vector2Int(1, -1);
+
+                Vector2Int whiteEndPosition1 = startPosition + whiteOffset1;
+                Vector2Int whiteEndPosition2 = startPosition + whiteOffset2;
+
+                if (whiteEndPosition1.x >= 0 && whiteEndPosition1.y >= 0 && whiteEndPosition1.x < internBoard.board.GetLength(0) && whiteEndPosition1.y < internBoard.board.GetLength(1))
+                {
+                    if (internBoard.board[whiteEndPosition1.x, whiteEndPosition1.y].GetType() != typeof(Pieces.None))
+                    {
+                        legalMoves.Add(new Move(startPosition, whiteEndPosition1, internBoard));
+                    }
+                }
+                if (whiteEndPosition2.x >= 0 && whiteEndPosition2.y >= 0 && whiteEndPosition2.x < internBoard.board.GetLength(0) && whiteEndPosition2.y < internBoard.board.GetLength(1))
+                {
+                    if (internBoard.board[whiteEndPosition2.x, whiteEndPosition2.y].GetType() != typeof(Pieces.None))
+                    {
+                        legalMoves.Add(new Move(startPosition, whiteEndPosition2, internBoard));
+                    }
                 }
             }
             return legalMoves;

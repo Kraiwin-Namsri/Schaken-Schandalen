@@ -19,7 +19,7 @@ public class Hand : MonoBehaviour
     }
     public void OnTriggerEnter(Collider collision)
     {
-        GameManager.OnPointerfingerCollisionEnter(this);
+        //GameManager.OnPointerfingerCollisionEnter(this);
     }
     public void OnTriggerExit(Collider collision)
     {
