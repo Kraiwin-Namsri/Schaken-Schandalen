@@ -11,7 +11,6 @@ using UnityEngine.UIElements;
 using UnityEngine.XR.OpenXR.Input;
 using static Move;
 
-
 public class GameManager : MonoBehaviour
 {
     public GameObject CHESSBOARD;
@@ -218,6 +217,7 @@ public class GameManager : MonoBehaviour
             }
             // Tijdelijk
             GameManager.UpdateExtern(GameManager.board);
+            // To Do reset rotation
         }
     }
 
