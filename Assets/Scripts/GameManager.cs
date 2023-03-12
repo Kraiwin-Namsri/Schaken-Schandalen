@@ -142,6 +142,7 @@ public class GameManager : MonoBehaviour
         Vector2 position = new Vector3((size.x / 32) - (8 * size.x / 16) + ((x * size.x / 16)), -size.y + (y * size.y * 2));
 
         capturedPiece.externPiece.pieceGameObject.transform.parent = board.externBoard.pedestalPlaySurface.transform;
+        //capturedPiece.externPiece.pieceGameObject.transform.localScale = new Vector3(1,1,1);
         capturedPiece.externPiece.pieceGameObject.transform.localPosition = position;
     }
 
