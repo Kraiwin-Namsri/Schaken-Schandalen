@@ -76,6 +76,7 @@ public class Move
                         internBoard.board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
                         internBoard.board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
                     }
+                    Board.Intern.Fen.BoardToFen(internBoard);
                 }
 
                 currentMove = currentMove.appendedMove;

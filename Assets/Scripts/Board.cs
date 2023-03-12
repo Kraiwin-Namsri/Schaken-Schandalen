@@ -3,6 +3,7 @@ using Microsoft.MixedReality.Toolkit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -274,6 +275,186 @@ public class Board
                     }   
                 }
                 
+            }
+            public static void BoardToFen(Board.Intern internboard)
+            {
+                bool fenStringMade = false;
+
+                string fenStringBuild = "";
+
+                int emptySquareCounter = 0;
+                bool wasEmptySquare = false;
+                bool firstRound = true;
+
+
+                for (int y = 0; y < 8; y++)
+                {
+                    if (firstRound == false)
+                    {
+                        if (emptySquareCounter > 0)
+                        {
+                            fenStringBuild += emptySquareCounter.ToString();
+                            emptySquareCounter = 0;
+                        }
+                        fenStringBuild += "/";
+                    }
+                    firstRound = false;
+                    for (int x = 0; x < 8; x++)
+                    {
+                        switch (internboard.board[x,y].GetType().ToString())
+                        {
+                            case "Pieces+None":
+                                emptySquareCounter++;
+                                wasEmptySquare = true;
+                                break;
+                            case "Pieces+White_King":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare = false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "K";
+                                break;
+                            case "Pieces+White_Queen":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare = false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "Q";
+                                break;
+                            case "Pieces+White_Rook":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare = false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "R";
+                                break;
+                            case "Pieces+White_Bischop":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare = false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "B";
+                                break;
+                            case "Pieces+White_Knight":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare = false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "N";
+                                break;
+                            case "Pieces+White_Pawn":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare = false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "P";
+                                break;
+                            case "Pieces+Black_king":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare = false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "k";
+                                break;
+                            case "Pieces+Black_Queen":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare = false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "q";
+                                break;
+                            case "Pieces+Black_Rook":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare = false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "r";
+                                break;
+                            case "Pieces+Black_Bischop":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare = false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "b";
+                                break;
+                            case "Pieces+Black_Knight":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare= false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "n";
+                                break;
+                            case "Pieces+Black_Pawn":
+                                if (wasEmptySquare == true)
+                                {
+                                    wasEmptySquare= false;
+                                    if (emptySquareCounter > 0)
+                                    {
+                                        fenStringBuild += emptySquareCounter.ToString();
+                                        emptySquareCounter = 0;
+                                    }
+                                }
+                                fenStringBuild += "p";
+                                break;
+                        }
+                    }
+                }
+                Debug.Log(fenStringBuild);
             }
         }
         public struct CastleAbility
