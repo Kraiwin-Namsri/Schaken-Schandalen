@@ -286,7 +286,7 @@ public class Board
                 bool wasEmptySquare = false;
                 bool firstRound = true;
 
-
+                //Check Piece position
                 for (int y = 0; y < 8; y++)
                 {
                     if (firstRound == false)
@@ -454,7 +454,35 @@ public class Board
                         }
                     }
                 }
+                //Check whose turn it is
+                fenStringBuild += " ";
+                fenStringBuild += "b";
+                fenStringBuild += " ";
+
+                //Check the castleability
+                if(internboard.castleAbility.whiteKingSide == true)
+                {
+                    fenStringBuild += "K";
+                }
+                if(internboard.castleAbility.whiteQueenSide == true)
+                {
+                    fenStringBuild += "Q";
+                }
+                if(internboard.castleAbility.blackKingSide == true)
+                {
+                    fenStringBuild += "k";
+                }
+                if(internboard.castleAbility.blackQueenSide == true)
+                {
+                    fenStringBuild += "q";
+                }
+                if(internboard.castleAbility.whiteKingSide == false && internboard.castleAbility.whiteQueenSide == false && internboard.castleAbility.blackKingSide == false && internboard.castleAbility.blackQueenSide == false)
+                {
+                    fenStringBuild += "-";
+                }
                 Debug.Log(fenStringBuild);
+
+
             }
         }
         public struct CastleAbility
