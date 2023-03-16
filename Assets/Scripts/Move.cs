@@ -83,6 +83,7 @@ public class Move
                 currentMove = currentMove.appendedMove;
             } while (currentMove is not null);
             UpdateCastleAbility(mainPiece, internBoard);
+            Board.Intern.Fen.BoardToFen(internBoard, internBoard.enPassantCordsString);
         }
         moves.Clear();
     }

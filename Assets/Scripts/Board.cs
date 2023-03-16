@@ -27,6 +27,7 @@ public class Board
         public EnPassant enPassant;
         public int enPassantXCord;
         public int enPassantYCord;
+        public string enPassantCordsString;
         public int halfMoveCounter;
         public int halfMoveClockCounter;
         public int fullMoveCounter;
@@ -59,8 +60,7 @@ public class Board
             }
 
             //Update Enpassent Coordinates
-            string enPassantCoordinates ;
-            enPassantCoordinates = "";
+            internboard.enPassantCordsString = "";
             internboard.enPassantXCord = xCord;
             if (((piece == "Pieces+Black_Pawn") || (piece == "Pieces+White_Pawn")) && ((finalPosition - startingPosition == 2) || finalPosition - startingPosition == -2))
             {
@@ -68,34 +68,33 @@ public class Board
 
                 switch (xCord)
                 {
-                    case 0:enPassantCoordinates += "a"; 
+                    case 0:
+                        internboard.enPassantCordsString += "a"; 
                         break;
                     case 1:
-                        enPassantCoordinates += "b";
+                        internboard.enPassantCordsString += "b";
                         break;
                     case 2:
-                        enPassantCoordinates += "c";
+                        internboard.enPassantCordsString += "c";
                         break;
                     case 3:
-                        enPassantCoordinates += "d";
+                        internboard.enPassantCordsString += "d";
                         break;
                     case 4:
-                        enPassantCoordinates += "e";
+                        internboard.enPassantCordsString += "e";
                         break;
                     case 5:
-                        enPassantCoordinates += "f";
+                        internboard.enPassantCordsString += "f";
                         break;
                     case 6:
-                        enPassantCoordinates += "g";
+                        internboard.enPassantCordsString += "g";
                         break;
                     case 7:
-                        enPassantCoordinates += "h";
+                        internboard.enPassantCordsString += "h";
                         break;
                 }
-                enPassantCoordinates += (9 - internboard.enPassantYCord -1).ToString();
+                internboard.enPassantCordsString += (9 - internboard.enPassantYCord -1).ToString();
             }
-            Board.Intern.Fen.BoardToFen(internboard, enPassantCoordinates);
-
         }
 
         public static class Fen
