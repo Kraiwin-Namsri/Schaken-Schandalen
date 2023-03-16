@@ -79,9 +79,10 @@ public class Move
                 }
 
                 currentMove = currentMove.appendedMove;
+                Board.Intern.UpdateMoveCount(internBoard);   
+                Board.Intern.Fen.BoardToFen(internBoard);
             } while (currentMove is not null);
             UpdateCastleAbility(mainPiece, internBoard);
-            Board.Intern.Fen.BoardToFen(internBoard);
         }
         moves.Clear();
     }

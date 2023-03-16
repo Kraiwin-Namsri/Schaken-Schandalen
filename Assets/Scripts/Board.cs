@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -39,6 +40,13 @@ public class Board
         {
             moves.Add(move);
             Move.ExecuteMoves(moves, this, true);
+
+        }
+
+        public static void UpdateMoveCount(Board.Intern internboard)
+        {
+            internboard.halfMoveCounter++;
+            internboard.fullMoveCounter = (int)Mathf.Floor(internboard.halfMoveCounter / 2);
         }
 
         public static class Fen
@@ -278,8 +286,6 @@ public class Board
             }
             public static void BoardToFen(Board.Intern internboard)
             {
-                bool fenStringMade = false;
-
                 string fenStringBuild = "";
 
                 int emptySquareCounter = 0;
@@ -456,8 +462,15 @@ public class Board
                 }
                 //Check whose turn it is
                 fenStringBuild += " ";
-                fenStringBuild += "b";
-                fenStringBuild += " ";
+                if (internboard.halfMoveCounter % 2 == 0)
+                {
+                    fenStringBuild += "w";
+                }
+                else
+                {
+                    fenStringBuild += "b";
+                }
+                    fenStringBuild += " ";
 
                 //Check the castleability
                 if(internboard.castleAbility.whiteKingSide == true)
@@ -481,8 +494,6 @@ public class Board
                     fenStringBuild += "-";
                 }
                 Debug.Log(fenStringBuild);
-
-
             }
         }
         public struct CastleAbility
