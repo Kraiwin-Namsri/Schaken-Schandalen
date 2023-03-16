@@ -342,5 +342,4 @@ public class Move
             return legalMoves;
         }
     }
-    
 }
