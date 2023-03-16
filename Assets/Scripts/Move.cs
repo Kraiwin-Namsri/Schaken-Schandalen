@@ -67,6 +67,7 @@ public class Move
                         internBoard.board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
                         internBoard.board[buffer3.internPiece.position.x, buffer3.internPiece.position.y] = buffer3;
                         internBoard.captured.Add(buffer2);
+                        Board.Intern.UpdateMoveCount(internBoard, true, "None");
                         GameManager.UpdatePedestal();
                     }
                     else
@@ -75,11 +76,11 @@ public class Move
 
                         internBoard.board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
                         internBoard.board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
+                        Board.Intern.UpdateMoveCount(internBoard, false, buffer1.ToString());
                     }
                 }
 
                 currentMove = currentMove.appendedMove;
-                Board.Intern.UpdateMoveCount(internBoard);   
                 Board.Intern.Fen.BoardToFen(internBoard);
             } while (currentMove is not null);
             UpdateCastleAbility(mainPiece, internBoard);

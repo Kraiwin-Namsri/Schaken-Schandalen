@@ -26,6 +26,7 @@ public class Board
         public CastleAbility castleAbility;
         public EnPassant enPassant;
         public int halfMoveCounter;
+        public int halfMoveClockCounter;
         public int fullMoveCounter;
 
         public List<Move> moves = new List<Move>();
@@ -43,10 +44,23 @@ public class Board
 
         }
 
-        public static void UpdateMoveCount(Board.Intern internboard)
+        public static void UpdateMoveCount(Board.Intern internboard, bool reset, string piece)
         {
+            Debug.Log("enter function");
+            Debug.Log(piece);
             internboard.halfMoveCounter++;
-            internboard.fullMoveCounter = (int)Mathf.Floor(internboard.halfMoveCounter / 2);
+            internboard.halfMoveClockCounter++;
+            internboard.fullMoveCounter = (int)Mathf.Floor(internboard.halfMoveCounter / 2) + 1;
+            
+            if((piece == "Pieces+Black_Pawn") || (piece == "Pieces+White_Pawn")) 
+            {
+                reset = true;
+            }
+            if (reset == true)
+            {
+                internboard.halfMoveClockCounter= 0;
+                Debug.Log("reset");
+            }
         }
 
         public static class Fen
@@ -385,7 +399,7 @@ public class Board
                                 }
                                 fenStringBuild += "P";
                                 break;
-                            case "Pieces+Black_king":
+                            case "Pieces+Black_King":
                                 if (wasEmptySquare == true)
                                 {
                                     wasEmptySquare = false;
@@ -493,6 +507,18 @@ public class Board
                 {
                     fenStringBuild += "-";
                 }
+                
+                //Check for enpassent
+                fenStringBuild += " ";
+                fenStringBuild += "-";
+                fenStringBuild += " ";
+
+                //Check the Move Count
+                fenStringBuild += " ";
+                fenStringBuild += internboard.halfMoveClockCounter.ToString();
+                fenStringBuild += " ";
+                fenStringBuild += internboard.fullMoveCounter.ToString();
+
                 Debug.Log(fenStringBuild);
             }
         }

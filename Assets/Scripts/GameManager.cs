@@ -85,10 +85,10 @@ public class GameManager : MonoBehaviour
         int x = board.internBoard.captured.Count - 1;
         int y = 0;
         int totalAmountOfWhitePieces = 0;
-        int amountOfWhitePieces = 0;
+        int amountOfWhitePieces;
         int amountOfWhitePawns = 0;
-        int totalAmountOfBlackPieces = 0;
-        int amountOfBlackPieces = 0;
+        int totalAmountOfBlackPieces;
+        int amountOfBlackPieces;
         int amountOfBlackPawns = 0;
 
         Vector2 size = board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size * (Vector2)board.externBoard.pedestalPlaySurface.transform.localScale;
