@@ -25,6 +25,8 @@ public class Board
         public bool whiteToMove;
         public CastleAbility castleAbility;
         public EnPassant enPassant;
+        public int enPassantXCord;
+        public int enPassantYCord;
         public int halfMoveCounter;
         public int halfMoveClockCounter;
         public int fullMoveCounter;
@@ -44,23 +46,56 @@ public class Board
 
         }
 
-        public static void UpdateMoveCount(Board.Intern internboard, bool reset, string piece)
+        public static void UpdateFenstringRequirements(Board.Intern internboard, bool reset, string piece, int startingPosition, int finalPosition, int xCord)
         {
-            Debug.Log("enter function");
-            Debug.Log(piece);
             internboard.halfMoveCounter++;
             internboard.halfMoveClockCounter++;
             internboard.fullMoveCounter = (int)Mathf.Floor(internboard.halfMoveCounter / 2) + 1;
             
-            if((piece == "Pieces+Black_Pawn") || (piece == "Pieces+White_Pawn")) 
+            //Update counters
+            if((piece == "Pieces+Black_Pawn") || (piece == "Pieces+White_Pawn") || (reset == true)) 
             {
-                reset = true;
+                internboard.halfMoveClockCounter = 0;
             }
-            if (reset == true)
+
+            //Update Enpassent Coordinates
+            string enPassantCoordinates ;
+            enPassantCoordinates = "";
+            internboard.enPassantXCord = xCord;
+            if (((piece == "Pieces+Black_Pawn") || (piece == "Pieces+White_Pawn")) && ((finalPosition - startingPosition == 2) || finalPosition - startingPosition == -2))
             {
-                internboard.halfMoveClockCounter= 0;
-                Debug.Log("reset");
+                internboard.enPassantYCord = (startingPosition + finalPosition) / 2;
+
+                switch (xCord)
+                {
+                    case 0:enPassantCoordinates += "a"; 
+                        break;
+                    case 1:
+                        enPassantCoordinates += "b";
+                        break;
+                    case 2:
+                        enPassantCoordinates += "c";
+                        break;
+                    case 3:
+                        enPassantCoordinates += "d";
+                        break;
+                    case 4:
+                        enPassantCoordinates += "e";
+                        break;
+                    case 5:
+                        enPassantCoordinates += "f";
+                        break;
+                    case 6:
+                        enPassantCoordinates += "g";
+                        break;
+                    case 7:
+                        enPassantCoordinates += "h";
+                        break;
+                }
+                enPassantCoordinates += (9 - internboard.enPassantYCord -1).ToString();
             }
+            Board.Intern.Fen.BoardToFen(internboard, enPassantCoordinates);
+
         }
 
         public static class Fen
@@ -298,7 +333,7 @@ public class Board
                 }
                 
             }
-            public static void BoardToFen(Board.Intern internboard)
+            public static void BoardToFen(Board.Intern internboard, string enPassantCoordinates)
             {
                 string fenStringBuild = "";
 
@@ -510,7 +545,7 @@ public class Board
                 
                 //Check for enpassent
                 fenStringBuild += " ";
-                fenStringBuild += "-";
+                fenStringBuild += enPassantCoordinates;
                 fenStringBuild += " ";
 
                 //Check the Move Count
