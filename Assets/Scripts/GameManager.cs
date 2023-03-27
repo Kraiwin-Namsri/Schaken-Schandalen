@@ -219,5 +219,62 @@ public class GameManager : MonoBehaviour
             // To Do reset rotation
         }
     }
+<<<<<<< Updated upstream
+=======
+
+    public static void setParentPointerfinger(Hand pointerfinger)
+    {
+        pointerfinger.gameObject.transform.parent = board.externBoard.piecesParent.transform; 
+    }
+    public static void OnPointerfingerCollisionEnter(Hand hand)
+    {
+        Vector3 localPosition = board.externBoard.playSurface.transform.InverseTransformPoint(hand.gameObject.transform.position);
+        Debug.Log($"position: {localPosition}");
+
+        Vector2Int position = ConvertExternToInternPosition(localPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+        if (position.x >= 0 && position.y >= 0 && position.x < board.internBoard.board.GetLength(0) && position.y < board.internBoard.board.GetLength(1))
+        {
+            Debug.Log($"Is inside bounds!");
+            MarkSquare(position);
+        }
+    }
+
+    public static void OnPointerfingerCollisionExit(Hand hand)
+    {
+        Vector2Int enterCoordinates = Hand.handCoordinates[hand.gameObject];
+        Debug.Log(enterCoordinates);
+
+        Vector2Int exitCoordinates = ConvertExternToInternPosition(hand.gameObject.transform.localPosition, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+        Debug.Log(exitCoordinates);
+
+
+        if(enterCoordinates == exitCoordinates)
+        {
+            MarkSquare(enterCoordinates);
+        }
+        else
+        {
+            DrawArrow(enterCoordinates, exitCoordinates);
+        }
+        Hand.handCoordinates.Remove(hand.gameObject);
+    }
+    public static void MarkSquare(Vector2Int coordinate)
+    {
+        Vector3 destination = ConvertInternToExternPosition(coordinate, board.externBoard.playSurface.GetComponent<MeshFilter>().mesh.bounds.size);
+        GameObject marker = Instantiate(GameManager.instance.MARKER, board.externBoard.playSurface.transform);
+        marker.SetActive(true);
+        marker.transform.localPosition = destination;
+    }
+
+    public static void DrawArrow(Vector2Int startCoordinate, Vector2Int endCoordinate)
+    {
+
+    }
+
+    public static void StartStockfish(string forsythEdwardsNotationString)
+    {
+        instance.StartCoroutine(StockFish.GetBestMove(forsythEdwardsNotationString));
+    }
+>>>>>>> Stashed changes
 }
 
