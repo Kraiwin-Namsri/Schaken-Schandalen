@@ -80,9 +80,10 @@ public class Move
                         Board.Intern.UpdateFenstringRequirements(internBoard, false, buffer1.ToString(), buffer1.internPiece.position.y, buffer2.internPiece.position.y, buffer2.internPiece.position.x);
                     }
                 }
-                UpdateCastleAbility(mainPiece, internBoard, currentMove);
+
                 currentMove = currentMove.appendedMove;
             } while (currentMove is not null);
+            UpdateCastleAbility(mainPiece, internBoard);
             Board.Intern.Fen.BoardToFen(internBoard, internBoard.enPassantCordsString);
         }
         moves.Clear();
@@ -98,7 +99,7 @@ public class Move
         }
         piece.internPiece.isFirstMove = false;
     }
-    private static void UpdateCastleAbility(Pieces piece, Board.Intern internboard, Move currentMove)
+    private static void UpdateCastleAbility(Pieces piece, Board.Intern internboard)
     {
         if (piece.GetType() == typeof(Pieces.White_King))
         {
@@ -112,22 +113,22 @@ public class Move
         }
         else if (piece.GetType() == typeof(Pieces.White_Rook))
         {
-            if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(7, 7))
+            if (piece.internPiece.position == new Vector2(7, 7))
             {
                 internboard.castleAbility.whiteKingSide = false;
             }
-            else if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(0, 7))
+            else if (piece.internPiece.position == new Vector2(0, 7))
             {
                 internboard.castleAbility.whiteQueenSide = false;
             }
         }
         else if (piece.GetType() == typeof(Pieces.Black_Rook))
         {
-            if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(0, 0))
+            if (piece.internPiece.position == new Vector2(0, 0))
             {
                 internboard.castleAbility.blackQueenSide = false;
             }
-            else if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(7, 0))
+            else if (piece.internPiece.position == new Vector2(7, 0))
             {
                 internboard.castleAbility.blackKingSide = false;
             }
