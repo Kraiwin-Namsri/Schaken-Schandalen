@@ -6,64 +6,59 @@ using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Move
+public class MoveManager
 {
-    public Vector2Int startPosition;
-    public Vector2Int endPosition;
-    public Move appendedMove;
-
-    public bool isCapture;
-
-    public Move(Vector2Int startPosition, Vector2Int endPosition, Board.Intern board, Move appendMove=null)
+    public class Move
     {
-        this.startPosition = startPosition;
-        this.endPosition = endPosition;
-        this.isCapture = Legal.isCapture(this, board);
-        this.appendedMove = appendMove;
-    }
-    
-    //For comparing Moves
-    public static bool Contains(List<Move> moves, Move moveToCheck)
-    {
-        foreach (Move move in moves)
+        public Vector2Int startPosition;
+        public Vector2Int endPosition;
+        public Move appendedMove;
+
+        public bool isCapture;
+
+        public Move(Vector2Int startPosition, Vector2Int endPosition, Board.Intern board, Move appendMove = null)
         {
-            if (move == moveToCheck) { return true;}
+            this.startPosition = startPosition;
+            this.endPosition = endPosition;
+            this.isCapture = Legal.isCapture(this, board);
+            this.appendedMove = appendMove;
         }
-        return false;
-    }
-    public static bool operator ==(Move move1, Move move2)
-    {
-        return (move1.startPosition == move2.startPosition && move1.endPosition == move2.endPosition);
-    }
-    public static bool operator !=(Move move1, Move move2)
-    {
-        return (move1.startPosition != move2.startPosition | move1.endPosition != move2.endPosition);
-    }
 
-    public static void ExecuteMoves(List<Move> moves, Board.Intern internBoard, bool legalOnly)
-    {
-        foreach (Move move in moves)
+        //For comparing Moves
+        public static bool Contains(List<Move> moves, Move moveToCheck)
         {
-            Move currentMove = move;
-            //To Do: Find better name
-            Pieces mainPiece = internBoard.board[currentMove.startPosition.x, currentMove.startPosition.y];
-            do 
-            { 
-                if (Legal.IsLegal(currentMove, internBoard) | !legalOnly)
+            foreach (Move move in moves)
+            {
+                if (move == moveToCheck) { return true; }
+            }
+            return false;
+        }
+        public static bool operator ==(Move move1, Move move2)
+        {
+            return (move1.startPosition == move2.startPosition && move1.endPosition == move2.endPosition);
+        }
+        public static bool operator !=(Move move1, Move move2)
+        {
+            return (move1.startPosition != move2.startPosition | move1.endPosition != move2.endPosition);
+        }
+
+        public static void ExecuteMoves(List<Move> moves, Board.Intern internBoard, bool legalOnly)
+        {
+            foreach (Move move in moves)
+            {
+                Move currentMove = move;
+                //To Do: Find better name
+                Piece mainPiece = internBoard.board[currentMove.startPosition.x, currentMove.startPosition.y];
+                do
                 {
-                    Pieces buffer1 = internBoard.board[currentMove.startPosition.x, currentMove.startPosition.y];
-                    Pieces buffer2 = internBoard.board[currentMove.endPosition.x, currentMove.endPosition.y];
-
-                    UpdateIsFirstMove(buffer1);
-
-                    buffer1.internPiece.position = currentMove.endPosition;
-                    if (currentMove.isCapture)
+                    if (Legal.IsLegal(currentMove, internBoard) | !legalOnly)
                     {
-                        Pieces buffer3 = new Pieces.None(internBoard.board[currentMove.startPosition.x, currentMove.startPosition.y].board);
-                        buffer3.CreateExtern(buffer1.board.externBoard.board);
+                        Piece buffer1 = internBoard.board[currentMove.startPosition.x, currentMove.startPosition.y];
+                        Piece buffer2 = internBoard.board[currentMove.endPosition.x, currentMove.endPosition.y];
 
-                        buffer3.internPiece.position = currentMove.startPosition;
+                        UpdateIsFirstMove(buffer1);
 
+<<<<<<< Updated upstream
                         internBoard.board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
                         internBoard.board[buffer3.internPiece.position.x, buffer3.internPiece.position.y] = buffer3;
                         internBoard.captured.Add(buffer2);
@@ -234,112 +229,85 @@ public class Move
                     {
                         Vector2Int endPosition = new Vector2Int(startPosition.x + moveOffset.x, startPosition.y + moveOffset.y);
                         legalMoves.Add(new Move(startPosition, endPosition, internBoard));
+=======
+                        buffer1.internPiece.position = currentMove.endPosition;
+                        if (currentMove.isCapture)
+                        {
+                            Piece buffer3 = new Piece.None(internBoard.board[currentMove.startPosition.x, currentMove.startPosition.y].board);
+                            buffer3.CreateExtern(buffer1.board.externBoard.board);
+
+                            buffer3.internPiece.position = currentMove.startPosition;
+
+                            internBoard.board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
+                            internBoard.board[buffer3.internPiece.position.x, buffer3.internPiece.position.y] = buffer3;
+                            internBoard.captured.Add(buffer2);
+                        }
+                        else
+                        {
+                            buffer2.internPiece.position = currentMove.startPosition;
+
+                            internBoard.board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
+                            internBoard.board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
+                        }
+>>>>>>> Stashed changes
                     }
-                }
+
+                    currentMove = currentMove.appendedMove;
+                } while (currentMove is not null);
+                UpdateCastleAbility(mainPiece, internBoard);
+                internBoard.fenManager.BoardToFen(internBoard);
             }
-            return legalMoves;
+            moves.Clear();
         }
-
-        private static List<Move> GenerateCastling(Vector2Int startPosition, Pieces piece, Board.Intern internBoard)
+        private static void UpdateIsFirstMove(Piece piece)
         {
-            List<Move> legalMoves = new List<Move>();
-            if (internBoard.castleAbility.whiteKingSide)
+            if ((piece.GetType() == typeof(Piece.White_Pawn) | piece.GetType() == typeof(Piece.Black_Pawn)))
             {
-                if (piece.GetType() == typeof(Pieces.White_King))
+                if (piece.internPiece.isFirstMove)
                 {
-                    legalMoves.Add(new Move(new Vector2Int(4, 7), new Vector2Int(6,7), internBoard, new Move(new Vector2Int(7, 7), new Vector2Int(5, 7), internBoard)));
-                }
-                else if (piece.GetType() == typeof(Pieces.White_Rook))
-                {
-                    legalMoves.Add(new Move(new Vector2Int(7, 7), new Vector2Int(5, 7), internBoard));
+                    piece.internPiece.moveOffsets.RemoveAt(1);
                 }
             }
-            if (internBoard.castleAbility.whiteQueenSide)
-            {
-                if (piece.GetType() == typeof(Pieces.White_King))
-                {
-                    legalMoves.Add(new Move(new Vector2Int(4, 7), new Vector2Int(2, 7), internBoard, new Move(new Vector2Int(0, 7), new Vector2Int(3, 7), internBoard)));
-                }
-                else if (piece.GetType() == typeof(Pieces.White_Rook))
-                {
-                    legalMoves.Add(new Move(new Vector2Int(0, 7), new Vector2Int(3, 7), internBoard));
-                }
-            }
-            if (internBoard.castleAbility.blackKingSide)
-            {
-                if (piece.GetType() == typeof(Pieces.Black_King))
-                {
-                    legalMoves.Add(new Move(new Vector2Int(4, 0), new Vector2Int(6, 0), internBoard, new Move(new Vector2Int(7, 0), new Vector2Int(5, 0), internBoard)));
-                }
-                else if (piece.GetType() == typeof(Pieces.Black_Rook))
-                {
-                    legalMoves.Add(new Move(new Vector2Int(7, 0), new Vector2Int(5, 0), internBoard));
-                }
-            }
-            if (internBoard.castleAbility.blackQueenSide)
-            {
-                if (piece.GetType() == typeof(Pieces.Black_King))
-                {
-                    legalMoves.Add(new Move(new Vector2Int(4, 0), new Vector2Int(2, 0), internBoard, new Move(new Vector2Int(0, 0), new Vector2Int(3, 0), internBoard)));
-                }
-                else if (piece.GetType() == typeof(Pieces.Black_Rook))
-                {
-                    legalMoves.Add(new Move(new Vector2Int(0, 0), new Vector2Int(3, 0), internBoard));
-                }
-            }
-            return legalMoves;
+            piece.internPiece.isFirstMove = false;
         }
-
-        private static List<Move> GeneratePawnCapture(Vector2Int startPosition, Pieces piece, Board.Intern internBoard)
+        private static void UpdateCastleAbility(Piece piece, Board.Intern internboard)
         {
-            List<Move> legalMoves = new List<Move>();
-            if (piece.GetType() == typeof(Pieces.Black_Pawn))
+            if (piece.GetType() == typeof(Piece.White_King))
             {
-                Vector2Int blackOffset1 = new Vector2Int(1, 1);
-                Vector2Int blackOffset2 = new Vector2Int(-1, 1);
-
-                Vector2Int blackEndPosition1 = startPosition + blackOffset1;
-                Vector2Int blackEndPosition2 = startPosition + blackOffset2;
-
-                if (blackEndPosition1.x >= 0 && blackEndPosition1.y >= 0 && blackEndPosition1.x < internBoard.board.GetLength(0) && blackEndPosition1.y < internBoard.board.GetLength(1))
+                internboard.castleAbility.whiteKingSide = false;
+                internboard.castleAbility.whiteQueenSide = false;
+            }
+            else if (piece.GetType() == typeof(Piece.Black_King))
+            {
+                internboard.castleAbility.blackKingSide = false;
+                internboard.castleAbility.blackQueenSide = false;
+            }
+            else if (piece.GetType() == typeof(Piece.White_Rook))
+            {
+                if (piece.internPiece.position == new Vector2(7, 7))
                 {
-                    if (internBoard.board[blackEndPosition1.x, blackEndPosition1.y].GetType() != typeof(Pieces.None))
-                    {
-                        legalMoves.Add(new Move(startPosition, blackEndPosition1, internBoard));
-                    }
+                    internboard.castleAbility.whiteKingSide = false;
                 }
-                if (blackEndPosition2.x >= 0 && blackEndPosition2.y >= 0 && blackEndPosition2.x < internBoard.board.GetLength(0) && blackEndPosition2.y < internBoard.board.GetLength(1))
+                else if (piece.internPiece.position == new Vector2(0, 7))
                 {
-                    if (internBoard.board[blackEndPosition2.x, blackEndPosition2.y].GetType() != typeof(Pieces.None))
-                    {
-                        legalMoves.Add(new Move(startPosition, blackEndPosition2, internBoard));
-                    }
+                    internboard.castleAbility.whiteQueenSide = false;
                 }
             }
-            else if (piece.GetType() == typeof(Pieces.White_Pawn))
+            else if (piece.GetType() == typeof(Piece.Black_Rook))
             {
-                Vector2Int whiteOffset1 = new Vector2Int(-1, -1);
-                Vector2Int whiteOffset2 = new Vector2Int(1, -1);
-
-                Vector2Int whiteEndPosition1 = startPosition + whiteOffset1;
-                Vector2Int whiteEndPosition2 = startPosition + whiteOffset2;
-
-                if (whiteEndPosition1.x >= 0 && whiteEndPosition1.y >= 0 && whiteEndPosition1.x < internBoard.board.GetLength(0) && whiteEndPosition1.y < internBoard.board.GetLength(1))
+                if (piece.internPiece.position == new Vector2(0, 0))
                 {
-                    if (internBoard.board[whiteEndPosition1.x, whiteEndPosition1.y].GetType() != typeof(Pieces.None))
-                    {
-                        legalMoves.Add(new Move(startPosition, whiteEndPosition1, internBoard));
-                    }
+                    internboard.castleAbility.blackQueenSide = false;
                 }
-                if (whiteEndPosition2.x >= 0 && whiteEndPosition2.y >= 0 && whiteEndPosition2.x < internBoard.board.GetLength(0) && whiteEndPosition2.y < internBoard.board.GetLength(1))
+                else if (piece.internPiece.position == new Vector2(7, 0))
                 {
-                    if (internBoard.board[whiteEndPosition2.x, whiteEndPosition2.y].GetType() != typeof(Pieces.None))
-                    {
-                        legalMoves.Add(new Move(startPosition, whiteEndPosition2, internBoard));
-                    }
+                    internboard.castleAbility.blackKingSide = false;
                 }
             }
-            return legalMoves;
+
         }
     }
+
+    
+}
 }
