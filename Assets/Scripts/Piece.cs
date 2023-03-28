@@ -23,271 +23,256 @@ public class Piece
     public static GameObject PREFAB_blackknight;
     public static GameObject PREFAB_blackpawn;
 
-    private static Dictionary<GameObject, Piece> lookupTable = new Dictionary<GameObject, Piece>();
+    private static Dictionary<GameObject, Piece> lookupTable;
 
-    public Board board;
-    public Piece pieceObject;
-    public Piece.Intern internPiece;
-    public Piece.Extern externPiece;
-    private GameObject prefabPiece;
+    public Intern intern;
+    public Extern @extern;
 
-    public Piece(Board board)
+    public static Piece Lookup(GameObject gameobject)
     {
-        pieceObject = this;
-        this.board = board;
+        if (Piece.lookupTable.ContainsKey(gameobject))
+        {
+            return Piece.lookupTable[gameobject];
+        }
+        return null;
     }
-    public void CreateExtern(GameObject parent)
+    public Type GetColor()
     {
-        this.externPiece = new Piece.Extern(this, parent);
-        lookupTable.Add(this.externPiece.pieceGameObject, this);
+        if (this.GetType().IsSubclassOf(typeof(White)))
+        {
+            return typeof(White);
+        }
+        if (this.GetType().IsSubclassOf(typeof(Black)))
+        {
+            return typeof(Black);
+        }
+        return typeof(None);
     }
     public class None : Piece
     {
-        public None(Board parent) : base (parent)
+        public None(Board board)
         {
-            internPiece = new Piece.Intern(this);
-            prefabPiece = GameManager.instance.NONE;
+            List<Vector2Int> moveOffsets = new List<Vector2Int>();
+            intern = new Intern(moveOffsets);
+            @extern = new Extern(none, board.@extern);
         }
     }
-    public class White_King : Piece
-    {
-        public White_King(Board parent) : base(parent)
+    public class White : Piece {
+        public class King : White
         {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = true;
-
-            internPiece.isSlidingPiece = false;
-            internPiece.moveOffsets.Add(new Vector2Int(0, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, 0));
-            internPiece.moveOffsets.Add(new Vector2Int(1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(0, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 0));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 1));
-
-            prefabPiece = GameManager.instance.WHITEKING;
+            public King(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>()
+                {
+                    new Vector2Int(0, 1),
+                    new Vector2Int(1, 1),
+                    new Vector2Int(1, 0),
+                    new Vector2Int(1, -1),
+                    new Vector2Int(0, -1),
+                    new Vector2Int(-1, -1),
+                    new Vector2Int(-1, 0),
+                    new Vector2Int(-1, 1)
+                };
+                intern = new Intern(moveOffsets);
+                @extern = new Extern(PREFAB_whiteking, board.@extern);
+            }
+        }
+        public class Queen : White
+        {
+            public Queen(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>()
+                {
+                    new Vector2Int(0, 1),
+                    new Vector2Int(1, 1),
+                    new Vector2Int(1, 0),
+                    new Vector2Int(1, -1),
+                    new Vector2Int(0, -1),
+                    new Vector2Int(-1, -1),
+                    new Vector2Int(-1, 0),
+                    new Vector2Int(-1, 1)
+                };
+                intern = new Intern(moveOffsets);
+                @extern = new Extern(PREFAB_whitequeen, board.@extern);
+            }
+        }
+        public class Rook : White
+        {
+            public Rook(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>()
+                {
+                    new Vector2Int(0, 1),
+                    new Vector2Int(1, 0),
+                    new Vector2Int(0, -1),
+                    new Vector2Int(-1, 0)
+                };
+                intern = new Intern(moveOffsets);
+                @extern = new Extern(PREFAB_whiterook, board.@extern);
+            }
+        }
+        public class Bischop : White
+        {
+            public Bischop(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>()
+                {
+                    new Vector2Int(1, 1),
+                    new Vector2Int(1, -1),
+                    new Vector2Int(-1, -1),
+                    new Vector2Int(-1, 1)
+                };
+                intern = new Intern(moveOffsets);
+                @extern = new Extern(PREFAB_whiterook, board.@extern);
+            }
+        }
+        public class Knight : White
+        {
+            public Knight(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>()
+                {
+                    new Vector2Int(1, 2),
+                    new Vector2Int(2, -1),
+                    new Vector2Int(2, 1),
+                    new Vector2Int(1, -2),
+                    new Vector2Int(-1, -2),
+                    new Vector2Int(-2, -1),
+                    new Vector2Int(-2, 1),
+                    new Vector2Int(-1, 2)
+                };
+                intern = new Intern(moveOffsets);
+                @extern = new Extern(PREFAB_whiteknight, board.@extern);
+            }
+        }
+        public class Pawn : White
+        {
+            public bool isFirstMove = true;
+            public Pawn(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>()
+                {
+                    new Vector2Int(0, -1),
+                    new Vector2Int(0, -2)
+                };
+                intern = new Intern(moveOffsets);
+                @extern = new Extern(PREFAB_whitepawn, board.@extern);
+            }
         }
     }
-    public class White_Queen : Piece
-    {
-        public White_Queen(Board parent) : base(parent)
+    public class Black : Piece {
+        public class King : Black
         {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = true;
-
-
-            internPiece.isSlidingPiece = true;
-            internPiece.moveOffsets.Add(new Vector2Int(0, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, 0));
-            internPiece.moveOffsets.Add(new Vector2Int(1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(0, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 0));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 1));
-
-            prefabPiece = GameManager.instance.WHITEQUEEN;
+            public King(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>()
+                {
+                    new Vector2Int(0, 1),
+                    new Vector2Int(1, 1),
+                    new Vector2Int(1, 0),
+                    new Vector2Int(1, -1),
+                    new Vector2Int(0, -1),
+                    new Vector2Int(-1, -1),
+                    new Vector2Int(-1, 0),
+                    new Vector2Int(-1, 1)
+                };
+                intern = new Intern(moveOffsets);
+            }
         }
-    }
-    public class White_Rook : Piece
-    {
-        public White_Rook(Board parent) : base(parent)
+        public class Queen : Black
         {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = true;
-
-
-            internPiece.isSlidingPiece = true;
-            internPiece.moveOffsets.Add(new Vector2Int(0, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, 0));
-            internPiece.moveOffsets.Add(new Vector2Int(0, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 0));
-
-            prefabPiece = GameManager.instance.WHITEROOK;
+            public Queen(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>()
+                {
+                    new Vector2Int(0, 1),
+                    new Vector2Int(1, 1),
+                    new Vector2Int(1, 0),
+                    new Vector2Int(1, -1),
+                    new Vector2Int(0, -1),
+                    new Vector2Int(-1, -1),
+                    new Vector2Int(-1, 0),
+                    new Vector2Int(-1, 1)
+                };
+                intern = new Intern(moveOffsets);
+            }
         }
-    }
-    public class White_Bischop : Piece
-    {
-        public White_Bischop(Board parent) : base(parent)
+        public class Rook : Black
         {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = true;
-
-
-            internPiece.isSlidingPiece = true;
-            internPiece.moveOffsets.Add(new Vector2Int(1, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 1));
-
-            prefabPiece = GameManager.instance.WHITEBISCHOP;
+            public Rook(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>()
+                {
+                    new Vector2Int(0, 1),
+                    new Vector2Int(1, 0),
+                    new Vector2Int(0, -1),
+                    new Vector2Int(-1, 0)
+                };
+                intern = new Intern(moveOffsets);
+            }
         }
-    }
-    public class White_Knight : Piece
-    {
-        public White_Knight(Board parent) : base(parent)
+        public class Bischop : Black
         {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = true;
-
-
-            internPiece.isSlidingPiece = false;
-            internPiece.moveOffsets.Add(new Vector2Int(1, 2));
-            internPiece.moveOffsets.Add(new Vector2Int(2, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(2, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, -2));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, -2));
-            internPiece.moveOffsets.Add(new Vector2Int(-2, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-2, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 2));
-
-            prefabPiece = GameManager.instance.WHITEKNIGHT;
+            public Bischop(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>() 
+                {
+                    new Vector2Int(1, 1),
+                    new Vector2Int(1, -1),
+                    new Vector2Int(-1, -1),
+                    new Vector2Int(-1, 1)
+                };
+                intern = new Intern(moveOffsets);
+            }
         }
-    }
-    public class White_Pawn : Piece
-    {
-        public White_Pawn(Board parent) : base(parent)
+        public class Knight : Black
         {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = true;
-
-            internPiece.isSlidingPiece = false;
-            internPiece.moveOffsets.Add(new Vector2Int(0, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(0, -2));
-
-            prefabPiece = GameManager.instance.WHITEPAWN;
+            public Knight(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>() 
+                    {
+                    new Vector2Int(1, 2),
+                    new Vector2Int(2, -1),
+                    new Vector2Int(2, 1),
+                    new Vector2Int(1, -2),
+                    new Vector2Int (-1, -2),
+                    new Vector2Int(-2, -1),
+                    new Vector2Int(-2, 1),
+                    new Vector2Int(-1, 2)
+                    };
+                intern = new Intern(moveOffsets);
+            }
         }
-    }
-    public class Black_King : Piece
-    {
-        public Black_King(Board parent) : base(parent)
+        public class Pawn : Black
         {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = false;
-
-
-            internPiece.isSlidingPiece = false;
-            internPiece.moveOffsets.Add(new Vector2Int(0, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, 0));
-            internPiece.moveOffsets.Add(new Vector2Int(1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(0, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 0));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 1));
-
-            prefabPiece = GameManager.instance.BLACKKING;
-        }
-    }
-    public class Black_Queen : Piece
-    {
-        public Black_Queen(Board parent) : base(parent)
-        {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = false;
-
-            internPiece.isSlidingPiece = true;
-            internPiece.moveOffsets.Add(new Vector2Int(0, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, 0));
-            internPiece.moveOffsets.Add(new Vector2Int(1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(0, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 0));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 1));
-
-            prefabPiece = GameManager.instance.BLACKQUEEN;
-        }
-    }
-    public class Black_Rook : Piece
-    {
-        public Black_Rook(Board parent) : base(parent)
-        {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = false;
-
-            internPiece.isSlidingPiece = true;
-            internPiece.moveOffsets.Add(new Vector2Int(0, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, 0));
-            internPiece.moveOffsets.Add(new Vector2Int(0, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 0));
-
-            prefabPiece = GameManager.instance.BLACKROOK;
-        }
-    }
-    public class Black_Bischop : Piece
-    {
-        public Black_Bischop(Board parent) : base(parent)
-        {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = false;
-
-            internPiece.isSlidingPiece = true;
-            internPiece.moveOffsets.Add(new Vector2Int(1, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 1));
-
-            prefabPiece = GameManager.instance.BLACKBISCHOP;
-        }
-    }
-    public class Black_Knight : Piece
-    {
-        public Black_Knight(Board parent) : base(parent)
-        {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = false;
-
-            internPiece.isSlidingPiece = false;
-            internPiece.moveOffsets.Add(new Vector2Int(1, 2));
-            internPiece.moveOffsets.Add(new Vector2Int(2, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(2, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(1, -2));
-            internPiece.moveOffsets.Add(new Vector2Int (-1, -2));
-            internPiece.moveOffsets.Add(new Vector2Int(-2, -1));
-            internPiece.moveOffsets.Add(new Vector2Int(-2, 1));
-            internPiece.moveOffsets.Add(new Vector2Int(-1, 2));
-
-            prefabPiece = GameManager.instance.BLACKKNIGHT;
-        }
-    }
-    public class Black_Pawn : Piece
-    {
-        public Black_Pawn(Board parent) : base(parent)
-        {
-            internPiece = new Piece.Intern(this);
-            internPiece.isWhite = false;
-
-            internPiece.isSlidingPiece = false;
-            internPiece.moveOffsets.Add(new Vector2Int(0,1));
-            internPiece.moveOffsets.Add(new Vector2Int(0, 2));
-
-            prefabPiece = GameManager.instance.BLACKPAWN;
+            public bool isFirstMove = true;
+            public Pawn(Board board)
+            {
+                List<Vector2Int> moveOffsets = new List<Vector2Int>() 
+                {
+                    new Vector2Int(0,1),
+                    new Vector2Int(0, 2)
+                };
+                intern = new Intern(moveOffsets);
+            }
         }
     }
     public class Intern
     {
         public Vector2Int position;
-
-        public bool isWhite;
-        public bool isSlidingPiece;
-
-        public readonly List<Vector2Int> moveOffsets = new List<Vector2Int>();
+        public readonly List<Vector2Int> moveOffsets;
         public List<Move> legalMoves;
-
-        public bool isFirstMove = true;
-        public Intern(Piece piece)
+        public Intern(List<Vector2Int> moveOffsets)
         {
-
+            this.moveOffsets = moveOffsets;
         }
     }
     public class Extern
     {
         public GameObject pieceGameObject;
-        public Extern(Piece piece, GameObject parent)
+        public Extern(GameObject prefabPiece, Board.Extern @extern)
         {
-            pieceGameObject = MonoBehaviour.Instantiate(piece.prefabPiece, parent.transform);
+            pieceGameObject = MonoBehaviour.Instantiate(prefabPiece, @extern.board.transform);
             pieceGameObject.SetActive(true);
         }
         public void Move(Vector3 destination)
@@ -295,7 +280,7 @@ public class Piece
             pieceGameObject.transform.localPosition = destination;
             pieceGameObject.transform.localRotation = Quaternion.identity;
         }
-
+        //To Do also smoothly return to standard rotation
         public IEnumerator SmoothMove(Vector3 destination, float journeyTime)
         {
             float startTime = Time.time;
@@ -310,24 +295,6 @@ public class Piece
             }
             pieceGameObject.transform.localPosition = destination;
             yield return null;
-        }
-    }
-
-    public static Piece Lookup(GameObject gameobject)
-    {
-        if (gameobject == null)
-        {
-            Debug.Log("Piece requested is null!");
-            return null;
-        }
-        if (Piece.lookupTable.ContainsKey(gameobject))
-        {
-            return Piece.lookupTable[gameobject];
-        }
-        else
-        {
-            Debug.LogError("Piece not in Lookuptable!");
-            return null;
         }
     }
 }

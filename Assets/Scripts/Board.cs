@@ -12,12 +12,12 @@ using UnityEngine.UIElements;
 
 public class Board : MonoBehaviour
 {
-    public Intern internBoard;
-    public Extern externBoard;
+    public Intern intern;
+    public Extern @extern;
     public Board()
     {
-        internBoard = new Intern(this);
-        externBoard = new Extern(this);
+        intern = new Intern(this);
+        @extern = new Extern(this);
     }
     public class Intern
     {
@@ -29,7 +29,6 @@ public class Board : MonoBehaviour
         public int halfMoveClockCounter;
         public int fullMoveCounter;
 
-        public List<Move> moves = new List<Move>();
         public List<Piece> captured = new List<Piece>();
         
         public Fen fenManager;
@@ -39,19 +38,10 @@ public class Board : MonoBehaviour
             fenManager = new Fen();
             fenManager.Apply(board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         }
-
-        public void AddMove(Move move)
-        {
-            moves.Add(move);
-            Move.ExecuteMoves(moves, this, true);
-
-        }
         public bool IsInsideBounds(Vector2Int position)
         {
             return position.x >= 0 && position.y >= 0 && position.x < board.GetLength(0) && position.y < board.GetLength(1);
         }
-
-        
         public struct CastleAbility
         {
             public bool whiteKingSide;
@@ -69,10 +59,10 @@ public class Board : MonoBehaviour
         public struct EnPassant
         {
             public bool forWhite;
-            public int column;
-            public EnPassant(bool forWhite, int column) {
+            public Vector2Int coordinate;
+            public EnPassant(bool forWhite, Vector2Int coordinate) {
                 this.forWhite = forWhite;
-                this.column = column;
+                this.coordinate = coordinate;
             }
         }
     }
@@ -97,14 +87,6 @@ public class Board : MonoBehaviour
             this.pedestalPlaySurface = this.board.transform.GetChild(3).GetChild(0).gameObject;
             this.piecesParent = this.board.transform.GetChild(2).gameObject;
             ClearPieces();
-
-            for (int y = 0; y < 8; y++)
-            {
-                for (int x = 0; x < 8; x++)
-                {
-                    board.internBoard.board[x, y].CreateExtern(this.piecesParent);
-                }
-            }
         }
 
         private void ClearPieces()

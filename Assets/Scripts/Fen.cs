@@ -9,8 +9,8 @@ public class Fen : MonoBehaviour
         // To Do: If there is no piece to place. Put a None Piece in its place. (Piece.None)
         public void Apply(Board board, string fenString)
         {
-            board.internBoard.castleAbility = new CastleAbility();
-            board.internBoard.enPassant = new EnPassant();
+            board.intern.castleAbility = new CastleAbility();
+            board.intern.enPassant = new EnPassant();
 
             int x = 0;
             int y = 0;
@@ -31,63 +31,63 @@ public class Fen : MonoBehaviour
                     switch (letter)
                     {
                         case 'K':
-                            board.internBoard.board[x, y] = new Piece.White_King(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.White_King(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'Q':
-                            board.internBoard.board[x, y] = new Piece.White_Queen(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.Queen(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'R':
-                            board.internBoard.board[x, y] = new Piece.White_Rook(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.White_Rook(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'B':
-                            board.internBoard.board[x, y] = new Piece.White_Bischop(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.White_Bischop(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'N':
-                            board.internBoard.board[x, y] = new Piece.White_Knight(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.White_Knight(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'P':
-                            board.internBoard.board[x, y] = new Piece.White_Pawn(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.White_Pawn(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'k':
-                            board.internBoard.board[x, y] = new Piece.Black_King(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.King(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'q':
-                            board.internBoard.board[x, y] = new Piece.Black_Queen(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.Queen(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'r':
-                            board.internBoard.board[x, y] = new Piece.Black_Rook(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.Rook(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'b':
-                            board.internBoard.board[x, y] = new Piece.Black_Bischop(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.Bischop(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'n':
-                            board.internBoard.board[x, y] = new Piece.Black_Knight(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.Knight(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'p':
-                            board.internBoard.board[x, y] = new Piece.Black_Pawn(board);
-                            board.internBoard.board[x, y].internPiece.position = new Vector2Int((int)x, (int)y);
+                            board.intern.board[x, y] = new Piece.Pawn(board);
+                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case '1':
@@ -127,7 +127,7 @@ public class Fen : MonoBehaviour
                     }
                     for (int u = 0; u < i; u++)
                     {
-                        board.internBoard.board[x, y] = new Piece.None(board);
+                        board.intern.board[x, y] = new Piece.None(board);
                         x++;
                     }
                     i = 0;
@@ -137,10 +137,10 @@ public class Fen : MonoBehaviour
                     switch (letter)
                     {
                         case 'w':
-                            board.internBoard.whiteToMove = true;
+                            board.intern.whiteToMove = true;
                             break;
                         case 'b':
-                            board.internBoard.whiteToMove = false;
+                            board.intern.whiteToMove = false;
                             break;
                         case ' ':
                             toMoveDone = true;
@@ -155,22 +155,22 @@ public class Fen : MonoBehaviour
                     switch (letter)
                     {
                         case 'K':
-                            board.internBoard.castleAbility.whiteKingSide = true;
+                            board.intern.castleAbility.whiteKingSide = true;
                             break;
                         case 'Q':
-                            board.internBoard.castleAbility.whiteQueenSide = true;
+                            board.intern.castleAbility.whiteQueenSide = true;
                             break;
                         case 'k':
-                            board.internBoard.castleAbility.blackKingSide = true;
+                            board.intern.castleAbility.blackKingSide = true;
                             break;
                         case 'q':
-                            board.internBoard.castleAbility.blackQueenSide = true;
+                            board.intern.castleAbility.blackQueenSide = true;
                             break;
                         case '-':
-                            board.internBoard.castleAbility.whiteKingSide = false;
-                            board.internBoard.castleAbility.whiteQueenSide = false;
-                            board.internBoard.castleAbility.whiteKingSide = false;
-                            board.internBoard.castleAbility.whiteKingSide = false;
+                            board.intern.castleAbility.whiteKingSide = false;
+                            board.intern.castleAbility.whiteQueenSide = false;
+                            board.intern.castleAbility.whiteKingSide = false;
+                            board.intern.castleAbility.whiteKingSide = false;
                             break;
                         case ' ':
                             castleDone = true;
@@ -185,38 +185,38 @@ public class Fen : MonoBehaviour
                     switch (letter)
                     {
                         case '-':
-                            board.internBoard.enPassant.column = -1;
+                            board.intern.enPassant.column = -1;
                             enPassantDone = true;
                             break;
                         case 'a':
-                            board.internBoard.enPassant.column = 0;
+                            board.intern.enPassant.column = 0;
                             break;
                         case 'b':
-                            board.internBoard.enPassant.column = 1;
+                            board.intern.enPassant.column = 1;
                             break;
                         case 'c':
-                            board.internBoard.enPassant.column = 2;
+                            board.intern.enPassant.column = 2;
                             break;
                         case 'd':
-                            board.internBoard.enPassant.column = 3;
+                            board.intern.enPassant.column = 3;
                             break;
                         case 'e':
-                            board.internBoard.enPassant.column = 4;
+                            board.intern.enPassant.column = 4;
                             break;
                         case 'f':
-                            board.internBoard.enPassant.column = 5;
+                            board.intern.enPassant.column = 5;
                             break;
                         case 'g':
-                            board.internBoard.enPassant.column = 6;
+                            board.intern.enPassant.column = 6;
                             break;
                         case 'h':
-                            board.internBoard.enPassant.column = 7;
+                            board.intern.enPassant.column = 7;
                             break;
                         case '6':
-                            board.internBoard.enPassant.forWhite = false;
+                            board.intern.enPassant.forWhite = false;
                             break;
                         case '3':
-                            board.internBoard.enPassant.forWhite = true;
+                            board.intern.enPassant.forWhite = true;
                             break;
                         case ' ':
                             enPassantDone = true;
@@ -228,7 +228,7 @@ public class Fen : MonoBehaviour
                 }
                 else if (!halfCounterDone)
                 {
-                    if (int.TryParse(letter.ToString(), out board.internBoard.halfMoveCounter))
+                    if (int.TryParse(letter.ToString(), out board.intern.halfMoveCounter))
                         halfCounterDone = true;
 
                 }
@@ -236,7 +236,7 @@ public class Fen : MonoBehaviour
                 {
                     if (letter == ' ')
                         break;
-                    if (int.TryParse(letter.ToString(), out board.internBoard.fullMoveCounter))
+                    if (int.TryParse(letter.ToString(), out board.intern.fullMoveCounter))
                         fullCounterDone = true;
                     else
                         Debug.LogError("Fen String is malformed!");

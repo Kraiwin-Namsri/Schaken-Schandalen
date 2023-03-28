@@ -20,7 +20,7 @@ public class Marker : MonoBehaviour
         public void Visualize(GameManager gameManager, Piece piece)
         {
             Delete();
-            foreach (Move legalMove in piece.internPiece.legalMoves)
+            foreach (Move legalMove in piece.intern.legalMoves)
             {
                 Vector3 destination = gameManager.ConvertInternToExternPosition(legalMove.endPosition);
                 GameObject hint = Instantiate(PREFAB_hint, gameManager.GetExternBoardPosition());

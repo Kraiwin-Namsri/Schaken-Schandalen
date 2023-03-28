@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using static MoveManager;
 
-public class Legal
+public static class Legal
 {
     public static void Generate(Board.Intern internBoard)
     {
@@ -16,23 +16,23 @@ public class Legal
                 if (piece.GetType() != typeof(Piece.None))
                 {
                     Vector2Int startPosition = new Vector2Int(x, y);
-                    piece.internPiece.legalMoves = GeneratePieceMoves(piece, new Move(startPosition, startPosition, internBoard), internBoard);
+                    piece.intern.legalMoves = GeneratePieceMoves(piece, new Move(startPosition, startPosition, internBoard), internBoard);
                 }
             }
         }
     }
-
     // All the boolean Functions
-    public static bool isCapture(Move move, Board.Intern internBoard)
+    public static bool IsCapture(Move move, Board.Intern internBoard)
     {
-        bool endPositionEmpty = internBoard.board[move.endPosition.x, move.endPosition.y].GetType() == typeof(Piece.None);
-        bool differentColor = internBoard.board[move.startPosition.x, move.startPosition.y].internPiece.isWhite != internBoard.board[move.endPosition.x, move.endPosition.y].internPiece.isWhite;
-        return !endPositionEmpty && differentColor;
+        Piece piece1 = internBoard.board[move.startPosition.x, move.startPosition.y];
+        Piece piece2 = internBoard.board[move.endPosition.x, move.endPosition.y];
+        bool endPositionEmpty = piece2.GetColor() == typeof(Piece.None);
+        bool differentColor = piece1.GetColor() != piece2.GetColor();
+        return (!endPositionEmpty) && differentColor;
     }
-
     public static bool IsLegal(Move move, Board.Intern internBoard)
     {
-        bool endPositionFree = IsEndPositionFree(move, internBoard);
+        bool endPositionFree = IsPositionFree(move.endPosition, internBoard);
 
         Piece movedPiece = internBoard.board[move.startPosition.x, move.startPosition.y];
 
@@ -40,146 +40,67 @@ public class Legal
 
         return (endPositionFree & legalPos);
     }
-    public static bool IsEndPositionFree(Move move, Board.Intern internBoard)
+    public static bool IsPositionFree(Vector2Int position, Board.Intern internBoard)
     {
-        bool endPositionEmpty = internBoard.board[move.endPosition.x, move.endPosition.y].GetType() == typeof(Piece.None);
-        bool differentColor = internBoard.board[move.startPosition.x, move.startPosition.y].internPiece.isWhite != internBoard.board[move.endPosition.x, move.endPosition.y].internPiece.isWhite;
-        return endPositionEmpty | differentColor;
+        Piece piece = internBoard.board[position.x, position.y];
+        bool positionEmpty = piece.GetColor() == typeof(Piece.None);
+        return positionEmpty;
     }
 
     // All the functions that return a list
-    private static List<Move> GeneratePieceMoves(Piece piece, Move move, Board.Intern internBoard)
-    {
-        List<Move> pieceMoves = new List<Move>();
-        if (piece.internPiece.isSlidingPiece)
-        {
-            pieceMoves = pieceMoves.Concat(GenerateSliding(move.startPosition, piece, internBoard)).ToList();
-        }
-        else
-        {
-            pieceMoves = pieceMoves.Concat(GenerateNonSliding(move.startPosition, piece, internBoard)).ToList();
-        }
-
-        if (piece.GetType() == typeof(Piece.White_King) | piece.GetType() == typeof(Piece.Black_King) | piece.GetType() == typeof(Piece.White_Rook) | piece.GetType() == typeof(Piece.Black_Rook))
-        {
-            pieceMoves = pieceMoves.Concat(GenerateCastling(move.startPosition, piece, internBoard)).ToList();
-        }
-
-        if (piece.GetType() == typeof(Piece.White_Pawn) | piece.GetType() == typeof(Piece.Black_Pawn))
-        {
-            pieceMoves = pieceMoves.Concat(GeneratePawnCapture(move.startPosition, piece, internBoard)).ToList();
-        }
-        return pieceMoves;
-
-    }
-    private static List<Move> GenerateSliding(Vector2Int startPosition, Piece piece, Board.Intern internBoard)
-    {
-        List<Move> legalMoves = new List<Move>();
-        for (int i = 0; i < piece.internPiece.moveOffsets.Count; i++)
-        {
-            Vector2Int moveOffset = piece.internPiece.moveOffsets[i];
-            Vector2Int delta = new Vector2Int(moveOffset.x, moveOffset.y);
-
-
-            while (delta.x + startPosition.x < internBoard.board.GetLength(0) && delta.y + startPosition.y < internBoard.board.GetLength(1) && delta.x + startPosition.x >= 0 && delta.y + startPosition.y >= 0)
-            {
-                Vector2Int endPosition = new Vector2Int(delta.x + startPosition.x, delta.y + startPosition.y);
-                if (internBoard.board[endPosition.x, endPosition.y].GetType() != typeof(Piece.None))
-                    break;
-                legalMoves.Add(new Move(startPosition, endPosition, internBoard));
-                delta += moveOffset;
-            }
-        }
-        return legalMoves;
-    }
-    private static List<Move> GenerateNonSliding(Vector2Int startPosition, Piece piece, Board.Intern internBoard)
-    {
-        List<Move> legalMoves = new List<Move>();
-        for (int i = 0; i < piece.internPiece.moveOffsets.Count; i++)
-        {
-            Vector2Int moveOffset = piece.internPiece.moveOffsets[i];
-            if (startPosition.x + moveOffset.x < internBoard.board.GetLength(0) && startPosition.y + moveOffset.y < internBoard.board.GetLength(1) && startPosition.x + moveOffset.x >= 0 && startPosition.y + moveOffset.y >= 0)
-            {
-                if (internBoard.board[startPosition.x, startPosition.y].internPiece.isWhite != internBoard.board[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].internPiece.isWhite | internBoard.board[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].GetType() == typeof(Piece.None))
-                {
-                    Vector2Int endPosition = new Vector2Int(startPosition.x + moveOffset.x, startPosition.y + moveOffset.y);
-
-                    if (internBoard.board[startPosition.x, startPosition.y].GetType() == typeof(Piece.White_Pawn) || internBoard.board[startPosition.x, startPosition.y].GetType() == typeof(Piece.Black_Pawn))
-                    {
-                        if (internBoard.board[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].GetType() != typeof(Piece.None))
-                        {
-
-                        }
-                        else
-                        {
-                            legalMoves.Add(new Move(startPosition, endPosition, internBoard));
-                        }
-                    }
-                    else
-                    {
-                        legalMoves.Add(new Move(startPosition, endPosition, internBoard));
-                        Debug.Log(internBoard.board[startPosition.x, startPosition.y]);
-                    }
-                }
-            }
-        }
-        return legalMoves;
-    }
-
-    private static List<Move> GenerateCastling(Vector2Int startPosition, Piece piece, Board.Intern internBoard)
+    static List<Move> GenerateCastling(Vector2Int startPosition, Piece piece, Board.Intern internBoard)
     {
         List<Move> legalMoves = new List<Move>();
         if (internBoard.castleAbility.whiteKingSide)
         {
-            if (piece.GetType() == typeof(Piece.White_King))
+            if (piece.GetType() == typeof(Piece.White.King))
             {
                 legalMoves.Add(new Move(new Vector2Int(4, 7), new Vector2Int(6, 7), internBoard, new Move(new Vector2Int(7, 7), new Vector2Int(5, 7), internBoard)));
             }
-            else if (piece.GetType() == typeof(Piece.White_Rook))
+            else if (piece.GetType() == typeof(Piece.White.Rook))
             {
                 legalMoves.Add(new Move(new Vector2Int(7, 7), new Vector2Int(5, 7), internBoard));
             }
         }
         if (internBoard.castleAbility.whiteQueenSide)
         {
-            if (piece.GetType() == typeof(Piece.White_King))
+            if (piece.GetType() == typeof(Piece.White.King))
             {
                 legalMoves.Add(new Move(new Vector2Int(4, 7), new Vector2Int(2, 7), internBoard, new Move(new Vector2Int(0, 7), new Vector2Int(3, 7), internBoard)));
             }
-            else if (piece.GetType() == typeof(Piece.White_Rook))
+            else if (piece.GetType() == typeof(Piece.White.Rook))
             {
                 legalMoves.Add(new Move(new Vector2Int(0, 7), new Vector2Int(3, 7), internBoard));
             }
         }
         if (internBoard.castleAbility.blackKingSide)
         {
-            if (piece.GetType() == typeof(Piece.Black_King))
+            if (piece.GetType() == typeof(Piece.Black.King))
             {
                 legalMoves.Add(new Move(new Vector2Int(4, 0), new Vector2Int(6, 0), internBoard, new Move(new Vector2Int(7, 0), new Vector2Int(5, 0), internBoard)));
             }
-            else if (piece.GetType() == typeof(Piece.Black_Rook))
+            else if (piece.GetType() == typeof(Piece.Black.Rook))
             {
                 legalMoves.Add(new Move(new Vector2Int(7, 0), new Vector2Int(5, 0), internBoard));
             }
         }
         if (internBoard.castleAbility.blackQueenSide)
         {
-            if (piece.GetType() == typeof(Piece.Black_King))
+            if (piece.GetType() == typeof(Piece.Black.King))
             {
                 legalMoves.Add(new Move(new Vector2Int(4, 0), new Vector2Int(2, 0), internBoard, new Move(new Vector2Int(0, 0), new Vector2Int(3, 0), internBoard)));
             }
-            else if (piece.GetType() == typeof(Piece.Black_Rook))
+            else if (piece.GetType() == typeof(Piece.Black.Rook))
             {
                 legalMoves.Add(new Move(new Vector2Int(0, 0), new Vector2Int(3, 0), internBoard));
             }
         }
         return legalMoves;
     }
-
-    private static List<Move> GeneratePawnCapture(Vector2Int startPosition, Piece piece, Board.Intern internBoard)
+    static List<Move> GeneratePawnCapture(Vector2Int startPosition, Piece piece, Board.Intern internBoard)
     {
         List<Move> legalMoves = new List<Move>();
-        if (piece.GetType() == typeof(Piece.Black_Pawn))
+        if (piece.GetType() == typeof(Piece.Black.Pawn))
         {
             Vector2Int blackOffset1 = new Vector2Int(1, 1);
             Vector2Int blackOffset2 = new Vector2Int(-1, 1);
@@ -202,7 +123,7 @@ public class Legal
                 }
             }
         }
-        else if (piece.GetType() == typeof(Piece.White_Pawn))
+        else if (piece.GetType() == typeof(Piece.White.Pawn))
         {
             Vector2Int whiteOffset1 = new Vector2Int(-1, -1);
             Vector2Int whiteOffset2 = new Vector2Int(1, -1);
@@ -226,5 +147,130 @@ public class Legal
             }
         }
         return legalMoves;
+    }
+    private static List<Move> GeneratePieceMoves(Piece piece, Move move, Board.Intern internBoard)
+    {
+        List<Move> pieceMoves = new List<Move>();
+        if (piece.intern.isSlidingPiece)
+        {
+            pieceMoves = pieceMoves.Concat(GenerateSliding(move.startPosition, piece, internBoard)).ToList();
+        }
+        else
+        {
+            pieceMoves = pieceMoves.Concat(GenerateNonSliding(move.startPosition, piece, internBoard)).ToList();
+        }
+
+        if (piece.GetType() == typeof(Piece.White.King) | piece.GetType() == typeof(Piece.Black.King) | piece.GetType() == typeof(Piece.White.Rook) | piece.GetType() == typeof(Piece.Black.Rook))
+        {
+            pieceMoves = pieceMoves.Concat(GenerateCastling(move.startPosition, piece, internBoard)).ToList();
+        }
+
+        if (piece.GetType() == typeof(Piece.White.Pawn) | piece.GetType() == typeof(Piece.Black.Pawn))
+        {
+            pieceMoves = pieceMoves.Concat(GeneratePawnCapture(move.startPosition, piece, internBoard)).ToList();
+        }
+        return pieceMoves;
+    }
+    private static List<Move> GenerateSliding(Vector2Int startPosition, Piece piece, Board.Intern internBoard)
+    {
+        List<Move> legalMoves = new List<Move>();
+        for (int i = 0; i < piece.intern.moveOffsets.Count; i++)
+        {
+            Vector2Int moveOffset = piece.intern.moveOffsets[i];
+            Vector2Int delta = new Vector2Int(moveOffset.x, moveOffset.y);
+
+
+            while (delta.x + startPosition.x < internBoard.board.GetLength(0) && delta.y + startPosition.y < internBoard.board.GetLength(1) && delta.x + startPosition.x >= 0 && delta.y + startPosition.y >= 0)
+            {
+                Vector2Int endPosition = new Vector2Int(delta.x + startPosition.x, delta.y + startPosition.y);
+                if (internBoard.board[endPosition.x, endPosition.y].GetType() != typeof(Piece.None))
+                    break;
+                legalMoves.Add(new Move(startPosition, endPosition, internBoard));
+                delta += moveOffset;
+            }
+        }
+        return legalMoves;
+    }
+    private static List<Move> GenerateNonSliding(Vector2Int startPosition, Piece piece, Board.Intern internBoard)
+    {
+        List<Move> legalMoves = new List<Move>();
+        for (int i = 0; i < piece.intern.moveOffsets.Count; i++)
+        {
+            Vector2Int moveOffset = piece.intern.moveOffsets[i];
+            if (startPosition.x + moveOffset.x < internBoard.board.GetLength(0) && startPosition.y + moveOffset.y < internBoard.board.GetLength(1) && startPosition.x + moveOffset.x >= 0 && startPosition.y + moveOffset.y >= 0)
+            {
+            {
+                if (internBoard.board[startPosition.x, startPosition.y].intern.isWhite != internBoard.board[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].intern.isWhite | internBoard.board[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].GetType() == typeof(Piece.None))
+                {
+                    Vector2Int endPosition = new Vector2Int(startPosition.x + moveOffset.x, startPosition.y + moveOffset.y);
+
+                    if (internBoard.board[startPosition.x, startPosition.y].GetType() == typeof(Piece.White_Pawn) || internBoard.board[startPosition.x, startPosition.y].GetType() == typeof(Piece.Pawn))
+                    {
+                        if (internBoard.board[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].GetType() != typeof(Piece.None))
+                        {
+
+                        }
+                        else
+                        {
+                            legalMoves.Add(new Move(startPosition, endPosition, internBoard));
+                        }
+                    }
+                    else
+                    {
+                        legalMoves.Add(new Move(startPosition, endPosition, internBoard));
+                        Debug.Log(internBoard.board[startPosition.x, startPosition.y]);
+                    }
+                }
+            }
+        }
+        return legalMoves;
+    }
+
+    static void UpdateIsFirstMove(Piece piece)
+    {
+        if ((piece.GetType() == typeof(Piece.White_Pawn) | piece.GetType() == typeof(Piece.Pawn)))
+        {
+            if (piece.intern.isFirstMove)
+            {
+                piece.intern.moveOffsets.RemoveAt(1);
+            }
+        }
+        piece.intern.isFirstMove = false;
+    }
+    static void UpdateCastleAbility(Piece piece, Board.Intern internboard)
+    {
+        if (piece.GetType() == typeof(Piece.White_King))
+        {
+            internboard.castleAbility.whiteKingSide = false;
+            internboard.castleAbility.whiteQueenSide = false;
+        }
+        else if (piece.GetType() == typeof(Piece.King))
+        {
+            internboard.castleAbility.blackKingSide = false;
+            internboard.castleAbility.blackQueenSide = false;
+        }
+        else if (piece.GetType() == typeof(Piece.White_Rook))
+        {
+            if (piece.intern.position == new Vector2(7, 7))
+            {
+                internboard.castleAbility.whiteKingSide = false;
+            }
+            else if (piece.intern.position == new Vector2(0, 7))
+            {
+                internboard.castleAbility.whiteQueenSide = false;
+            }
+        }
+        else if (piece.GetType() == typeof(Piece.Rook))
+        {
+            if (piece.intern.position == new Vector2(0, 0))
+            {
+                internboard.castleAbility.blackQueenSide = false;
+            }
+            else if (piece.intern.position == new Vector2(7, 0))
+            {
+                internboard.castleAbility.blackKingSide = false;
+            }
+        }
+
     }
 }
