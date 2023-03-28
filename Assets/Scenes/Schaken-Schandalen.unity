@@ -519,26 +519,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1626697672680962025, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
-      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1626697672680962025, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
-      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 675274894}
-    - target: {fileID: 1626697672680962025, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
-      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StartStockfish
-      objectReference: {fileID: 0}
-    - target: {fileID: 1626697672680962025, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
-      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 1626697672680962025, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
-      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2665847548664129302, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -732,16 +712,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2800000, guid: 559e1da0e65611c4f93ec931e1e6a8a2, type: 3}
     - target: {fileID: 8201116937734736058, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
-      propertyPath: m_text
-      value: Stockfish
-      objectReference: {fileID: 0}
-    - target: {fileID: 8201116937734736058, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
       propertyPath: m_textAlignment
       value: 65535
-      objectReference: {fileID: 0}
-    - target: {fileID: 8201116937734736058, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
-      propertyPath: m_TextStyleHashCode
-      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 8201116937734736058, guid: 8e490a62f12a9764a84b31db73256d39, type: 3}
       propertyPath: m_VerticalAlignment
@@ -1208,19 +1180,6 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 675274894}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: StartStockfish
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: rnbqkbnr/ppppp2p/5p2/6p1/4P2Q/8/PPPP1PPP/RNB1KBNR w KQkq
-            - 0 4
           m_BoolArgument: 0
         m_CallState: 2
   onManipulationEnded:
