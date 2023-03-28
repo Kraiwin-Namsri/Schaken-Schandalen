@@ -1,3 +1,4 @@
+using Microsoft.MixedReality.Toolkit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -233,7 +234,23 @@ public class Move
                     if (internBoard.board[startPosition.x, startPosition.y].internPiece.isWhite != internBoard.board[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].internPiece.isWhite | internBoard.board[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].GetType() == typeof(Pieces.None))
                     {
                         Vector2Int endPosition = new Vector2Int(startPosition.x + moveOffset.x, startPosition.y + moveOffset.y);
-                        legalMoves.Add(new Move(startPosition, endPosition, internBoard));
+
+                        if (internBoard.board[startPosition.x, startPosition.y].GetType() == typeof(Pieces.White_Pawn) || internBoard.board[startPosition.x, startPosition.y].GetType() == typeof(Pieces.Black_Pawn))
+                        {
+                            if (internBoard.board[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].GetType() != typeof(Pieces.None))
+                            {
+
+                            }
+                            else
+                            {
+                                legalMoves.Add(new Move(startPosition, endPosition, internBoard));
+                            }
+                        }
+                        else
+                        {
+                            legalMoves.Add(new Move(startPosition, endPosition, internBoard));
+                            Debug.Log(internBoard.board[startPosition.x, startPosition.y]);
+                        }
                     }
                 }
             }
