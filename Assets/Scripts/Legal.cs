@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public static class Legal
@@ -266,6 +267,71 @@ public static class Legal
             else if (piece.intern.position == new Vector2(7, 0))
             {
                 internboard.castleAbility.blackKingSide = false;
+            }
+        }
+
+    }
+    public static class Remise
+    {
+        public static void Check(Board.Intern internboard)
+        {
+            string fen = internboard.fenManager.BoardToFen();
+            StalesMate(fen, internboard);
+            FiftyMoveRule(internboard);
+            InsuficientMaterial(fen, internboard);
+            RepeatedPosition(fen, internboard);
+        }
+        public static void StalesMate(string fenstring, Board.Intern internboard)
+        {
+
+        }
+
+        public static void FiftyMoveRule(Board.Intern internboard)
+        {
+            if (internboard.halfMoveClockCounter >= 50)
+            {
+                internboard.gameState = 0;
+            }
+        }
+        public static void InsuficientMaterial(string fenstring, Board.Intern internboard)
+        {
+            //Hoeveelheid stukken buiten de koningen
+            int piecesCount = fenstring.Count(f => f == 'Q' || f == 'q' || f == 'R' || f == 'r' || f == 'B' || f == 'b' || f == 'N' || f == 'n' || f == 'P' || f == 'p');
+            int bishopCount = fenstring.Count(f => f == 'B' || f == 'b');
+            int knightCount = fenstring.Count(f => f == 'N' || f == 'n');
+
+            if (piecesCount <= 2)
+            {
+                if (knightCount == 2)
+                {
+                    internboard.gameState = 0;
+                }
+                else if (bishopCount == 2)
+                {
+                    internboard.gameState = 0;
+                }
+                else if (bishopCount == 1 && knightCount == 1)
+                {
+                    internboard.gameState = 0;
+                }
+            }
+        }
+        public static void RepeatedPosition(string fenstring, Board.Intern internboard)
+        {
+            string newFenstring = Regex.Replace(fenstring.Split()[0], @" ", "");
+            internboard.gamePositions.Add(newFenstring);
+
+            int occurences = 0;
+            foreach (string gamePosition in internboard.gamePositions)
+            {
+                if (newFenstring == gamePosition)
+                {
+                    occurences++;
+                }
+            }
+            if (occurences >= 3)
+            {
+                internboard.gameState = 0;
             }
         }
 

@@ -7,6 +7,11 @@ using static Board.Intern;
 
 public class Fen
 {
+    public Board board;
+    public Fen(Board board)
+    {
+        this.board = board;
+    }
         // To Do: If there is no piece to place. Put a None Piece in its place. (Piece.None)
         public void Apply(Board board, string fenString)
         {
@@ -247,7 +252,7 @@ public class Fen
             }
 
         }
-        public void BoardToFen(Board.Intern board)
+        public string BoardToFen()
         {
             string fenStringBuild = "";
 
@@ -270,7 +275,7 @@ public class Fen
                 firstRound = false;
                 for (int x = 0; x < 8; x++)
                 {
-                    switch (board.array[x, y].GetType().ToString())
+                    switch (board.intern.array[x, y].GetType().ToString())
                     {
                         case "Pieces+None":
                             emptySquareCounter++;
@@ -425,7 +430,7 @@ public class Fen
             }
             //Check whose turn it is
             fenStringBuild += " ";
-            if (board.halfMoveCounter % 2 == 0)
+            if (board.intern.halfMoveCounter % 2 == 0)
             {
                 fenStringBuild += "w";
             }
@@ -436,23 +441,23 @@ public class Fen
             fenStringBuild += " ";
 
             //Check the castleability
-            if (board.castleAbility.whiteKingSide == true)
+            if (board.intern.castleAbility.whiteKingSide == true)
             {
                 fenStringBuild += "K";
             }
-            if (board.castleAbility.whiteQueenSide == true)
+            if (board.intern.castleAbility.whiteQueenSide == true)
             {
                 fenStringBuild += "Q";
             }
-            if (board.castleAbility.blackKingSide == true)
+            if (board.intern.castleAbility.blackKingSide == true)
             {
                 fenStringBuild += "k";
             }
-            if (board.castleAbility.blackQueenSide == true)
+            if (board.intern.castleAbility.blackQueenSide == true)
             {
                 fenStringBuild += "q";
             }
-            if (board.castleAbility.whiteKingSide == false && board.castleAbility.whiteQueenSide == false && board.castleAbility.blackKingSide == false && board.castleAbility.blackQueenSide == false)
+            if (board.intern.castleAbility.whiteKingSide == false && board.intern.castleAbility.whiteQueenSide == false && board.intern.castleAbility.blackKingSide == false && board.intern.castleAbility.blackQueenSide == false)
             {
                 fenStringBuild += "-";
             }
@@ -466,10 +471,9 @@ public class Fen
 
             //Check the Move Count
             fenStringBuild += " ";
-            fenStringBuild += board.halfMoveClockCounter.ToString();
+            fenStringBuild += board.intern.halfMoveClockCounter.ToString();
             fenStringBuild += " ";
-            fenStringBuild += board.fullMoveCounter.ToString();
-
-            Debug.Log(fenStringBuild);
+            fenStringBuild += board.intern.castleAbility.ToString();
+            return fenStringBuild;
         }
 }

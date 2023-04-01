@@ -26,6 +26,7 @@ public class Board
         public Board board;
         public Piece[,] array;
         public bool whiteToMove;
+        public int gameState; // -1 Nothing 0 remise, 1 white won, 2 black won
         public CastleAbility castleAbility;
         public EnPassant enPassant;
         public int halfMoveCounter;
@@ -33,11 +34,13 @@ public class Board
         public int fullMoveCounter;
         public Fen fenManager;
 
+        public List<string> gamePositions;
+
         public Intern(Board board)
         {
             this.board = board;
             array = new Piece[8, 8];    
-            fenManager = new Fen();
+            fenManager = new Fen(board);
         }
         public bool IsInsideBounds(Vector2Int position)
         {
