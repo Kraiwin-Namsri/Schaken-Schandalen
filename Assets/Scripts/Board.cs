@@ -3,6 +3,7 @@ using Microsoft.MixedReality.Toolkit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Unity.Mathematics;
@@ -558,11 +559,54 @@ public class Board
                 fenStringBuild += internboard.fullMoveCounter.ToString();
 
                 Debug.Log(fenStringBuild);
-                RepeatedPositionCheck(fenStringBuild, internboard);
+                remiseChecker(fenStringBuild, internboard);
             }
         }
 
-        public static void RepeatedPositionCheck(string fenstring, Board.Intern internboard)
+        public static void remiseChecker(string fenstring, Board.Intern internboard)
+        {
+            
+            RepeatedPositionRemise(fenstring, internboard);
+            InsuficientMaterialRemise(fenstring, internboard);
+            FiftyMoveRule(internboard);
+            StalesMate(fenstring, internboard);
+        }
+        public static void StalesMate(string fenstring, Board.Intern internboard)
+        {
+         //
+        }
+
+        public static void FiftyMoveRule(Board.Intern internboard)
+        {
+            if (internboard.halfMoveClockCounter >= 50)
+            {
+                internboard.remise = true;
+            }
+        }
+        public static void InsuficientMaterialRemise(string fenstring, Board.Intern internboard)
+        {
+            //Hoeveelheid stukken buiten de koningen
+            int piecesCount = fenstring.Count(f => f == 'Q' || f == 'q' || f == 'R' || f == 'r' || f == 'B'|| f == 'b' || f == 'N' || f == 'n' || f == 'P' || f == 'p');
+            int bishopCount = fenstring.Count(f => f == 'B' || f == 'b');
+            int knightCount = fenstring.Count(f => f == 'N' || f == 'n');
+
+            if (piecesCount <= 2)
+            {
+                if(knightCount == 2) 
+                {
+                    internboard.remise = true;
+                }
+                else if(bishopCount == 2)
+                {
+                    internboard.remise = true;
+                }
+                else if(bishopCount == 1 && knightCount == 1)
+                {
+                    internboard.remise = true;
+                }
+            }
+        }
+        public static void RepeatedPositionRemise(string fenstring, Board.Intern internboard)
         {
             int i = 0;
             string newFenstring = Regex.Replace(fenstring.Split()[0], @" ", "");
