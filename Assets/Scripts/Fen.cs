@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using static Board.Intern;
 
-public class Fen : MonoBehaviour
+public class Fen
 {
         // To Do: If there is no piece to place. Put a None Piece in its place. (Piece.None)
         public void Apply(Board board, string fenString)
@@ -31,63 +32,63 @@ public class Fen : MonoBehaviour
                     switch (letter)
                     {
                         case 'K':
-                            board.intern.board[x, y] = new Piece.White_King(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.White.King(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'Q':
-                            board.intern.board[x, y] = new Piece.Queen(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.White.Queen(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'R':
-                            board.intern.board[x, y] = new Piece.White_Rook(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.White.Rook(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'B':
-                            board.intern.board[x, y] = new Piece.White_Bischop(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.White.Bischop(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'N':
-                            board.intern.board[x, y] = new Piece.White_Knight(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.White.Knight(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'P':
-                            board.intern.board[x, y] = new Piece.White_Pawn(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.White.Pawn(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'k':
-                            board.intern.board[x, y] = new Piece.King(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.Black.King(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'q':
-                            board.intern.board[x, y] = new Piece.Queen(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.Black.Queen(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'r':
-                            board.intern.board[x, y] = new Piece.Rook(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.Black.Rook(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'b':
-                            board.intern.board[x, y] = new Piece.Bischop(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.Black.Bischop(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'n':
-                            board.intern.board[x, y] = new Piece.Knight(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.Black.Knight(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case 'p':
-                            board.intern.board[x, y] = new Piece.Pawn(board);
-                            board.intern.board[x, y].intern.position = new Vector2Int((int)x, (int)y);
+                            board.intern.array[x, y] = new Piece.Black.Pawn(board);
+                            board.intern.array[x, y].intern.position = new Vector2Int((int)x, (int)y);
                             x++;
                             break;
                         case '1':
@@ -127,7 +128,7 @@ public class Fen : MonoBehaviour
                     }
                     for (int u = 0; u < i; u++)
                     {
-                        board.intern.board[x, y] = new Piece.None(board);
+                        board.intern.array[x, y] = new Piece.None(board);
                         x++;
                     }
                     i = 0;
@@ -182,41 +183,43 @@ public class Fen : MonoBehaviour
                 }
                 else if (!enPassantDone)
                 {
+                    Vector2Int enPassantCoordinate = new Vector2Int();
                     switch (letter)
                     {
                         case '-':
-                            board.intern.enPassant.column = -1;
+                            enPassantCoordinate.x = -1;
+                            enPassantCoordinate.y = -1;
                             enPassantDone = true;
                             break;
                         case 'a':
-                            board.intern.enPassant.column = 0;
+                            enPassantCoordinate.x = 0;
                             break;
                         case 'b':
-                            board.intern.enPassant.column = 1;
+                            enPassantCoordinate.x = 1;
                             break;
                         case 'c':
-                            board.intern.enPassant.column = 2;
+                            enPassantCoordinate.x = 2;
                             break;
                         case 'd':
-                            board.intern.enPassant.column = 3;
+                            enPassantCoordinate.x = 3;
                             break;
                         case 'e':
-                            board.intern.enPassant.column = 4;
+                            enPassantCoordinate.x = 4;
                             break;
                         case 'f':
-                            board.intern.enPassant.column = 5;
+                            enPassantCoordinate.x = 5;
                             break;
                         case 'g':
-                            board.intern.enPassant.column = 6;
+                            enPassantCoordinate.x = 6;
                             break;
                         case 'h':
-                            board.intern.enPassant.column = 7;
+                            enPassantCoordinate.x = 7;
                             break;
                         case '6':
-                            board.intern.enPassant.forWhite = false;
+                            enPassantCoordinate.y = 5;
                             break;
                         case '3':
-                            board.intern.enPassant.forWhite = true;
+                            enPassantCoordinate.y = 2;
                             break;
                         case ' ':
                             enPassantDone = true;
@@ -267,7 +270,7 @@ public class Fen : MonoBehaviour
                 firstRound = false;
                 for (int x = 0; x < 8; x++)
                 {
-                    switch (internboard.board[x, y].GetType().ToString())
+                    switch (board.array[x, y].GetType().ToString())
                     {
                         case "Pieces+None":
                             emptySquareCounter++;
@@ -422,7 +425,7 @@ public class Fen : MonoBehaviour
             }
             //Check whose turn it is
             fenStringBuild += " ";
-            if (internboard.halfMoveCounter % 2 == 0)
+            if (board.halfMoveCounter % 2 == 0)
             {
                 fenStringBuild += "w";
             }
@@ -433,27 +436,29 @@ public class Fen : MonoBehaviour
             fenStringBuild += " ";
 
             //Check the castleability
-            if (internboard.castleAbility.whiteKingSide == true)
+            if (board.castleAbility.whiteKingSide == true)
             {
                 fenStringBuild += "K";
             }
-            if (internboard.castleAbility.whiteQueenSide == true)
+            if (board.castleAbility.whiteQueenSide == true)
             {
                 fenStringBuild += "Q";
             }
-            if (internboard.castleAbility.blackKingSide == true)
+            if (board.castleAbility.blackKingSide == true)
             {
                 fenStringBuild += "k";
             }
-            if (internboard.castleAbility.blackQueenSide == true)
+            if (board.castleAbility.blackQueenSide == true)
             {
                 fenStringBuild += "q";
             }
-            if (internboard.castleAbility.whiteKingSide == false && internboard.castleAbility.whiteQueenSide == false && internboard.castleAbility.blackKingSide == false && internboard.castleAbility.blackQueenSide == false)
+            if (board.castleAbility.whiteKingSide == false && board.castleAbility.whiteQueenSide == false && board.castleAbility.blackKingSide == false && board.castleAbility.blackQueenSide == false)
             {
                 fenStringBuild += "-";
             }
 
+        //To Do: convert vector2Int to ingame coordinate.
+            string enPassantCoordinates = "";
             //Check for enpassent
             fenStringBuild += " ";
             fenStringBuild += enPassantCoordinates;
@@ -461,9 +466,9 @@ public class Fen : MonoBehaviour
 
             //Check the Move Count
             fenStringBuild += " ";
-            fenStringBuild += internboard.halfMoveClockCounter.ToString();
+            fenStringBuild += board.halfMoveClockCounter.ToString();
             fenStringBuild += " ";
-            fenStringBuild += internboard.fullMoveCounter.ToString();
+            fenStringBuild += board.fullMoveCounter.ToString();
 
             Debug.Log(fenStringBuild);
         }
