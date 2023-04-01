@@ -7,76 +7,89 @@ using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MoveManager
+public class Move
 {
-    private List<Move> moves;
-    public MoveManager()
+    public Vector2Int startPosition;
+    public Vector2Int endPosition;
+    public Move appendedMove;
+
+    public bool isCapture;
+
+    public Move(Vector2Int startPosition, Vector2Int endPosition, Board.Intern board, Move appendMove=null)
     {
-        moves = new List<Move>();
-    }
-    public void AddMove(Move move)
-    {
-        moves.Add(move);
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+        this.isCapture = Legal.isCapture(this, board);
+        this.appendedMove = appendMove;
     }
     
-    //This functions executes all moves in the list moves, and returns all the captured pieces.
-    public List<Piece> ExecuteMoveQueue(Board board)
+    //For comparing Moves
+    public static bool Contains(List<Move> moves, Move moveToCheck)
     {
-        List<Piece> capturedPieces = new List<Piece>();
         foreach (Move move in moves)
         {
-            //Buffer for appended moves.
-            Move currentMove = move;
-            do
-            {
-                //Store the two pieces on the start and end position
-                Piece buffer1 = board.intern.array[currentMove.startPosition.x, currentMove.startPosition.y];
-                Piece buffer2 = board.intern.array[currentMove.endPosition.x, currentMove.endPosition.y];
+            if (move == moveToCheck) { return true;}
+        }
+        return false;
+    }
+    public static bool operator ==(Move move1, Move move2)
+    {
+        return (move1.startPosition == move2.startPosition && move1.endPosition == move2.endPosition);
+    }
+    public static bool operator !=(Move move1, Move move2)
+    {
+        return (move1.startPosition != move2.startPosition | move1.endPosition != move2.endPosition);
+    }
 
-                //Update rules
-                if (buffer1.GetType() == typeof(Piece.White.Pawn) | buffer1.GetType() == typeof(Piece.Black.Pawn))
+    public static void ExecuteMoves(List<Move> moves, Board.Intern internBoard, bool legalOnly)
+    {
+        foreach (Move move in moves)
+        {
+            Move currentMove = move;
+            //To Do: Find better name
+            Pieces mainPiece = internBoard.board[currentMove.startPosition.x, currentMove.startPosition.y];
+            do 
+            { 
+                if (Legal.IsLegal(currentMove, internBoard) | !legalOnly)
                 {
-                    ((dynamic) buffer1).RemoveDoublePawnPush();
+                    Pieces buffer1 = internBoard.board[currentMove.startPosition.x, currentMove.startPosition.y];
+                    Pieces buffer2 = internBoard.board[currentMove.endPosition.x, currentMove.endPosition.y];
+
+                    UpdateIsFirstMove(buffer1);
+
+                    buffer1.internPiece.position = currentMove.endPosition;
+                    if (currentMove.isCapture)
+                    {
+                        Pieces buffer3 = new Pieces.None(internBoard.board[currentMove.startPosition.x, currentMove.startPosition.y].board);
+                        buffer3.CreateExtern(buffer1.board.externBoard.board);
+
+                        buffer3.internPiece.position = currentMove.startPosition;
+
+                        internBoard.board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
+                        internBoard.board[buffer3.internPiece.position.x, buffer3.internPiece.position.y] = buffer3;
+                        internBoard.captured.Add(buffer2);
+                        Board.Intern.UpdateFenstringRequirements(internBoard, true, "None", 0, 0, 0);
+                        GameManager.UpdatePedestal();
+                    }
+                    else
+                    {
+                        buffer2.internPiece.position = currentMove.startPosition;
+
+                        internBoard.board[buffer1.internPiece.position.x, buffer1.internPiece.position.y] = buffer1;
+                        internBoard.board[buffer2.internPiece.position.x, buffer2.internPiece.position.y] = buffer2;
+                        Board.Intern.UpdateFenstringRequirements(internBoard, false, buffer1.ToString(), buffer1.internPiece.position.y, buffer2.internPiece.position.y, buffer2.internPiece.position.x);
+                    }
                 }
-<<<<<<< HEAD
 
                 currentMove = currentMove.appendedMove;
             } while (currentMove is not null);
             UpdateCastleAbility(mainPiece, internBoard);
             Board.Intern.Fen.BoardToFen(internBoard, internBoard.enPassantCordsString);
-=======
-                UpdateCastleAbility(buffer1, board.intern, currentMove);
-
-                //Set the internal position to the endposition of the move
-                buffer1.intern.position = currentMove.endPosition;
-
-                if (Legal.IsCapture(currentMove, board.intern))
-                {
-                    Piece buffer3 = new Piece.None(board);
-
-                    buffer3.intern.position = currentMove.startPosition;
-
-                    board.intern.array[buffer1.intern.position.x, buffer1.intern.position.y] = buffer1;
-                    board.intern.array[buffer3.intern.position.x, buffer3.intern.position.y] = buffer3;
-                    capturedPieces.Add(buffer2);
-                }
-                else
-                {
-                    buffer2.intern.position = currentMove.startPosition;
-                    board.intern.array[buffer1.intern.position.x, buffer1.intern.position.y] = buffer1;
-                    board.intern.array[buffer2.intern.position.x, buffer2.intern.position.y] = buffer2;
-                }
-                
-                currentMove = currentMove.appendedMove;
-            } while (currentMove is not null);
->>>>>>> development
         }
         moves.Clear();
-        return capturedPieces;
     }
-    private void UpdateCastleAbility(Piece piece, Board.Intern internboard, Move currentMove)
+    private static void UpdateIsFirstMove(Pieces piece)
     {
-<<<<<<< HEAD
         if ((piece.GetType() == typeof(Pieces.White_Pawn) | piece.GetType() == typeof(Pieces.Black_Pawn)))
         {
             if (piece.internPiece.isFirstMove)
@@ -89,19 +102,16 @@ public class MoveManager
     private static void UpdateCastleAbility(Pieces piece, Board.Intern internboard)
     {
         if (piece.GetType() == typeof(Pieces.White_King))
-=======
-        if (piece.GetType() == typeof(Piece.White.King))
->>>>>>> development
         {
             internboard.castleAbility.whiteKingSide = false;
             internboard.castleAbility.whiteQueenSide = false;
         }
-        else if (piece.GetType() == typeof(Piece.Black.King))
+        else if (piece.GetType() == typeof(Pieces.Black_King))
         {
             internboard.castleAbility.blackKingSide = false;
             internboard.castleAbility.blackQueenSide = false;
         }
-        else if (piece.GetType() == typeof(Piece.White.Rook))
+        else if (piece.GetType() == typeof(Pieces.White_Rook))
         {
             if (piece.internPiece.position == new Vector2(7, 7))
             {
@@ -112,7 +122,7 @@ public class MoveManager
                 internboard.castleAbility.whiteQueenSide = false;
             }
         }
-        else if (piece.GetType() == typeof(Piece.Black.Rook))
+        else if (piece.GetType() == typeof(Pieces.Black_Rook))
         {
             if (piece.internPiece.position == new Vector2(0, 0))
             {
@@ -125,26 +135,11 @@ public class MoveManager
         }
 
     }
-}
-public class Move
-{
-    public Vector2Int startPosition;
-    public Vector2Int endPosition;
-    public Move appendedMove;
 
-    public Move(Vector2Int startPosition, Vector2Int endPosition, Board.Intern board, Move appendMove = null)
+    public static class Legal
     {
-        this.startPosition = startPosition;
-        this.endPosition = endPosition;
-        this.appendedMove = appendMove;
-    }
-
-    //For comparing Moves
-    public static bool Contains(List<Move> moves, Move moveToCheck)
-    {
-        foreach (Move move in moves)
+        public static void Generate(Board.Intern internBoard)
         {
-<<<<<<< HEAD
             for (int y = 0; y < internBoard.board.GetLength(1); y++)
             {
                 for (int x = 0; x < internBoard.board.GetLength(0); x++)
@@ -363,18 +358,6 @@ public class Move
                 }
             }
             return legalMoves;
-=======
-            if (move == moveToCheck) { return true; }
->>>>>>> development
         }
-        return false;
-    }
-    public static bool operator ==(Move move1, Move move2)
-    {
-        return (move1.startPosition == move2.startPosition && move1.endPosition == move2.endPosition);
-    }
-    public static bool operator !=(Move move1, Move move2)
-    {
-        return (move1.startPosition != move2.startPosition | move1.endPosition != move2.endPosition);
     }
 }
