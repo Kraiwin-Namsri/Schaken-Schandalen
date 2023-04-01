@@ -12,7 +12,7 @@ using Unity.VisualScripting;
 using Newtonsoft.Json;
 using System.Xml.Linq;
 
-public class StockFish : MonoBehaviour
+public class StockFish
 {
     class Response
     {
