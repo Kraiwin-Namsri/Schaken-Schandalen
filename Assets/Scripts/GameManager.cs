@@ -21,8 +21,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         board = new Board();
+        board.intern.fenManager.Apply("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         pedestal = new Pedestal();
-        board.intern.fenManager.Apply(board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         markerManager = new MarkerManager();
         moveManager = new MoveManager();
         StartCoroutine(LateStart(0.1f));
@@ -45,12 +45,14 @@ public class GameManager : MonoBehaviour
     }
     public void OnRelease(GameObject gameObject)
     {
-        markerManager.hints.Delete();
         Piece releasedPiece = Piece.Lookup(gameObject);
+        
+        markerManager.hints.Delete();
 
         if (gameObject != null & releasedPiece != null)
         {
             Vector2Int releasePosition = board.@extern.ToIntern(gameObject.transform.localPosition);
+            
             bool isInsideBounds = board.intern.IsInsideBounds(releasePosition);
             if (isInsideBounds)
             {

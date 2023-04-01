@@ -13,7 +13,7 @@ public class Fen
         this.board = board;
     }
         // To Do: If there is no piece to place. Put a None Piece in its place. (Piece.None)
-        public void Apply(Board board, string fenString)
+        public void Apply(string fenString)
         {
             board.intern.castleAbility = new CastleAbility();
             board.intern.enPassant = new EnPassant();
@@ -462,7 +462,7 @@ public class Fen
                 fenStringBuild += "-";
             }
 
-        //To Do: convert vector2Int to ingame coordinate.
+            //To Do: convert vector2Int to ingame coordinate.
             string enPassantCoordinates = "";
             //Check for enpassent
             fenStringBuild += " ";

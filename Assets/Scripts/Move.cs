@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -32,12 +33,19 @@ public class MoveManager
                 Piece buffer1 = board.intern.array[currentMove.startPosition.x, currentMove.startPosition.y];
                 Piece buffer2 = board.intern.array[currentMove.endPosition.x, currentMove.endPosition.y];
 
+
+
                 //Update rules
                 if (buffer1.GetType() == typeof(Piece.White.Pawn) | buffer1.GetType() == typeof(Piece.Black.Pawn))
                 {
                     ((dynamic) buffer1).RemoveDoublePawnPush();
+                    board.intern.UpdateEnPassant(move);
                 }
-                UpdateCastleAbility(buffer1, board.intern, currentMove);
+                board.intern.UpdateCastleAbility(buffer1, currentMove);
+                board.intern.UpdateHalfMove();
+                board.intern.UpdateHalfMoveClock(Legal.IsCapture(currentMove, board.intern));
+
+
 
                 //Set the internal position to the endposition of the move
                 buffer1.intern.position = currentMove.endPosition;
@@ -65,42 +73,7 @@ public class MoveManager
         moves.Clear();
         return capturedPieces;
     }
-    private void UpdateCastleAbility(Piece piece, Board.Intern internboard, Move currentMove)
-    {
-        if (piece.GetType() == typeof(Piece.White.King))
-        {
-            internboard.castleAbility.whiteKingSide = false;
-            internboard.castleAbility.whiteQueenSide = false;
-        }
-        else if (piece.GetType() == typeof(Piece.Black.King))
-        {
-            internboard.castleAbility.blackKingSide = false;
-            internboard.castleAbility.blackQueenSide = false;
-        }
-        else if (piece.GetType() == typeof(Piece.White.Rook))
-        {
-            if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(7, 7))
-            {
-                internboard.castleAbility.whiteKingSide = false;
-            }
-            else if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(0, 7))
-            {
-                internboard.castleAbility.whiteQueenSide = false;
-            }
-        }
-        else if (piece.GetType() == typeof(Piece.Black.Rook))
-        {
-            if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(0, 0))
-            {
-                internboard.castleAbility.blackQueenSide = false;
-            }
-            else if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(7, 0))
-            {
-                internboard.castleAbility.blackKingSide = false;
-            }
-        }
-
-    }
+    
 }
 public class Move
 {

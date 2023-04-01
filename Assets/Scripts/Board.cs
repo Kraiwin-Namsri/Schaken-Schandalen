@@ -29,9 +29,9 @@ public class Board
         public int gameState; // -1 Nothing 0 remise, 1 white won, 2 black won
         public CastleAbility castleAbility;
         public EnPassant enPassant;
-        public int halfMoveCounter;
-        public int halfMoveClockCounter;
-        public int fullMoveCounter;
+        public int halfMoveCounter = 0;
+        public int halfMoveClockCounter = 0;
+        public int fullMoveCounter = 1;
         public Fen fenManager;
 
         public List<string> gamePositions;
@@ -41,6 +41,62 @@ public class Board
             this.board = board;
             array = new Piece[8, 8];    
             fenManager = new Fen(board);
+        }
+        public void UpdateHalfMoveClock(bool isCapture)
+        {
+            if (isCapture)
+            {
+                halfMoveClockCounter = 0;
+            }
+            else 
+            {
+                halfMoveClockCounter++;
+            }
+        }
+        public void UpdateHalfMove()
+        {
+            halfMoveCounter++;
+        }
+        public void UpdateCastleAbility(Piece piece, Move currentMove)
+        {
+            if (piece.GetType() == typeof(Piece.White.King))
+            {
+                castleAbility.whiteKingSide = false;
+                castleAbility.whiteQueenSide = false;
+            }
+            else if (piece.GetType() == typeof(Piece.Black.King))
+            {
+                castleAbility.blackKingSide = false;
+                castleAbility.blackQueenSide = false;
+            }
+            else if (piece.GetType() == typeof(Piece.White.Rook))
+            {
+                if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(7, 7))
+                {
+                    castleAbility.whiteKingSide = false;
+                }
+                else if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(0, 7))
+                {
+                    castleAbility.whiteQueenSide = false;
+                }
+            }
+            else if (piece.GetType() == typeof(Piece.Black.Rook))
+            {
+                if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(0, 0))
+                {
+                    castleAbility.blackQueenSide = false;
+                }
+                else if (new Vector2(currentMove.startPosition.x, currentMove.startPosition.y) == new Vector2(7, 0))
+                {
+                    castleAbility.blackKingSide = false;
+                }
+            }
+
+        }
+        public void UpdateEnPassant(Move move)
+        {
+            enPassant.coordinate.y = (move.startPosition.y + move.endPosition.y) / 2;
+            enPassant.coordinate.x = move.startPosition.x;
         }
         public bool IsInsideBounds(Vector2Int position)
         {
@@ -62,7 +118,7 @@ public class Board
         }
         public struct EnPassant
         {
-            public Vector2Int coordinate;
+            public Vector2Int coordinate;   
             public EnPassant(Vector2Int coordinate) {
                 this.coordinate = coordinate;
             }
