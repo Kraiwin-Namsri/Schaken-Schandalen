@@ -4,10 +4,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Windows;
 
 
 public class Board
@@ -31,9 +33,11 @@ public class Board
         public int halfMoveCounter;
         public int halfMoveClockCounter;
         public int fullMoveCounter;
+        public bool remise;
 
         public List<Move> moves = new List<Move>();
         public List<Pieces> captured = new List<Pieces>();
+        public List<string> positions= new List<string>();
 
         public Intern(Board board)
         {
@@ -554,6 +558,29 @@ public class Board
                 fenStringBuild += internboard.fullMoveCounter.ToString();
 
                 Debug.Log(fenStringBuild);
+                RepeatedPositionCheck(fenStringBuild, internboard);
+            }
+        }
+
+        public static void RepeatedPositionCheck(string fenstring, Board.Intern internboard)
+        {
+            int i = 0;
+            string newFenstring = Regex.Replace(fenstring.Split()[0], @" ", "");
+            
+            internboard.positions.Add(newFenstring);
+            Debug.Log(newFenstring);
+
+            foreach (string position in internboard.positions)
+            {
+                if(newFenstring == position)
+                {
+                    i++;
+                }
+            }
+            if(i == 3) 
+            {
+                internboard.remise = true;
+                Debug.Log("remise");
             }
         }
         public struct CastleAbility

@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Schaken-Schandalen.unity
+    path: Assets/Scenes/Tegen zelf.unity
     guid: 18f9d48196c9b6d4589fd414246f71de
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: aa4b0c1811085444993f5d7088ac64f8, type: 2}
