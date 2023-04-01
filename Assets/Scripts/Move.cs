@@ -9,33 +9,33 @@ using UnityEngine;
 public class MoveManager
 {
     private List<Move> moves;
-    MoveManager()
+    public MoveManager()
     {
         moves = new List<Move>();
     }
-    //To Do: when changing position of one of pieces. It should automatically update the piece as wel as on the board.
-    public void ExecuteMoves(Board board)
+    public void AddMove(Move move)
     {
+        moves.Add(move);
+    }
+    
+    //This functions executes all moves in the list moves, and returns all the captured pieces.
+    public List<Piece> ExecuteMoveQueue(Board board)
+    {
+        List<Piece> capturedPieces = new List<Piece>();
         foreach (Move move in moves)
         {
             //Buffer for appended moves.
             Move currentMove = move;
             do
             {
-                //If one of the moves is illegal stop executing.
-                if (!Legal.IsLegal(currentMove, board.intern))
-                {
-                    moves.Clear();
-                    return;
-                }
                 //Store the two pieces on the start and end position
-                Piece buffer1 = board.intern.board[currentMove.startPosition.x, currentMove.startPosition.y];
-                Piece buffer2 = board.intern.board[currentMove.endPosition.x, currentMove.endPosition.y];
+                Piece buffer1 = board.intern.array[currentMove.startPosition.x, currentMove.startPosition.y];
+                Piece buffer2 = board.intern.array[currentMove.endPosition.x, currentMove.endPosition.y];
 
                 //Update rules
                 if (buffer1.GetType() == typeof(Piece.White.Pawn) | buffer1.GetType() == typeof(Piece.Black.Pawn))
                 {
-                    UpdatePawnFirstMove(buffer1);
+                    ((dynamic) buffer1).RemoveDoublePawnPush();
                 }
                 UpdateCastleAbility(buffer1, board.intern, currentMove);
 
@@ -48,31 +48,22 @@ public class MoveManager
 
                     buffer3.intern.position = currentMove.startPosition;
 
-                    board.intern.board[buffer1.intern.position.x, buffer1.intern.position.y] = buffer1;
-                    board.intern.board[buffer3.intern.position.x, buffer3.intern.position.y] = buffer3;
-                    board.intern.captured.Add(buffer2);
+                    board.intern.array[buffer1.intern.position.x, buffer1.intern.position.y] = buffer1;
+                    board.intern.array[buffer3.intern.position.x, buffer3.intern.position.y] = buffer3;
+                    capturedPieces.Add(buffer2);
                 }
                 else
                 {
-                    // Simply switch the piece+none
                     buffer2.intern.position = currentMove.startPosition;
-
-                    board.intern.board[buffer1.intern.position.x, buffer1.intern.position.y] = buffer1;
-                    board.intern.board[buffer2.intern.position.x, buffer2.intern.position.y] = buffer2;
+                    board.intern.array[buffer1.intern.position.x, buffer1.intern.position.y] = buffer1;
+                    board.intern.array[buffer2.intern.position.x, buffer2.intern.position.y] = buffer2;
                 }
                 
                 currentMove = currentMove.appendedMove;
             } while (currentMove is not null);
         }
         moves.Clear();
-    }
-    private void UpdatePawnFirstMove(dynamic piece)
-    {
-        if (piece.intern.isFirstMove)
-        {
-            piece.intern.moveOffsets.RemoveAt(1);
-            piece.intern.isFirstMove = false;
-        }
+        return capturedPieces;
     }
     private void UpdateCastleAbility(Piece piece, Board.Intern internboard, Move currentMove)
     {
@@ -113,7 +104,6 @@ public class MoveManager
 }
 public class Move
 {
-    public MoveManager moveManager;
     public Vector2Int startPosition;
     public Vector2Int endPosition;
     public Move appendedMove;

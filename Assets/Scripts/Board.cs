@@ -4,13 +4,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 
-public class Board : MonoBehaviour
+public class Board
 {
     public Intern intern;
     public Extern @extern;
@@ -21,26 +23,25 @@ public class Board : MonoBehaviour
     }
     public class Intern
     {
-        public Piece[,] board = new Piece[8, 8];
+        public Board board;
+        public Piece[,] array;
         public bool whiteToMove;
         public CastleAbility castleAbility;
         public EnPassant enPassant;
         public int halfMoveCounter;
         public int halfMoveClockCounter;
         public int fullMoveCounter;
-
-        public List<Piece> captured = new List<Piece>();
-        
         public Fen fenManager;
 
         public Intern(Board board)
         {
+            this.board = board;
+            array = new Piece[8, 8];    
             fenManager = new Fen();
-            fenManager.Apply(board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         }
         public bool IsInsideBounds(Vector2Int position)
         {
-            return position.x >= 0 && position.y >= 0 && position.x < board.GetLength(0) && position.y < board.GetLength(1);
+            return position.x >= 0 && position.y >= 0 && position.x < array.GetLength(0) && position.y < array.GetLength(1);
         }
         public struct CastleAbility
         {
@@ -58,43 +59,54 @@ public class Board : MonoBehaviour
         }
         public struct EnPassant
         {
-            public bool forWhite;
             public Vector2Int coordinate;
-            public EnPassant(bool forWhite, Vector2Int coordinate) {
-                this.forWhite = forWhite;
+            public EnPassant(Vector2Int coordinate) {
                 this.coordinate = coordinate;
             }
+        }
+        public Vector3 ToExtern(Vector2Int internDestination)
+        {
+            Vector3 parentSize = board.@extern.boardPlaySurfaceGameObject.GetComponent<MeshFilter>().mesh.bounds.size;
+            Vector3 externDestination = (((Vector2)internDestination * (Vector2)parentSize / 8) + ((Vector2)parentSize / 16) - ((Vector2)parentSize / 2));
+            externDestination.z = 0;
+            return externDestination;
         }
     }
     public class Extern
     {
-        public static GameObject PREFAB_externBoard;
+        public Board board;
+        public GameObject boardGameObject;
+        public GameObject boardPlaySurfaceGameObject;
+        public GameObject pieces;
 
-        public GameObject board;
-        public GameObject playSurface;
-        public GameObject pedestalPlaySurface;
-        public GameObject piecesParent;
 
         public Vector3 boardOrigin;
         public Vector3 boardScale;
         
-        public Extern(Board board) 
+        public Extern(Board board)
         {
-            PREFAB_externBoard.SetActive(false);
-            this.board = Instantiate(PREFAB_externBoard);
-            this.board.SetActive(true);
-            this.playSurface = this.board.transform.GetChild(0).gameObject;
-            this.pedestalPlaySurface = this.board.transform.GetChild(3).GetChild(0).gameObject;
-            this.piecesParent = this.board.transform.GetChild(2).gameObject;
-            ClearPieces();
+            this.board = board;
+            boardGameObject = Prefab.Instantiate(Prefab.ChessBoard, null);
+            boardPlaySurfaceGameObject = boardGameObject.GetNamedChild("PlaySurface");
+            pieces = boardGameObject.GetNamedChild("Pieces");
         }
 
-        private void ClearPieces()
+        public void Update(GameManager gameManager)
         {
-            while (piecesParent.transform.childCount > 0)
+            for (int y = 0; y < board.intern.array.GetLength(1); y++)
             {
-                DestroyImmediate(piecesParent.transform.GetChild(0).gameObject);
+                for (int x = 0; x < board.intern.array.GetLength(0); x++)
+                {
+                    Piece piece = board.intern.array[x, y];
+                    gameManager.StartCoroutine(piece.@extern.Update(0.1f));
+                }
             }
+        }
+        public Vector2Int ToIntern(Vector3 externPosition)
+        {
+            Vector3 parentSize = board.@extern.boardPlaySurfaceGameObject.GetComponent<MeshFilter>().mesh.bounds.size;
+            Vector2 internPosition = (((Vector2)externPosition) - ((Vector2)parentSize / 16) + ((Vector2)parentSize / 2)) / ((Vector2)parentSize / 8);
+            return Vector2Int.RoundToInt(internPosition);
         }
     }
 }

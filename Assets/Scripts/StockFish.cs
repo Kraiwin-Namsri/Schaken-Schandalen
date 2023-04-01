@@ -11,7 +11,7 @@ using UnityEditor.PackageManager.UI;
 using Unity.VisualScripting;
 using Newtonsoft.Json;
 
-public class StockFish : MonoBehaviour
+public class StockFish
 {
     class Response
     {

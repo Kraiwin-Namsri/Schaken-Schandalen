@@ -7,60 +7,68 @@ using UnityEngine;
 
 public class Piece
 {
-    public static GameObject none;
-
-    public static GameObject PREFAB_whiteking;
-    public static GameObject PREFAB_whitequeen;
-    public static GameObject PREFAB_whiterook;
-    public static GameObject PREFAB_whitebischop;
-    public static GameObject PREFAB_whiteknight;
-    public static GameObject PREFAB_whitepawn;
-
-    public static GameObject PREFAB_blackking;
-    public static GameObject PREFAB_blackqueen;
-    public static GameObject PREFAB_blackrook;
-    public static GameObject PREFAB_blackbischop;
-    public static GameObject PREFAB_blackknight;
-    public static GameObject PREFAB_blackpawn;
-
-    private static Dictionary<GameObject, Piece> lookupTable;
-
+    private static Dictionary<GameObject, Piece> lookupTable = new Dictionary<GameObject, Piece>();
+    public Board board;
     public Intern intern;
     public Extern @extern;
-
     public static Piece Lookup(GameObject gameobject)
     {
-        if (Piece.lookupTable.ContainsKey(gameobject))
+        if (lookupTable.ContainsKey(gameobject))
         {
-            return Piece.lookupTable[gameobject];
+            return lookupTable[gameobject];
         }
         return null;
     }
+    public Piece(Board board)
+    {
+        this.board = board;
+    }
     public Type GetColor()
     {
-        if (this.GetType().IsSubclassOf(typeof(White)))
+        if (GetType().IsSubclassOf(typeof(White)))
         {
             return typeof(White);
         }
-        if (this.GetType().IsSubclassOf(typeof(Black)))
+        if (GetType().IsSubclassOf(typeof(Black)))
         {
             return typeof(Black);
         }
         return typeof(None);
     }
+    public bool IsSliding()
+    {
+        if(GetType() == typeof(White.Bischop) | GetType() == typeof(Black.Bischop))
+        {
+            return true;
+        }
+        if (GetType() == typeof(White.Rook) | GetType() == typeof(Black.Rook))
+        {
+            return true;
+        }
+        if (GetType() == typeof(White.Queen) | GetType() == typeof(Black.Queen))
+        {
+            return true;
+        }
+        return false;
+    }
     public class None : Piece
     {
-        public None(Board board)
+        public None(Board board) : base (board)
         {
             List<Vector2Int> moveOffsets = new List<Vector2Int>();
             intern = new Intern(moveOffsets);
-            @extern = new Extern(none, board.@extern);
+            @extern = new Extern(this, Prefab.None, board);
         }
     }
     public class White : Piece {
+        public White(Board board) : base(board)
+        {
+
+        }
         public class King : White
         {
-            public King(Board board)
+            public bool isFirstMove = true;
+            public King(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>()
                 {
@@ -74,12 +82,12 @@ public class Piece
                     new Vector2Int(-1, 1)
                 };
                 intern = new Intern(moveOffsets);
-                @extern = new Extern(PREFAB_whiteking, board.@extern);
+                @extern = new Extern(this, Prefab.WhiteKing, board);
             }
         }
         public class Queen : White
         {
-            public Queen(Board board)
+            public Queen(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>()
                 {
@@ -93,12 +101,13 @@ public class Piece
                     new Vector2Int(-1, 1)
                 };
                 intern = new Intern(moveOffsets);
-                @extern = new Extern(PREFAB_whitequeen, board.@extern);
+                @extern = new Extern(this, Prefab.WhiteQueen, board);
             }
         }
         public class Rook : White
         {
-            public Rook(Board board)
+            public bool isFirstMove = true;
+            public Rook(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>()
                 {
@@ -108,12 +117,12 @@ public class Piece
                     new Vector2Int(-1, 0)
                 };
                 intern = new Intern(moveOffsets);
-                @extern = new Extern(PREFAB_whiterook, board.@extern);
+                @extern = new Extern(this, Prefab.WhiteRook, board);
             }
         }
         public class Bischop : White
         {
-            public Bischop(Board board)
+            public Bischop(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>()
                 {
@@ -123,12 +132,12 @@ public class Piece
                     new Vector2Int(-1, 1)
                 };
                 intern = new Intern(moveOffsets);
-                @extern = new Extern(PREFAB_whiterook, board.@extern);
+                @extern = new Extern(this, Prefab.WhiteBischop, board);
             }
         }
         public class Knight : White
         {
-            public Knight(Board board)
+            public Knight(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>()
                 {
@@ -141,14 +150,14 @@ public class Piece
                     new Vector2Int(-2, 1),
                     new Vector2Int(-1, 2)
                 };
-                intern = new Intern(moveOffsets);
-                @extern = new Extern(PREFAB_whiteknight, board.@extern);
+                intern = new Intern(moveOffsets);   
+                @extern = new Extern(this, Prefab.WhiteKnight, board);
             }
         }
         public class Pawn : White
         {
             public bool isFirstMove = true;
-            public Pawn(Board board)
+            public Pawn(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>()
                 {
@@ -156,14 +165,23 @@ public class Piece
                     new Vector2Int(0, -2)
                 };
                 intern = new Intern(moveOffsets);
-                @extern = new Extern(PREFAB_whitepawn, board.@extern);
+                @extern = new Extern(this, Prefab.WhitePawn, board);
+            }
+            public void RemoveDoublePawnPush()
+            {
+                intern.moveOffsets.Remove(new Vector2Int(0, -2));
             }
         }
     }
     public class Black : Piece {
+        public Black(Board board) : base(board)
+        {
+
+        }
         public class King : Black
         {
-            public King(Board board)
+            public bool isFirstMove = true;
+            public King(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>()
                 {
@@ -177,11 +195,12 @@ public class Piece
                     new Vector2Int(-1, 1)
                 };
                 intern = new Intern(moveOffsets);
+                @extern = new Extern(this, Prefab.BlackKing, board);
             }
         }
         public class Queen : Black
         {
-            public Queen(Board board)
+            public Queen(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>()
                 {
@@ -195,11 +214,13 @@ public class Piece
                     new Vector2Int(-1, 1)
                 };
                 intern = new Intern(moveOffsets);
+                @extern = new Extern(this, Prefab.BlackQueen, board);
             }
         }
         public class Rook : Black
         {
-            public Rook(Board board)
+            public bool isFirstMove = true;
+            public Rook(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>()
                 {
@@ -209,11 +230,12 @@ public class Piece
                     new Vector2Int(-1, 0)
                 };
                 intern = new Intern(moveOffsets);
+                @extern = new Extern(this, Prefab.BlackRook, board);
             }
         }
         public class Bischop : Black
         {
-            public Bischop(Board board)
+            public Bischop(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>() 
                 {
@@ -223,11 +245,13 @@ public class Piece
                     new Vector2Int(-1, 1)
                 };
                 intern = new Intern(moveOffsets);
+                @extern = new Extern(this, Prefab.BlackBischop, board);
+
             }
         }
         public class Knight : Black
         {
-            public Knight(Board board)
+            public Knight(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>() 
                     {
@@ -241,12 +265,12 @@ public class Piece
                     new Vector2Int(-1, 2)
                     };
                 intern = new Intern(moveOffsets);
+                @extern = new Extern(this, Prefab.BlackKnight, board);
             }
         }
         public class Pawn : Black
         {
-            public bool isFirstMove = true;
-            public Pawn(Board board)
+            public Pawn(Board board) : base(board)
             {
                 List<Vector2Int> moveOffsets = new List<Vector2Int>() 
                 {
@@ -254,6 +278,11 @@ public class Piece
                     new Vector2Int(0, 2)
                 };
                 intern = new Intern(moveOffsets);
+                @extern = new Extern(this, Prefab.BlackPawn, board);
+            }
+            public void RemoveDoublePawnPush()
+            {
+                intern.moveOffsets.Remove(new Vector2Int(0,2));
             }
         }
     }
@@ -269,20 +298,20 @@ public class Piece
     }
     public class Extern
     {
+        public Piece piece;
+        public Board board;
         public GameObject pieceGameObject;
-        public Extern(GameObject prefabPiece, Board.Extern @extern)
+        public Extern(Piece piece, GameObject prefabPiece, Board board)
         {
-            pieceGameObject = MonoBehaviour.Instantiate(prefabPiece, @extern.board.transform);
-            pieceGameObject.SetActive(true);
-        }
-        public void Move(Vector3 destination)
-        {
-            pieceGameObject.transform.localPosition = destination;
-            pieceGameObject.transform.localRotation = Quaternion.identity;
+            this.piece = piece;
+            this.board = board;
+            pieceGameObject = Prefab.Instantiate(prefabPiece, board.@extern.boardGameObject.transform);
+            lookupTable.Add(pieceGameObject, piece);
         }
         //To Do also smoothly return to standard rotation
-        public IEnumerator SmoothMove(Vector3 destination, float journeyTime)
+        public IEnumerator Update(float journeyTime)
         {
+            Vector3 destination = board.intern.ToExtern(this.piece.intern.position);
             float startTime = Time.time;
             Vector3 startPosition = pieceGameObject.transform.localPosition;
             float fracComplete = (Time.time - startTime) / journeyTime;
