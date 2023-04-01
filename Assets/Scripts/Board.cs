@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,7 +12,7 @@ using UnityEngine.UIElements;
 using UnityEngine.Windows;
 
 
-public class Board
+public class Board : MonoBehaviour
 {
     public Intern internBoard;
     public Extern externBoard;
@@ -24,7 +23,11 @@ public class Board
     }
     public class Intern
     {
+<<<<<<< HEAD
         public Pieces[,] board = new Pieces[8, 8];
+=======
+        public Piece[,] board = new Piece[8, 8];
+>>>>>>> parent of 9871a0a (Refactoring Codebase 3)
         public bool whiteToMove;
         public CastleAbility castleAbility;
         public EnPassant enPassant;
@@ -34,6 +37,7 @@ public class Board
         public int halfMoveCounter;
         public int halfMoveClockCounter;
         public int fullMoveCounter;
+<<<<<<< HEAD
         public bool remise;
 
         public List<Move> moves = new List<Move>();
@@ -43,10 +47,22 @@ public class Board
         public Intern(Board board)
         {
             Fen.Apply(this, board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+=======
+
+        public List<Piece> captured = new List<Piece>();
+        
+        public Fen fenManager;
+
+        public Intern(Board board)
+        {
+            fenManager = new Fen();
+            fenManager.Apply(board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+>>>>>>> parent of 9871a0a (Refactoring Codebase 3)
         }
 
         public void AddMove(Move move)
         {
+<<<<<<< HEAD
             moves.Add(move);
             Move.ExecuteMoves(moves, this, true);
 
@@ -626,6 +642,9 @@ public class Board
                 internboard.remise = true;
                 Debug.Log("remise");
             }
+=======
+            return position.x >= 0 && position.y >= 0 && position.x < board.GetLength(0) && position.y < board.GetLength(1);
+>>>>>>> parent of 9871a0a (Refactoring Codebase 3)
         }
         public struct CastleAbility
         {
@@ -644,16 +663,28 @@ public class Board
         public struct EnPassant
         {
             public bool forWhite;
+<<<<<<< HEAD
             public int column;
             public EnPassant(bool forWhite, int column)
             {
                 this.forWhite = forWhite;
                 this.column = column;
+=======
+            public Vector2Int coordinate;
+            public EnPassant(bool forWhite, Vector2Int coordinate) {
+                this.forWhite = forWhite;
+                this.coordinate = coordinate;
+>>>>>>> parent of 9871a0a (Refactoring Codebase 3)
             }
         }
     }
     public class Extern
     {
+<<<<<<< HEAD
+=======
+        public static GameObject PREFAB_externBoard;
+
+>>>>>>> parent of 9871a0a (Refactoring Codebase 3)
         public GameObject board;
         public GameObject playSurface;
         public GameObject pedestalPlaySurface;
@@ -664,12 +695,18 @@ public class Board
         
         public Extern(Board board) 
         {
+<<<<<<< HEAD
             this.board = MonoBehaviour.Instantiate(GameManager.instance.CHESSBOARD);
+=======
+            PREFAB_externBoard.SetActive(false);
+            this.board = Instantiate(PREFAB_externBoard);
+>>>>>>> parent of 9871a0a (Refactoring Codebase 3)
             this.board.SetActive(true);
             this.playSurface = this.board.transform.GetChild(0).gameObject;
             this.pedestalPlaySurface = this.board.transform.GetChild(3).GetChild(0).gameObject;
             this.piecesParent = this.board.transform.GetChild(2).gameObject;
             ClearPieces();
+<<<<<<< HEAD
 
             for (int y = 0; y < 8; y++)
             {
@@ -687,5 +724,16 @@ public class Board
                 MonoBehaviour.DestroyImmediate(piecesParent.transform.GetChild(0).gameObject);
             }
         }
+=======
+        }
+
+        private void ClearPieces()
+        {
+            while (piecesParent.transform.childCount > 0)
+            {
+                DestroyImmediate(piecesParent.transform.GetChild(0).gameObject);
+            }
+        }
+>>>>>>> parent of 9871a0a (Refactoring Codebase 3)
     }
 }
