@@ -80,7 +80,6 @@ public class GameManager : MonoBehaviour
         //piece.externPiece.Move(externDestination);
         instance.StartCoroutine(piece.externPiece.SmoothMove(externDestination, 0.1f));
     }
-
     public static void UpdatePedestal()
     {
         int x = board.internBoard.captured.Count - 1;
@@ -181,6 +180,7 @@ public class GameManager : MonoBehaviour
         }
         visualizeGameobject.Clear();
     }
+
 
     public static void OnGrab(GameObject gameObject)
     {

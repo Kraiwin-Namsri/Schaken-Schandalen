@@ -565,11 +565,12 @@ public class Board
 
         public static void remiseChecker(string fenstring, Board.Intern internboard)
         {
-            StalesMate(fenstring, internboard);
-            FiftyMoveRule(internboard);
-            InsuficientMaterialRemise(fenstring, internboard);
+            
             RepeatedPositionRemise(fenstring, internboard);
-            }
+            InsuficientMaterialRemise(fenstring, internboard);
+            FiftyMoveRule(internboard);
+            StalesMate(fenstring, internboard);
+        }
         public static void StalesMate(string fenstring, Board.Intern internboard)
         {
          //
