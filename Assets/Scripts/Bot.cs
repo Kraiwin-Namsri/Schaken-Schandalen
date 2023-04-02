@@ -36,7 +36,6 @@ public class Bot
         }
         public IEnumerator GetBestMove(string forsythEdwardsNotationString, Action<Move> callback)
         {
-            Debug.Log(forsythEdwardsNotationString);
             //Refactor to yield on correct moment
             yield return new WaitForSeconds(0);
             var request = (HttpWebRequest)WebRequest.Create(host);

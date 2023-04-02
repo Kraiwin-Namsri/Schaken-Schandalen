@@ -11,4 +11,9 @@ public class Player
     {
         this.isPlayingWhite = isPlayingWhite;
     }
+
+    public void SubmitMove(Move move)
+    {
+
+    }
 }

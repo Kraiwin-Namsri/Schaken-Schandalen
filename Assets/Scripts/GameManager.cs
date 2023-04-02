@@ -90,7 +90,6 @@ public class GameManager : MonoBehaviour
         bool isOpponentsMove = board.intern.legal.IsOpponentsMove(move, player1);
         if(isOpponentsMove == true)
         {
-            Debug.Log("added move");
             moveManager.AddMove(move);
             List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
             pedestal.AddPieces(capturedPieces);
