@@ -99,10 +99,11 @@ public class Board
         }
         public void UpdateEnPassant(Piece piece, Move move)
         {
-            if (piece.GetType() == typeof(Piece.White.Pawn) | piece.GetType() == typeof(Piece.Black.Pawn))
+            if (piece.GetType() == typeof(Piece.White.Pawn) || piece.GetType() == typeof(Piece.Black.Pawn))
             {
                 enPassant.coordinate.y = (move.startPosition.y + move.endPosition.y) / 2;
                 enPassant.coordinate.x = move.startPosition.x;
+                return;
             }
             enPassant.coordinate = new Vector2Int(-1,-1);
         }

@@ -54,10 +54,11 @@ public class Bot
 
             var response = (HttpWebResponse)request.GetResponse();
             var json = new StreamReader(response.GetResponseStream()).ReadToEnd();
-
             Response parsed = JsonConvert.DeserializeObject<Response>(json);
 
             Move stockFishMove = BestMoveToCoordinates(parsed.best_move);
+            Debug.Log(parsed.best_move);
+            Debug.Log(stockFishMove.endPosition);
             callback(stockFishMove);
         }
         private Move BestMoveToCoordinates(string response)

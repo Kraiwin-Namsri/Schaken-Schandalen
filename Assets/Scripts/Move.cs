@@ -43,7 +43,7 @@ public class MoveManager
                 {
                     ((dynamic) buffer1).RemoveDoublePawnPush();
                 }
-                board.intern.UpdateEnPassant(buffer1, move);
+                board.intern.UpdateEnPassant(buffer1, currentMove);
                 board.intern.UpdateCastleAbility(buffer1, currentMove);
                 board.intern.UpdateHalfMove();
                 board.intern.UpdateHalfMoveClock(Legal.IsCapture(currentMove, board.intern));

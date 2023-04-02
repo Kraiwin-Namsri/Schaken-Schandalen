@@ -277,12 +277,12 @@ public class Fen
                 {
                     switch (board.intern.array[x, y].GetType().ToString())
                     {
-                        case "Pieces+None":
+                        case "Piece+None":
                             emptySquareCounter++;
                             wasEmptySquare = true;
                             break;
-                        case "Pieces+White_King":
-                            if (wasEmptySquare == true)
+                        case "Piece+White+King":
+                        if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
                                 if (emptySquareCounter > 0)
@@ -293,7 +293,7 @@ public class Fen
                             }
                             fenStringBuild += "K";
                             break;
-                        case "Pieces+White_Queen":
+                        case "Piece+White+Queen":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -305,8 +305,8 @@ public class Fen
                             }
                             fenStringBuild += "Q";
                             break;
-                        case "Pieces+White_Rook":
-                            if (wasEmptySquare == true)
+                        case "Piece+White+Rook":
+                        if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
                                 if (emptySquareCounter > 0)
@@ -317,7 +317,7 @@ public class Fen
                             }
                             fenStringBuild += "R";
                             break;
-                        case "Pieces+White_Bischop":
+                        case "Piece+White+Bischop":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -329,7 +329,7 @@ public class Fen
                             }
                             fenStringBuild += "B";
                             break;
-                        case "Pieces+White_Knight":
+                        case "Piece+White+Knight":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -341,7 +341,7 @@ public class Fen
                             }
                             fenStringBuild += "N";
                             break;
-                        case "Pieces+White_Pawn":
+                        case "Piece+White+Pawn":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -353,7 +353,7 @@ public class Fen
                             }
                             fenStringBuild += "P";
                             break;
-                        case "Pieces+Black_King":
+                        case "Piece+Black+King":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -365,7 +365,7 @@ public class Fen
                             }
                             fenStringBuild += "k";
                             break;
-                        case "Pieces+Black_Queen":
+                        case "Piece+Black+Queen":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -377,7 +377,7 @@ public class Fen
                             }
                             fenStringBuild += "q";
                             break;
-                        case "Pieces+Black_Rook":
+                        case "Piece+Black+Rook":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -389,8 +389,8 @@ public class Fen
                             }
                             fenStringBuild += "r";
                             break;
-                        case "Pieces+Black_Bischop":
-                            if (wasEmptySquare == true)
+                        case "Piece+Black+Bischop":
+                        if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
                                 if (emptySquareCounter > 0)
@@ -401,7 +401,7 @@ public class Fen
                             }
                             fenStringBuild += "b";
                             break;
-                        case "Pieces+Black_Knight":
+                        case "Piece+Black+Knight":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -413,7 +413,7 @@ public class Fen
                             }
                             fenStringBuild += "n";
                             break;
-                        case "Pieces+Black_Pawn":
+                        case "Piece+Black+Pawn":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -464,18 +464,59 @@ public class Fen
                 fenStringBuild += "-";
             }
 
-            //To Do: convert vector2Int to ingame coordinate.
-            string enPassantCoordinates = "";
-            //Check for enpassent
-            fenStringBuild += " ";
-            fenStringBuild += enPassantCoordinates;
-            fenStringBuild += " ";
+        //To Do: convert vector2Int to ingame coordinate.
+        Vector2Int enPassantCoordinate = board.intern.enPassant.coordinate;
+        string enPassantCoordinatesString =  "";
 
-            //Check the Move Count
-            fenStringBuild += " ";
-            fenStringBuild += board.intern.halfMoveClockCounter.ToString();
-            fenStringBuild += " ";
-            fenStringBuild += board.intern.castleAbility.ToString();
-            return fenStringBuild;
+        Debug.Log(enPassantCoordinate);
+
+        if(enPassantCoordinate != new Vector2Int(-1,-1))
+        {
+            Debug.Log("door check");
+            switch (enPassantCoordinate.x)
+            {
+                case 0:
+                    enPassantCoordinatesString += "a";
+                    break;
+                case 1:
+                    enPassantCoordinatesString += "b";
+                    break;
+                case 2:
+                    enPassantCoordinatesString += "c";
+                    break;
+                case 3:
+                    enPassantCoordinatesString += "d";
+                    break;
+                case 4:
+                    enPassantCoordinatesString += "e";
+                    break;
+                case 5:
+                    enPassantCoordinatesString += "f";
+                    break;
+                case 6:
+                    enPassantCoordinatesString += "g";
+                    break;
+                case 7:
+                    enPassantCoordinatesString += "h";
+                    break;
+            }
+            enPassantCoordinatesString += (9 - enPassantCoordinate.y - 1).ToString();
+        }
+        else
+        {
+            enPassantCoordinatesString = "-";
+        }
+        
+        //Check for enpassent
+        fenStringBuild += " ";
+        fenStringBuild += enPassantCoordinatesString;
+        fenStringBuild += " ";
+
+        //Check the Move Count
+        fenStringBuild += board.intern.halfMoveClockCounter.ToString();
+        fenStringBuild += " ";
+        fenStringBuild += board.intern.fullMoveCounter.ToString();
+        Debug.Log(fenStringBuild);
+        return fenStringBuild;
         }
 }
