@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     private MenuManager menuManager;
     private Player player1;
     private Player player2;
+    private Bot supervisor;
 
     // Start is called before the first frame update
     void Start()
@@ -28,9 +29,13 @@ public class GameManager : MonoBehaviour
         pedestal = new Pedestal();
         markerManager = new MarkerManager();
         moveManager = new MoveManager();
-        player1 = new Player(true);
-        player2 = new Player(false);
+
+        Action<Player, Move> callback = new Action<Player, Move>((Player player, Move move) => SubmitMoveCallback(player, move));
+        player1 = new Player(callback, true);
+        player2 = new Player(callback, false);
         player2.bot = new Bot.StockFishOnline(player2, board, "http://127.0.0.1:5000");
+        supervisor = new Bot.StockFishOnline(null, board, "http://127.0.0.1:5000");
+
         menuManager = new MenuManager();
         StartCoroutine(LateStart(0.1f));
     }
@@ -67,35 +72,29 @@ public class GameManager : MonoBehaviour
                 {
                     if (legalMove == new Move(releasedPiece.intern.position, releasePosition))
                     {
-                        if(board.intern.legal.whiteToMove ==  player1.isPlayingWhite)
-                        {
-                            moveManager.AddMove(legalMove);
-                            List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
-                            pedestal.AddPieces(capturedPieces);
-                            board.intern.legal.whiteToMove = !board.intern.legal.whiteToMove;
-                        }
+                        player1.SubmitMove(legalMove);
+
+                        string fen = board.intern.fenManager.BoardToFen();
+                        StartCoroutine(((Bot.StockFishOnline)player2.bot).GetBestMove(fen));
                         break;
                     }
                 }
             }
-            board.@extern.Update(this);
 
-            string fen = board.intern.fenManager.BoardToFen();
-
-            StartCoroutine(((Bot.StockFishOnline)player2.bot).GetBestMove(fen, new Action<Move>((Move move) => Callback_StockFish(move))));
         }
+        board.@extern.Update(this);
     }
-    public void Callback_StockFish(Move move)
+    public void SubmitMoveCallback(Player player, Move move)
     {
-        bool isOpponentsMove = board.intern.legal.IsOpponentsMove(move, player1);
-        if(isOpponentsMove == true)
+        if (player.isPlayingWhite == board.intern.legal.whiteToMove)
         {
             moveManager.AddMove(move);
             List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
             pedestal.AddPieces(capturedPieces);
-            board.@extern.Update(this);
             board.intern.legal.whiteToMove = !board.intern.legal.whiteToMove;
         }
+        board.@extern.Update(this);
+        Debug.Log(board.intern.array[7, 7].GetType().ToString());
     }
 
     public void LoadMainScene()

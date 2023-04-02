@@ -46,6 +46,7 @@ public class MoveManager
                 board.intern.legal.castleAbility.Update(buffer1, currentMove);
                 board.intern.legal.remise.UpdateHalfMove();
                 board.intern.legal.remise.UpdateHalfMoveClock(currentMove);
+                board.intern.legal.remise.UpdateFullMove();
 
 
 
@@ -72,6 +73,7 @@ public class MoveManager
                 currentMove = currentMove.appendedMove;
             } while (currentMove is not null);
         }
+        Debug.Log(board.intern.fenManager.BoardToFen());
         moveQueue.Clear();
         return capturedPieces;
     }

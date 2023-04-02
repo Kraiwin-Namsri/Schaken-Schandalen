@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Board.Intern;
@@ -32,7 +33,7 @@ public class Legal
     }
     public bool IsOpponentsMove(Move bestMove, Player player)
     {
-        if (board.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player.isPlayingWhite == false)
+        if (board.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player.isPlayingWhite == true)
         {
             return false;
         }
@@ -445,6 +446,10 @@ public class Legal
                 legal.gameState = 0;
             }
         }
+        public void UpdateHalfMove()
+        {
+            legal.halfMoveCounter++;
+        }
         public void UpdateHalfMoveClock(Move move)
         {
             if (legal.IsCapture(move))
@@ -456,9 +461,9 @@ public class Legal
                 legal.halfMoveClockCounter++;
             }
         }
-        public void UpdateHalfMove()
+        public void UpdateFullMove()
         {
-            legal.halfMoveCounter++;
+            legal.halfMoveCounter = (int)math.floor(legal.halfMoveCounter/2);
         }
     }
     public class Check
