@@ -35,22 +35,7 @@ public class Piece
         }
         return typeof(None);
     }
-    public bool IsSliding()
-    {
-        if(GetType() == typeof(White.Bischop) | GetType() == typeof(Black.Bischop))
-        {
-            return true;
-        }
-        if (GetType() == typeof(White.Rook) | GetType() == typeof(Black.Rook))
-        {
-            return true;
-        }
-        if (GetType() == typeof(White.Queen) | GetType() == typeof(Black.Queen))
-        {
-            return true;
-        }
-        return false;
-    }
+
     public class None : Piece
     {
         public None(Board board) : base (board)
@@ -296,6 +281,34 @@ public class Piece
         public Intern(List<Vector2Int> moveOffsets)
         {
             this.moveOffsets = moveOffsets;
+        }
+        public bool IsSliding()
+        {
+            if (GetType() == typeof(White.Bischop) | GetType() == typeof(Black.Bischop))
+            {
+                return true;
+            }
+            if (GetType() == typeof(White.Rook) | GetType() == typeof(Black.Rook))
+            {
+                return true;
+            }
+            if (GetType() == typeof(White.Queen) | GetType() == typeof(Black.Queen))
+            {
+                return true;
+            }
+            return false;
+        }
+        public Type GetColor()
+        {
+            if (GetType().IsSubclassOf(typeof(White)))
+            {
+                return typeof(White);
+            }
+            if (GetType().IsSubclassOf(typeof(Black)))
+            {
+                return typeof(Black);
+            }
+            return typeof(None);
         }
     }
     public class Extern
