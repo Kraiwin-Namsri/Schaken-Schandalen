@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.UIElements;
 using System;
 
 public static class Legal
@@ -22,6 +24,7 @@ public static class Legal
     }
     public static void Generate(Board.Intern internBoard)
     {
+        internBoard.checkMoves.Clear();
         for (int y = 0; y < internBoard.array.GetLength(1); y++)
         {
             for (int x = 0; x < internBoard.array.GetLength(0); x++)
@@ -34,7 +37,11 @@ public static class Legal
                 }
             }
         }
-        if (internBoard.inCheck != -1)
+
+        //Below is vastly inneffient
+
+        // White is in check
+        if (internBoard.inCheck == 0)
         {
             int amountOfBlockMoves = 0;
             for (int y = 0; y < internBoard.array.GetLength(1); y++)
@@ -42,10 +49,31 @@ public static class Legal
                 for (int x = 0; x < internBoard.array.GetLength(0); x++)
                 {
                     Piece piece = internBoard.array[x, y];
-                    if (piece.GetType() != typeof(Piece.None))
+                    if (piece.GetType() != typeof(Piece.None) && piece.GetColor() == typeof(Piece.White))
+                    {
+                        foreach (Move move in piece.intern.legalMoves)
+                        {
+                            Piece[,] arrayCopy = internBoard.array.Clone() as Piece[,];
+
+                        }
+                    }
+                }
+            }
+        }
+
+        // Black is in check
+        if (internBoard.inCheck == 1)
+        {
+            int amountOfBlockMoves = 0;
+            for (int y = 0; y < internBoard.array.GetLength(1); y++)
+            {
+                for (int x = 0; x < internBoard.array.GetLength(0); x++)
+                {
+                    Piece piece = internBoard.array[x, y];
+                    if (piece.GetType() != typeof(Piece.None) && piece.GetColor() == typeof(Piece.White))
                     {
                         Vector2Int startPosition = new Vector2Int(x, y);
-                        piece.intern.legalMoves = GeneratePieceMoves(piece, new Move(startPosition, startPosition, internBoard), internBoard);
+                        piece.intern.legalMoves = GenerateBlockMoves(piece, new Move(startPosition, startPosition, internBoard), internBoard);
                     }
                 }
             }
@@ -209,6 +237,10 @@ public static class Legal
     private static List<Move> GenerateBlockMoves(Piece piece, Move move, Board.Intern internBoard)
     {
         List<Move> pieceMoves = new List<Move>();
+        if (piece.GetType() == typeof(Piece.Black.King) | piece.GetType() == typeof(Piece.White.King))
+        {
+
+        }
         return pieceMoves;
     }
     private static List<Move> GeneratePieceMoves(Piece piece, Move move, Board.Intern internBoard)
@@ -236,13 +268,18 @@ public static class Legal
             pieceMoves = pieceMoves.Concat(GenerateEnPassant(piece, move.startPosition, internBoard, internBoard.enPassant)).ToList();
         }
         internBoard.inCheck = -1;
-        if (Move.Contains(pieceMoves, new Move(move.startPosition, internBoard.whiteKing.intern.position, internBoard)) && piece.GetColor() == typeof(Piece.Black))
+        Move kingCapture;
+        kingCapture = new Move(move.startPosition, internBoard.whiteKing.intern.position, internBoard);
+        if (Move.Contains(pieceMoves, kingCapture) && piece.GetColor() == typeof(Piece.Black))
         {
             internBoard.inCheck = 0;
+            internBoard.checkMoves.Add(kingCapture);
         }
-        if (Move.Contains(pieceMoves, new Move(move.startPosition, internBoard.blackKing.intern.position, internBoard)) && piece.GetColor() == typeof(Piece.White))
+        kingCapture = new Move(move.startPosition, internBoard.blackKing.intern.position, internBoard);
+        if (Move.Contains(pieceMoves, kingCapture) && piece.GetColor() == typeof(Piece.White))
         {
             internBoard.inCheck = 1;
+            internBoard.checkMoves.Add(kingCapture);
         }
         return pieceMoves;
     }

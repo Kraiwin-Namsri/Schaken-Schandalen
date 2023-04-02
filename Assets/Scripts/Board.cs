@@ -37,7 +37,7 @@ public class Board
         public int fullMoveCounter = 1;
         public Fen fenManager;
         public int inCheck; //-1 No-one, 0 white, 1 black
-
+        public List<Move> checkMoves = new List<Move>();
         public List<string> gamePositions;
 
         public Intern(Board board)
