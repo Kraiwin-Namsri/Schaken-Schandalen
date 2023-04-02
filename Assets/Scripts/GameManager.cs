@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         board = new Board();
-        board.intern.fenManager.Apply("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        ApplyFenstring("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         pedestal = new Pedestal();
         markerManager = new MarkerManager();
         moveManager = new MoveManager();
@@ -72,6 +72,7 @@ public class GameManager : MonoBehaviour
                             moveManager.AddMove(legalMove);
                             List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
                             pedestal.AddPieces(capturedPieces);
+                            board.intern.whiteToMove = !board.intern.whiteToMove;
                         }
                         break;
                     }
@@ -80,6 +81,7 @@ public class GameManager : MonoBehaviour
             board.@extern.Update(this);
 
             string fen = board.intern.fenManager.BoardToFen();
+
             StartCoroutine(((Bot.StockFishOnline)player2.bot).GetBestMove(fen, new Action<Move>((Move move) => Callback_StockFish(move))));
         }
     }
@@ -88,7 +90,12 @@ public class GameManager : MonoBehaviour
         bool isOpponentsMove = board.intern.legal.IsOpponentsMove(move, player1);
         if(isOpponentsMove == true)
         {
+            Debug.Log("added move");
             moveManager.AddMove(move);
+            List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
+            pedestal.AddPieces(capturedPieces);
+            board.@extern.Update(this);
+            board.intern.whiteToMove = !board.intern.whiteToMove;
         }
     }
 
@@ -102,17 +109,21 @@ public class GameManager : MonoBehaviour
     }
     public void Backwards()
     {
-        menuManager.Backwards();
+        menuManager.Backwards(board.intern);
     }
 
     public void Forwards()
     {
-        menuManager.Backwards();
+        menuManager.Forwards(board.intern);
     }
     public void SwitchColour()
     {
         menuManager.SwitchColour(player1, player2);
     }
 
+    public void ApplyFenstring(string fenString)
+    {
+        board.intern.fenManager.Apply(fenString);
+    }
 }
 

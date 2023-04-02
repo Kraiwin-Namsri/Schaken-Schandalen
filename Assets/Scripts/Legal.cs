@@ -214,10 +214,27 @@ public class Legal
         {
             return false;
         }
-        else
+        //if the piece is black and player1 is black 
+        else if(board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() != typeof(Piece.White) && player1.isPlayingWhite == false)
+        {
+            return false;
+        }
+        //if the piece is white and player1 is black
+        else if (board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player1.isPlayingWhite != false)
         {
             return true;
         }
+        //if the piece is black and player1 is white
+        else if (board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() != typeof(Piece.White) && player1.isPlayingWhite == true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+            Debug.Log("unKnown error in origin cheker");
+        }
+
     }
 
     public bool IsCapture(Move move)
@@ -446,7 +463,8 @@ public class Legal
             int occurences = 0;
             foreach (string gamePosition in legal.gamePositions)
             {
-                if (newFenstring == gamePosition)
+                string newGamePosition = Regex.Replace(gamePosition.Split()[0], @" ", "");
+                if (newFenstring == newGamePosition)
                 {
                     occurences++;
                 }
