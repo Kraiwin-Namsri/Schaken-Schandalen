@@ -47,7 +47,7 @@ public class Board
                     if (piece.GetType() != typeof(Piece.None))
                     {
                         Vector2Int startPosition = new Vector2Int(x, y);
-                        legal.Update(piece, new Move(startPosition, startPosition));
+                        legal.Update(piece.intern, startPosition);
                     }
                 }
             }
