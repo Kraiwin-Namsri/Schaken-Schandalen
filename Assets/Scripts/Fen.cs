@@ -275,13 +275,14 @@ public class Fen
                 firstRound = false;
                 for (int x = 0; x < 8; x++)
                 {
+                Debug.Log(board.intern.array[x, y].GetType().ToString());
                     switch (board.intern.array[x, y].GetType().ToString())
                     {
                         case "Pieces+None":
                             emptySquareCounter++;
                             wasEmptySquare = true;
                             break;
-                        case "Pieces+White_King":
+                        case "Pieces+White+King":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -293,7 +294,7 @@ public class Fen
                             }
                             fenStringBuild += "K";
                             break;
-                        case "Pieces+White_Queen":
+                        case "Pieces+White+Queen":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -305,7 +306,7 @@ public class Fen
                             }
                             fenStringBuild += "Q";
                             break;
-                        case "Pieces+White_Rook":
+                        case "Pieces+White+Rook":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -317,7 +318,7 @@ public class Fen
                             }
                             fenStringBuild += "R";
                             break;
-                        case "Pieces+White_Bischop":
+                        case "Pieces+White+Bischop":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -329,7 +330,7 @@ public class Fen
                             }
                             fenStringBuild += "B";
                             break;
-                        case "Pieces+White_Knight":
+                        case "Pieces+White+Knight":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -341,7 +342,7 @@ public class Fen
                             }
                             fenStringBuild += "N";
                             break;
-                        case "Pieces+White_Pawn":
+                        case "Pieces+White+Pawn":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -353,7 +354,7 @@ public class Fen
                             }
                             fenStringBuild += "P";
                             break;
-                        case "Pieces+Black_King":
+                        case "Pieces+Black+King":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -365,7 +366,7 @@ public class Fen
                             }
                             fenStringBuild += "k";
                             break;
-                        case "Pieces+Black_Queen":
+                        case "Pieces+Black+Queen":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -377,7 +378,7 @@ public class Fen
                             }
                             fenStringBuild += "q";
                             break;
-                        case "Pieces+Black_Rook":
+                        case "Pieces+Black+Rook":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -389,7 +390,7 @@ public class Fen
                             }
                             fenStringBuild += "r";
                             break;
-                        case "Pieces+Black_Bischop":
+                        case "Pieces+Black+Bischop":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -401,7 +402,7 @@ public class Fen
                             }
                             fenStringBuild += "b";
                             break;
-                        case "Pieces+Black_Knight":
+                        case "Pieces+Black+Knight":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;
@@ -413,7 +414,7 @@ public class Fen
                             }
                             fenStringBuild += "n";
                             break;
-                        case "Pieces+Black_Pawn":
+                        case "Pieces+Black+Pawn":
                             if (wasEmptySquare == true)
                             {
                                 wasEmptySquare = false;

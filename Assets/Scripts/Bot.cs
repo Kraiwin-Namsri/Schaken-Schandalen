@@ -36,6 +36,7 @@ public class Bot
         }
         public IEnumerator GetBestMove(string forsythEdwardsNotationString, Action<Move> callback)
         {
+            Debug.Log(forsythEdwardsNotationString);
             //Refactor to yield on correct moment
             yield return new WaitForSeconds(0);
             var request = (HttpWebRequest)WebRequest.Create(host);
@@ -56,11 +57,12 @@ public class Bot
             var json = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
             Response parsed = JsonConvert.DeserializeObject<Response>(json);
+            Debug.Log(parsed.fen);
 
-            Move stockFishMove = BestMoveToCoordinates(parsed.best_move);
+            Move stockFishMove = BestMoveToCoordinates(parsed);
             callback(stockFishMove);
         }
-        private Move BestMoveToCoordinates(string response)
+        private Move BestMoveToCoordinates(Response response)
         {
             int xCordStart = 0;
             int xCordEnd = 0;
@@ -68,7 +70,7 @@ public class Bot
             int yCordEnd = 0;
             bool startCordPassed = false;
 
-            Char[] letters = response.ToCharArray();
+            Char[] letters = response.best_move.ToCharArray();
 
             foreach (char letter in letters)
             {

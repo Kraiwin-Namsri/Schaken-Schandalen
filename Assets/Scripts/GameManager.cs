@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
         moveManager = new MoveManager();
         player1 = new Player(true);
         player2 = new Player(false);
-        player2.bot = new Bot.StockFishOnline(player2, board, "127.0.0.1:5000");
+        player2.bot = new Bot.StockFishOnline(player2, board, "http://127.0.0.1:5000");
         menuManager = new MenuManager();
         StartCoroutine(LateStart(0.1f));
     }
