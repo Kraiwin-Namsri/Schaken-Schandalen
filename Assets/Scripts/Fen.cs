@@ -432,10 +432,12 @@ public class Fen
             fenStringBuild += " ";
             if (board.intern.halfMoveCounter % 2 == 0)
             {
+                board.intern.whiteToMove = true;
                 fenStringBuild += "w";
             }
             else
             {
+                board.intern.whiteToMove = false;
                 fenStringBuild += "b";
             }
             fenStringBuild += " ";

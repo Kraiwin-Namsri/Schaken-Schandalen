@@ -16,7 +16,9 @@ public class GameManager : MonoBehaviour
     private Pedestal pedestal;
     private MarkerManager markerManager;
     private MoveManager moveManager;
-    private StockFish stockFish;
+    private MenuManager menuManager;
+    private Player player1;
+    private Player player2;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +28,10 @@ public class GameManager : MonoBehaviour
         pedestal = new Pedestal();
         markerManager = new MarkerManager();
         moveManager = new MoveManager();
-        stockFish = new StockFish(board);
+        player1 = new Player(true);
+        player2 = new Player(false);
+        player2.bot = new Bot.StockFishOnline(player2, board, "127.0.0.1:5000");
+        menuManager = new MenuManager();
         StartCoroutine(LateStart(0.1f));
     }
     IEnumerator LateStart(float waitTime)
@@ -62,21 +67,53 @@ public class GameManager : MonoBehaviour
                 {
                     if (legalMove == new Move(releasedPiece.intern.position, releasePosition, board.intern))
                     {
-                        moveManager.AddMove(legalMove);
-                        List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
-                        pedestal.AddPieces(capturedPieces);
+                        if(board.intern.whiteToMove ==  player1.isPlayingWhite)
+                        {
+                            moveManager.AddMove(legalMove);
+                            List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
+                            pedestal.AddPieces(capturedPieces);
+                        }
                         break;
                     }
                 }
             }
             board.@extern.Update(this);
+
+            string fen = board.intern.fenManager.BoardToFen();
+            StartCoroutine(((Bot.StockFishOnline)player2.bot).GetBestMove(fen, new Action<Move>((Move move) => Callback_StockFish(move))));
         }
     }
-    public void Callback_StockFish()
+    public void Callback_StockFish(Move move)
     {
+        bool isOpponentsMove = Legal.CheckOriginBestMove(move, board, player1);
 
+        if(isOpponentsMove == true)
+        {
+            moveManager.AddMove(move);
+        }
     }
 
+    public void LoadMainScene()
+    {
+        menuManager.LoadMainScene();
+    }
+    public void LoadStockfishScene()
+    {
+        menuManager.LoadStockFishScene();
+    }
+    public void Backwards()
+    {
+        menuManager.Backwards();
+    }
+
+    public void Forwards()
+    {
+        menuManager.Backwards();
+    }
+    public void SwitchColour()
+    {
+        menuManager.SwitchColour(player1, player2);
+    }
 
 }
 

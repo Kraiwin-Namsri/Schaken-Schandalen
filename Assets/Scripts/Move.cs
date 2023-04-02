@@ -82,12 +82,14 @@ public class Move
 {
     public Vector2Int startPosition;
     public Vector2Int endPosition;
+    public bool fromWhite;
     public Move appendedMove;
 
-    public Move(Vector2Int startPosition, Vector2Int endPosition, Board.Intern board, Move appendMove = null)
+    public Move(Vector2Int startPosition, Vector2Int endPosition, Board.Intern board, Move appendMove = null, bool fromWhite = false)
     {
         this.startPosition = startPosition;
         this.endPosition = endPosition;
+        this.fromWhite = fromWhite;
         this.appendedMove = appendMove;
     }
 
