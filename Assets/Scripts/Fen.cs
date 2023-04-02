@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using static Board.Intern;
 
 public class Fen
@@ -234,8 +235,7 @@ public class Fen
                 else if (!halfCounterDone)
                 {
                     if (int.TryParse(letter.ToString(), out board.intern.legal.halfMoveCounter))
-                        halfCounterDone = true;
-
+                    halfCounterDone = true;
                 }
                 else if (!fullCounterDone)
                 {
@@ -423,18 +423,22 @@ public class Fen
                             fenStringBuild += "p";
                             break;
                     }
+
                 }
             }
-            //Check whose turn it is
-            fenStringBuild += " ";
-            if (board.intern.legal.halfMoveCounter % 2 == 0)
+            if (emptySquareCounter > 0)
             {
-                board.intern.legal.whiteToMove = true;
+                fenStringBuild += emptySquareCounter.ToString();
+                emptySquareCounter = 0;
+            }
+        //Check whose turn it is
+        fenStringBuild += " ";
+            if (board.intern.legal.whiteToMove)
+            {
                 fenStringBuild += "w";
             }
             else
             {
-                board.intern.legal.whiteToMove = false;
                 fenStringBuild += "b";
             }
             fenStringBuild += " ";
@@ -509,7 +513,7 @@ public class Fen
         //Check the Move Count
         fenStringBuild += board.intern.legal.halfMoveClockCounter.ToString();
         fenStringBuild += " ";
-        fenStringBuild += board.intern.fullMoveCounter.ToString();
+        fenStringBuild += board.intern.legal.fullMoveCounter.ToString();
         return fenStringBuild;
         }
 }
