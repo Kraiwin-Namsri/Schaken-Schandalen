@@ -21,6 +21,22 @@ public static class Legal
                 }
             }
         }
+        if (internBoard.inCheck != -1)
+        {
+            int amountOfBlockMoves = 0;
+            for (int y = 0; y < internBoard.array.GetLength(1); y++)
+            {
+                for (int x = 0; x < internBoard.array.GetLength(0); x++)
+                {
+                    Piece piece = internBoard.array[x, y];
+                    if (piece.GetType() != typeof(Piece.None))
+                    {
+                        Vector2Int startPosition = new Vector2Int(x, y);
+                        piece.intern.legalMoves = GeneratePieceMoves(piece, new Move(startPosition, startPosition, internBoard), internBoard);
+                    }
+                }
+            }
+        }
     }
     // All the boolean Functions
     public static bool IsCapture(Move move, Board.Intern internBoard)
@@ -173,9 +189,14 @@ public static class Legal
         }
         return legalMoves;
     }
-
+    private static List<Move> GenerateBlockMoves(Piece piece, Move move, Board.Intern internBoard)
+    {
+        List<Move> pieceMoves = new List<Move>();
+        return pieceMoves;
+    }
     private static List<Move> GeneratePieceMoves(Piece piece, Move move, Board.Intern internBoard)
     {
+        //Refactor to first check color
         List<Move> pieceMoves = new List<Move>();
         if (piece.IsSliding())
         {
@@ -194,7 +215,17 @@ public static class Legal
         if (piece.GetType() == typeof(Piece.White.Pawn) | piece.GetType() == typeof(Piece.Black.Pawn))
         {
             pieceMoves = pieceMoves.Concat(GeneratePawnCapture(move.startPosition, piece, internBoard)).ToList();
+            // Does pawn check work?
             pieceMoves = pieceMoves.Concat(GenerateEnPassant(piece, move.startPosition, internBoard, internBoard.enPassant)).ToList();
+        }
+        internBoard.inCheck = -1;
+        if (Move.Contains(pieceMoves, new Move(move.startPosition, internBoard.whiteKing.intern.position, internBoard)) && piece.GetColor() == typeof(Piece.Black))
+        {
+            internBoard.inCheck = 0;
+        }
+        if (Move.Contains(pieceMoves, new Move(move.startPosition, internBoard.blackKing.intern.position, internBoard)) && piece.GetColor() == typeof(Piece.White))
+        {
+            internBoard.inCheck = 1;
         }
         return pieceMoves;
     }

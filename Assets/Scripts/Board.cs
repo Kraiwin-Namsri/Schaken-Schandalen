@@ -3,6 +3,7 @@ using Microsoft.MixedReality.Toolkit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using Unity.Mathematics;
@@ -23,16 +24,19 @@ public class Board
     }
     public class Intern
     {
+        public Piece.White.King whiteKing;
+        public Piece.Black.King blackKing;
         public Board board;
         public Piece[,] array;
         public bool whiteToMove;
-        public int gameState; // -1 Nothing 0 remise, 1 white won, 2 black won
+        public int gameState; // -1 Nothing 0 white won, 1 black won, 2 remise
         public CastleAbility castleAbility;
         public EnPassant enPassant;
         public int halfMoveCounter = 0;
         public int halfMoveClockCounter = 0;
         public int fullMoveCounter = 1;
         public Fen fenManager;
+        public int inCheck; //-1 No-one, 0 white, 1 black
 
         public List<string> gamePositions;
 

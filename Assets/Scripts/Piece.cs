@@ -83,6 +83,7 @@ public class Piece
                 };
                 intern = new Intern(moveOffsets);
                 @extern = new Extern(this, Prefab.WhiteKing, board);
+                board.intern.whiteKing = this;
             }
         }
         public class Queen : White
@@ -196,6 +197,7 @@ public class Piece
                 };
                 intern = new Intern(moveOffsets);
                 @extern = new Extern(this, Prefab.BlackKing, board);
+                board.intern.blackKing = this;
             }
         }
         public class Queen : Black
