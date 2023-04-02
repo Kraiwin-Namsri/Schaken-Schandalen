@@ -21,7 +21,6 @@ public class Legal
     public int halfMoveCounter = 0;
     public int halfMoveClockCounter = 0;
     public int fullMoveCounter = 1;
-    public int inCheck; //-1 No-one, 0 white, 1 black
     public List<string> gamePositions;
     public Legal(Board.Intern board)
     {
@@ -90,31 +89,18 @@ public class Legal
             GenerateNonSliding(piece, startPosition);
         }
 
-
         if (piece.GetType() == typeof(Piece.White.King) | piece.GetType() == typeof(Piece.Black.King) | piece.GetType() == typeof(Piece.White.Rook) | piece.GetType() == typeof(Piece.Black.Rook))
         {
             castleAbility.Generate(piece);
-
-            if (piece.GetType() == typeof(Piece.White.Pawn) | piece.GetType() == typeof(Piece.Black.Pawn))
-            {
-                GeneratePawnCapture(piece, startPosition);
-                // Does pawn check work?
-                enPassant.Generate(piece, startPosition);
-            }
-
-            inCheck = -1;
-            Move kingCapture;
-            kingCapture = new Move(startPosition, board.whiteKing.intern.position);
-            if (Move.Contains(piece.legalMoves, kingCapture) && piece.GetColor() == typeof(Piece.Black))
-            {
-                inCheck = 0;
-            }
-            kingCapture = new Move(startPosition, board.blackKing.intern.position);
-            if (Move.Contains(piece.legalMoves, kingCapture) && piece.GetColor() == typeof(Piece.White))
-            {
-                inCheck = 1;
-            }
         }
+
+        if (piece.GetType() == typeof(Piece.White.Pawn) | piece.GetType() == typeof(Piece.Black.Pawn))
+        {
+            GeneratePawnCapture(piece, startPosition);
+            enPassant.Generate(piece, startPosition);
+        }
+
+        check.Update(piece);
     }
     void GenerateSliding(Piece.Intern piece, Vector2Int startPosition)
     {
@@ -478,18 +464,33 @@ public class Legal
     public class Check
     {
         Legal legal;
+        public int inCheck; //-1 No-one, 0 white, 1 black
         public Check(Legal legal)
         {
             this.legal = legal;
         }
-        public bool Is(Move move, bool fromWhite)
+        public void Update(Piece.Intern piece)
         {
-            if (fromWhite) {
-                return legal.board.blackKing.intern.position == move.endPosition;
+            if (piece.GetColor() == typeof(Piece.White)) {
+                Move kingCapture = new Move(piece.position, legal.board.blackKing.intern.position);
+                if (piece.legalMoves.Contains(kingCapture))
+                {
+                    inCheck = 1;
+                } else
+                {
+                    inCheck = -1;
+                }
             }
             else
             {
-                return legal.board.whiteKing.intern.position == move.endPosition;
+                Move kingCapture = new Move(piece.position, legal.board.whiteKing.intern.position);
+                if (piece.legalMoves.Contains(kingCapture))
+                {
+                    inCheck = 0;
+                } else
+                {
+                    inCheck = -1;
+                }
             }
         }
     }
