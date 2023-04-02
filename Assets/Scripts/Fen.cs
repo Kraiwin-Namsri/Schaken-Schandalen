@@ -509,7 +509,7 @@ public class Fen
         //Check the Move Count
         fenStringBuild += board.intern.legal.halfMoveClockCounter.ToString();
         fenStringBuild += " ";
-        fenStringBuild += board.intern.fullMoveCounter.ToString();
+        fenStringBuild += board.intern.legal.fullMoveCounter.ToString();
         return fenStringBuild;
         }
 }
