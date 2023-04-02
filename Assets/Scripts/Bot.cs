@@ -57,10 +57,8 @@ public class Bot
             var json = new StreamReader(response.GetResponseStream()).ReadToEnd();
             Response parsed = JsonConvert.DeserializeObject<Response>(json);
             Debug.Log(parsed.fen);
-
-            Move stockFishMove = BestMoveToCoordinates(parsed.best_move);
             Debug.Log(parsed.best_move);
-            Debug.Log(stockFishMove.endPosition);
+            Move stockFishMove = BestMoveToCoordinates(parsed);
             callback(stockFishMove);
         }
         private Move BestMoveToCoordinates(Response response)
@@ -80,6 +78,16 @@ public class Bot
                     case "a":
                         if (startCordPassed == false)
                         {
+                            xCordStart = 0;
+                        }
+                        else
+                        {
+                            xCordEnd = 0;
+                        }
+                        break;
+                    case "b":
+                        if (startCordPassed == false)
+                        {
                             xCordStart = 1;
                         }
                         else
@@ -87,7 +95,7 @@ public class Bot
                             xCordEnd = 1;
                         }
                         break;
-                    case "b":
+                    case "c":
                         if (startCordPassed == false)
                         {
                             xCordStart = 2;
@@ -97,7 +105,7 @@ public class Bot
                             xCordEnd = 2;
                         }
                         break;
-                    case "c":
+                    case "d":
                         if (startCordPassed == false)
                         {
                             xCordStart = 3;
@@ -107,7 +115,7 @@ public class Bot
                             xCordEnd = 3;
                         }
                         break;
-                    case "d":
+                    case "e":
                         if (startCordPassed == false)
                         {
                             xCordStart = 4;
@@ -117,7 +125,7 @@ public class Bot
                             xCordEnd = 4;
                         }
                         break;
-                    case "e":
+                    case "f":
                         if (startCordPassed == false)
                         {
                             xCordStart = 5;
@@ -127,7 +135,7 @@ public class Bot
                             xCordEnd = 5;
                         }
                         break;
-                    case "f":
+                    case "g":
                         if (startCordPassed == false)
                         {
                             xCordStart = 6;
@@ -137,7 +145,7 @@ public class Bot
                             xCordEnd = 6;
                         }
                         break;
-                    case "g":
+                    case "h":
                         if (startCordPassed == false)
                         {
                             xCordStart = 7;
@@ -147,31 +155,23 @@ public class Bot
                             xCordEnd = 7;
                         }
                         break;
-                    case "h":
-                        if (startCordPassed == false)
-                        {
-                            xCordStart = 8;
-                        }
-                        else
-                        {
-                            xCordEnd = 8;
-                        }
-                        break;
                     default:
                         if (startCordPassed == false)
                         {
-                            yCordStart = letter - '0';
+                            yCordStart = 8- (letter - '0');
+                            startCordPassed= true;
                         }
                         else
                         {
-                            yCordEnd = letter - '0';
+                            yCordEnd = 8- (letter - '0');
                         }
                         break;
                 }
-                startCordPassed = true;
             }
             Vector2Int startCoordinates = new Vector2Int(xCordStart, yCordStart);
             Vector2Int endCoordinates = new Vector2Int(xCordEnd, yCordEnd);
+            Debug.Log(startCoordinates);
+            Debug.Log(endCoordinates);
             return new Move(startCoordinates, endCoordinates, board.intern, null, player.isPlayingWhite);
         }
     }

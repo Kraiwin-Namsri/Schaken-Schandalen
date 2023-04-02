@@ -275,7 +275,6 @@ public class Fen
                 firstRound = false;
                 for (int x = 0; x < 8; x++)
                 {
-                Debug.Log(board.intern.array[x, y].GetType().ToString());
                     switch (board.intern.array[x, y].GetType().ToString())
                     {
                         case "Piece+None":

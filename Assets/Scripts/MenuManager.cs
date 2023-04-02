@@ -16,12 +16,12 @@ public class MenuManager
         SceneManager.LoadScene("VS_Stockfish");
     }
 
-    public void Backwards()
+    public void Backwards(Board.Intern internbaord)
     {
 
     }
 
-    public void Forwards()
+    public void Forwards(Board.Intern internbaord)
     {
 
     }

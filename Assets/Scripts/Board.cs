@@ -61,6 +61,11 @@ public class Board
         {
             halfMoveCounter++;
         }
+
+        public void UpdateFullMove()
+        {
+            fullMoveCounter = (int)math.floor(halfMoveClockCounter/2);
+        }
         public void UpdateCastleAbility(Piece piece, Move currentMove)
         {
             if (piece.GetType() == typeof(Piece.White.King))

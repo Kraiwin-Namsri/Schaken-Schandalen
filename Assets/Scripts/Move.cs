@@ -50,6 +50,7 @@ public class MoveManager
                 board.intern.UpdateCastleAbility(buffer1, currentMove);
                 board.intern.UpdateHalfMove();
                 board.intern.UpdateHalfMoveClock(Legal.IsCapture(currentMove, board.intern));
+                board.intern.UpdateFullMove();
 
 
 

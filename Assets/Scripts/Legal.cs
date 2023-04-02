@@ -10,15 +10,32 @@ using System;
 
 public static class Legal
 {
-    public static bool CheckOriginBestMove(Move bestMove, Board board, Player player1)
+    public static bool IsMoveFromOpponent(Move bestMove, Board board, Player player1)
     {
-        if (board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player1.isPlayingWhite == false)
+        //if the piece is white and the player1 is white:
+        if (board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player1.isPlayingWhite == true)
         {
             return false;
         }
-        else
+        //if the piece is black and player1 is black 
+        else if(board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() != typeof(Piece.White) && player1.isPlayingWhite == false)
+        {
+            return false;
+        }
+        //if the piece is white and player1 is black
+        else if (board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player1.isPlayingWhite != false)
         {
             return true;
+        }
+        //if the piece is black and player1 is white
+        else if (board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() != typeof(Piece.White) && player1.isPlayingWhite == true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+            Debug.Log("unKnown error in origin cheker");
         }
 
     }
@@ -434,9 +451,11 @@ public static class Legal
             internboard.gamePositions.Add(newFenstring);
 
             int occurences = 0;
+
             foreach (string gamePosition in internboard.gamePositions)
             {
-                if (newFenstring == gamePosition)
+                string newGamePosition = Regex.Replace(gamePosition.Split()[0], @" ", "");
+                if (newFenstring == newGamePosition)
                 {
                     occurences++;
                 }
@@ -446,6 +465,5 @@ public static class Legal
                 internboard.gameState = 0;
             }
         }
-
     }
 }
