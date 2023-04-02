@@ -268,8 +268,7 @@ public class Legal
                 {
                     blackKingSide = false;
                 }
-            }
-
+            };
         }
         //What does this function do?
         void Update2(Piece piece, Board.Intern internboard)

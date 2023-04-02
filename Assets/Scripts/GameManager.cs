@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
             }
 
         }
-        board.@extern.Update(this);
+        board.@extern.Update(this);;
     }
     public void SubmitMoveCallback(Player player, Move move)
     {
@@ -94,7 +94,6 @@ public class GameManager : MonoBehaviour
             board.intern.legal.whiteToMove = !board.intern.legal.whiteToMove;
         }
         board.@extern.Update(this);
-        Debug.Log(board.intern.array[7, 7].GetType().ToString());
     }
 
     public void LoadMainScene()
@@ -107,12 +106,16 @@ public class GameManager : MonoBehaviour
     }
     public void Backwards()
     {
+        Debug.Log("backwards");
         menuManager.Backwards(board.intern);
+        board.@extern.Update(this);
     }
 
     public void Forwards()
     {
+        Debug.Log("forewards");
         menuManager.Forwards(board.intern);
+        board.@extern.Update(this);
     }
     public void SwitchColour()
     {

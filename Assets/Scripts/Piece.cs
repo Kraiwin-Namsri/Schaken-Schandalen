@@ -286,7 +286,6 @@ public class Piece
         }
         public bool IsSliding()
         {
-            Debug.Log(GetType());
             if (piece.GetType() == typeof(White.Bischop) | piece.GetType() == typeof(Black.Bischop))
             {
                 return true;
