@@ -26,6 +26,7 @@ public class Board
         public Board board;
         public Piece[,] array;
         public bool whiteToMove;
+        public bool playerIsWhite = true;
         public int gameState; // -1 Nothing 0 remise, 1 white won, 2 black won
         public CastleAbility castleAbility;
         public EnPassant enPassant;

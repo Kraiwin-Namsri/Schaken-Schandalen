@@ -26,14 +26,9 @@ public class MenuManager : MonoBehaviour
 
     }
 
-    public static void PlayAsWhite() 
+    public static void SwitchColour(Board board)
     {
-
-    }
-
-    public static void PlayAsBlack()
-    {
-
+        board.intern.playerIsWhite = !board.intern.playerIsWhite;
     }
 
     public static void StockfishBestMove()
@@ -43,5 +38,6 @@ public class MenuManager : MonoBehaviour
 
     public static void EnterFenstring()
     {
+
     }
 }
