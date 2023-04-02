@@ -120,6 +120,9 @@ public class GameManager : MonoBehaviour
     public void SwitchColour()
     {
         menuManager.SwitchColour(player1, player2);
+        string fen = board.intern.fenManager.BoardToFen();
+        StartCoroutine(((Bot.StockFishOnline)player2.bot).GetBestMove(fen));
+        board.@extern.Update(this);
     }
 
     public void ApplyFenstring(string fenString)
