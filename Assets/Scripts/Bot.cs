@@ -71,6 +71,11 @@ public class Bot
             int yCordEnd = 0;
             bool startCordPassed = false;
 
+            if (response.best_move == null)
+            {
+                Debug.LogError("Response is empty");
+                return null;
+            }
 
             Char[] letters = response.best_move.ToCharArray();
 

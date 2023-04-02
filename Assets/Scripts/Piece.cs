@@ -41,7 +41,7 @@ public class Piece
         public None(Board board) : base (board)
         {
             List<Vector2Int> moveOffsets = new List<Vector2Int>();
-            intern = new Intern(moveOffsets);
+            intern = new Intern(this, moveOffsets);
             @extern = new Extern(this, Prefab.None, board);
         }
     }
@@ -66,7 +66,7 @@ public class Piece
                     new Vector2Int(-1, 0),
                     new Vector2Int(-1, 1)
                 };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.WhiteKing, board);
                 board.intern.whiteKing = this;
             }
@@ -86,7 +86,7 @@ public class Piece
                     new Vector2Int(-1, 0),
                     new Vector2Int(-1, 1)
                 };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.WhiteQueen, board);
             }
         }
@@ -102,7 +102,7 @@ public class Piece
                     new Vector2Int(0, -1),
                     new Vector2Int(-1, 0)
                 };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.WhiteRook, board);
             }
         }
@@ -117,7 +117,7 @@ public class Piece
                     new Vector2Int(-1, -1),
                     new Vector2Int(-1, 1)
                 };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.WhiteBischop, board);
             }
         }
@@ -136,7 +136,7 @@ public class Piece
                     new Vector2Int(-2, 1),
                     new Vector2Int(-1, 2)
                 };
-                intern = new Intern(moveOffsets);   
+                intern = new Intern(this, moveOffsets);   
                 @extern = new Extern(this, Prefab.WhiteKnight, board);
             }
         }
@@ -150,7 +150,7 @@ public class Piece
                     new Vector2Int(0, -1),
                     new Vector2Int(0, -2)
                 };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.WhitePawn, board);
             }
             public void RemoveDoublePawnPush()
@@ -180,7 +180,7 @@ public class Piece
                     new Vector2Int(-1, 0),
                     new Vector2Int(-1, 1)
                 };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.BlackKing, board);
                 board.intern.blackKing = this;
             }
@@ -200,7 +200,7 @@ public class Piece
                     new Vector2Int(-1, 0),
                     new Vector2Int(-1, 1)
                 };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.BlackQueen, board);
             }
         }
@@ -216,7 +216,7 @@ public class Piece
                     new Vector2Int(0, -1),
                     new Vector2Int(-1, 0)
                 };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.BlackRook, board);
             }
         }
@@ -231,7 +231,7 @@ public class Piece
                     new Vector2Int(-1, -1),
                     new Vector2Int(-1, 1)
                 };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.BlackBischop, board);
 
             }
@@ -251,7 +251,7 @@ public class Piece
                     new Vector2Int(-2, 1),
                     new Vector2Int(-1, 2)
                     };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.BlackKnight, board);
             }
         }
@@ -264,7 +264,7 @@ public class Piece
                     new Vector2Int(0,1),
                     new Vector2Int(0, 2)
                 };
-                intern = new Intern(moveOffsets);
+                intern = new Intern(this, moveOffsets);
                 @extern = new Extern(this, Prefab.BlackPawn, board);
             }
             public void RemoveDoublePawnPush()
@@ -275,24 +275,27 @@ public class Piece
     }
     public class Intern
     {
+        Piece piece;
         public Vector2Int position;
         public readonly List<Vector2Int> moveOffsets;
         public List<Move> legalMoves;
-        public Intern(List<Vector2Int> moveOffsets)
+        public Intern(Piece piece, List<Vector2Int> moveOffsets)
         {
+            this.piece = piece;
             this.moveOffsets = moveOffsets;
         }
         public bool IsSliding()
         {
-            if (GetType() == typeof(White.Bischop) | GetType() == typeof(Black.Bischop))
+            Debug.Log(GetType());
+            if (piece.GetType() == typeof(White.Bischop) | piece.GetType() == typeof(Black.Bischop))
             {
                 return true;
             }
-            if (GetType() == typeof(White.Rook) | GetType() == typeof(Black.Rook))
+            if (piece.GetType() == typeof(White.Rook) | piece.GetType() == typeof(Black.Rook))
             {
                 return true;
             }
-            if (GetType() == typeof(White.Queen) | GetType() == typeof(Black.Queen))
+            if (piece.GetType() == typeof(White.Queen) | piece.GetType() == typeof(Black.Queen))
             {
                 return true;
             }

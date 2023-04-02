@@ -31,35 +31,12 @@ public class Legal
         enPassant = new EnPassant(this);
         check = new Check(this);
     }
-    public bool IsOpponentsMove(Move bestMove, Player player)
-    {
-        if (board.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player.isPlayingWhite == true)
-        {
-            return false;
-        }
-        //if the piece is black and player1 is black 
-        if(board.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() != typeof(Piece.White) && player.isPlayingWhite == false)
-        {
-            return false;
-        }
-        //if the piece is white and player1 is black
-        if (board.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player.isPlayingWhite != false)
-        {
-            return true;
-        }
-        //if the piece is black and player1 is white
-        if (board.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() != typeof(Piece.White) && player.isPlayingWhite == true)
-        {
-            return true;
-        }
-        return false;
-    }
     public bool IsCapture(Move move)
     {
         Piece piece1 = board.array[move.startPosition.x, move.startPosition.y];
         Piece piece2 = board.array[move.endPosition.x, move.endPosition.y];
-        bool endPositionEmpty = piece2.GetColor() == typeof(Piece.None);
         bool differentColor = piece1.GetColor() != piece2.GetColor();
+        bool endPositionEmpty = piece2.GetType() == typeof(Piece.None);
         return (!endPositionEmpty) && differentColor;
     }
     public bool IsLegal(Move move)
@@ -77,7 +54,6 @@ public class Legal
         bool positionEmpty = piece.GetColor() == typeof(Piece.None);
         return positionEmpty;
     }
-
     public void Update(Piece.Intern piece, Vector2Int startPosition)
     {
         piece.legalMoves = new List<Move>();
