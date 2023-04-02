@@ -21,7 +21,10 @@ public class MoveManager
         moves.Add(move);
         moveQueue.Add(move);
     }
-    
+    public Piece[,] SimulateMove(Piece[,] array, Move move)
+    {
+        return array;
+    }
     //This functions executes all moves in the list moves, and returns all the captured pieces.
     public List<Piece> ExecuteMoveQueue(Board board)
     {

@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator LateStart(float waitTime)
     {
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime); 
         board.@extern.Update(this);
     }
 
