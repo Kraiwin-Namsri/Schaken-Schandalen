@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         Piece grabedPiece = Piece.Lookup(gameObject);
         if (gameObject != null & grabedPiece != null)
         {
-            Legal.Generate(board.intern);
+            board.intern.GenerateLegalMoves();
             markerManager.hints.Visualize(board, grabedPiece);
         }
     }
@@ -65,9 +65,9 @@ public class GameManager : MonoBehaviour
             {
                 foreach (Move legalMove in releasedPiece.intern.legalMoves)
                 {
-                    if (legalMove == new Move(releasedPiece.intern.position, releasePosition, board.intern))
+                    if (legalMove == new Move(releasedPiece.intern.position, releasePosition))
                     {
-                        if(board.intern.whiteToMove ==  player1.isPlayingWhite)
+                        if(board.intern.legal.whiteToMove ==  player1.isPlayingWhite)
                         {
                             moveManager.AddMove(legalMove);
                             List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
@@ -85,8 +85,7 @@ public class GameManager : MonoBehaviour
     }
     public void Callback_StockFish(Move move)
     {
-        bool isOpponentsMove = Legal.CheckOriginBestMove(move, board, player1);
-
+        bool isOpponentsMove = board.intern.legal.IsOpponentsMove(move, player1);
         if(isOpponentsMove == true)
         {
             moveManager.AddMove(move);
