@@ -66,13 +66,12 @@ public class GameManager : MonoBehaviour
                 foreach (Move legalMove in releasedPiece.intern.legalMoves)
                 {
                     if (legalMove == new Move(releasedPiece.intern.position, releasePosition, board.intern))
-                    {
+                    { 
                         if(board.intern.whiteToMove ==  player1.isPlayingWhite)
                         {
                             moveManager.AddMove(legalMove);
                             List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
                             pedestal.AddPieces(capturedPieces);
-                            board.intern.whiteToMove = !board.intern.whiteToMove;
                         }
                         break;
                     }
@@ -87,18 +86,14 @@ public class GameManager : MonoBehaviour
     }
     public void Callback_StockFish(Move move)
     {
-        Debug.Log("has been returned");
         bool isOpponentsMove = Legal.IsMoveFromOpponent(move, board, player1);
 
-        Debug.Log(isOpponentsMove);
         if(isOpponentsMove == true)
         {
-            Debug.Log("added move");
             moveManager.AddMove(move);
             List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
             pedestal.AddPieces(capturedPieces);
             board.@extern.Update(this);
-            board.intern.whiteToMove = !board.intern.whiteToMove;
         }
     }
 

@@ -468,11 +468,8 @@ public class Fen
         Vector2Int enPassantCoordinate = board.intern.enPassant.coordinate;
         string enPassantCoordinatesString =  "";
 
-        Debug.Log(enPassantCoordinate);
-
         if(enPassantCoordinate != new Vector2Int(-1,-1))
         {
-            Debug.Log("door check");
             switch (enPassantCoordinate.x)
             {
                 case 0:
@@ -516,7 +513,6 @@ public class Fen
         fenStringBuild += board.intern.halfMoveClockCounter.ToString();
         fenStringBuild += " ";
         fenStringBuild += board.intern.fullMoveCounter.ToString();
-        Debug.Log(fenStringBuild);
         return fenStringBuild;
         }
 }

@@ -51,6 +51,7 @@ public class MoveManager
                 board.intern.UpdateHalfMove();
                 board.intern.UpdateHalfMoveClock(Legal.IsCapture(currentMove, board.intern));
                 board.intern.UpdateFullMove();
+                Debug.Log(board.intern.fenManager.BoardToFen());
 
 
 

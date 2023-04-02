@@ -36,7 +36,6 @@ public class Bot
         }
         public IEnumerator GetBestMove(string forsythEdwardsNotationString, Action<Move> callback)
         {
-            Debug.Log(forsythEdwardsNotationString);
             //Refactor to yield on correct moment
             yield return new WaitForSeconds(0);
             var request = (HttpWebRequest)WebRequest.Create(host);
@@ -56,8 +55,7 @@ public class Bot
             var response = (HttpWebResponse)request.GetResponse();
             var json = new StreamReader(response.GetResponseStream()).ReadToEnd();
             Response parsed = JsonConvert.DeserializeObject<Response>(json);
-            Debug.Log(parsed.fen);
-            Debug.Log(parsed.best_move);
+
             Move stockFishMove = BestMoveToCoordinates(parsed);
             callback(stockFishMove);
         }
@@ -170,8 +168,6 @@ public class Bot
             }
             Vector2Int startCoordinates = new Vector2Int(xCordStart, yCordStart);
             Vector2Int endCoordinates = new Vector2Int(xCordEnd, yCordEnd);
-            Debug.Log(startCoordinates);
-            Debug.Log(endCoordinates);
             return new Move(startCoordinates, endCoordinates, board.intern, null, player.isPlayingWhite);
         }
     }
