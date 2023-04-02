@@ -55,7 +55,6 @@ public class Bot
             var response = (HttpWebResponse)request.GetResponse();
             var json = new StreamReader(response.GetResponseStream()).ReadToEnd();
             Response parsed = JsonConvert.DeserializeObject<Response>(json);
-
             Move stockFishMove = BestMoveToCoordinates(parsed);
             callback(stockFishMove);
         }
@@ -168,7 +167,7 @@ public class Bot
             }
             Vector2Int startCoordinates = new Vector2Int(xCordStart, yCordStart);
             Vector2Int endCoordinates = new Vector2Int(xCordEnd, yCordEnd);
-            return new Move(startCoordinates, endCoordinates, board.intern, null, player.isPlayingWhite);
+            return new Move(startCoordinates, endCoordinates);
         }
     }
 }

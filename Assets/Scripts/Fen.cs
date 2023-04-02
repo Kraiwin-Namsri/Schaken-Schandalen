@@ -15,9 +15,6 @@ public class Fen
         // To Do: If there is no piece to place. Put a None Piece in its place. (Piece.None)
         public void Apply(string fenString)
         {
-            board.intern.castleAbility = new CastleAbility();
-            board.intern.enPassant = new EnPassant();
-
             int x = 0;
             int y = 0;
             int i = 0;
@@ -143,10 +140,10 @@ public class Fen
                     switch (letter)
                     {
                         case 'w':
-                            board.intern.whiteToMove = true;
+                            board.intern.legal.whiteToMove = true;
                             break;
                         case 'b':
-                            board.intern.whiteToMove = false;
+                            board.intern.legal.whiteToMove = false;
                             break;
                         case ' ':
                             toMoveDone = true;
@@ -161,22 +158,22 @@ public class Fen
                     switch (letter)
                     {
                         case 'K':
-                            board.intern.castleAbility.whiteKingSide = true;
+                            board.intern.legal.castleAbility.whiteKingSide = true;
                             break;
                         case 'Q':
-                            board.intern.castleAbility.whiteQueenSide = true;
+                            board.intern.legal.castleAbility.whiteQueenSide = true;
                             break;
                         case 'k':
-                            board.intern.castleAbility.blackKingSide = true;
+                            board.intern.legal.castleAbility.blackKingSide = true;
                             break;
                         case 'q':
-                            board.intern.castleAbility.blackQueenSide = true;
+                            board.intern.legal.castleAbility.blackQueenSide = true;
                             break;
                         case '-':
-                            board.intern.castleAbility.whiteKingSide = false;
-                            board.intern.castleAbility.whiteQueenSide = false;
-                            board.intern.castleAbility.whiteKingSide = false;
-                            board.intern.castleAbility.whiteKingSide = false;
+                            board.intern.legal.castleAbility.whiteKingSide = false;
+                            board.intern.legal.castleAbility.whiteQueenSide = false;
+                            board.intern.legal.castleAbility.whiteKingSide = false;
+                            board.intern.legal.castleAbility.whiteKingSide = false;
                             break;
                         case ' ':
                             castleDone = true;
@@ -236,7 +233,7 @@ public class Fen
                 }
                 else if (!halfCounterDone)
                 {
-                    if (int.TryParse(letter.ToString(), out board.intern.halfMoveCounter))
+                    if (int.TryParse(letter.ToString(), out board.intern.legal.halfMoveCounter))
                         halfCounterDone = true;
 
                 }
@@ -244,7 +241,7 @@ public class Fen
                 {
                     if (letter == ' ')
                         break;
-                    if (int.TryParse(letter.ToString(), out board.intern.fullMoveCounter))
+                    if (int.TryParse(letter.ToString(), out board.intern.legal.fullMoveCounter))
                         fullCounterDone = true;
                     else
                         Debug.LogError("Fen String is malformed!");
@@ -430,42 +427,42 @@ public class Fen
             }
             //Check whose turn it is
             fenStringBuild += " ";
-            if (board.intern.halfMoveCounter % 2 == 0)
+            if (board.intern.legal.halfMoveCounter % 2 == 0)
             {
-                board.intern.whiteToMove = true;
+                board.intern.legal.whiteToMove = true;
                 fenStringBuild += "w";
             }
             else
             {
-                board.intern.whiteToMove = false;
+                board.intern.legal.whiteToMove = false;
                 fenStringBuild += "b";
             }
             fenStringBuild += " ";
 
             //Check the castleability
-            if (board.intern.castleAbility.whiteKingSide == true)
+            if (board.intern.legal.castleAbility.whiteKingSide == true)
             {
                 fenStringBuild += "K";
             }
-            if (board.intern.castleAbility.whiteQueenSide == true)
+            if (board.intern.legal.castleAbility.whiteQueenSide == true)
             {
                 fenStringBuild += "Q";
             }
-            if (board.intern.castleAbility.blackKingSide == true)
+            if (board.intern.legal.castleAbility.blackKingSide == true)
             {
                 fenStringBuild += "k";
             }
-            if (board.intern.castleAbility.blackQueenSide == true)
+            if (board.intern.legal.castleAbility.blackQueenSide == true)
             {
                 fenStringBuild += "q";
             }
-            if (board.intern.castleAbility.whiteKingSide == false && board.intern.castleAbility.whiteQueenSide == false && board.intern.castleAbility.blackKingSide == false && board.intern.castleAbility.blackQueenSide == false)
+            if (board.intern.legal.castleAbility.whiteKingSide == false && board.intern.legal.castleAbility.whiteQueenSide == false && board.intern.legal.castleAbility.blackKingSide == false && board.intern.legal.castleAbility.blackQueenSide == false)
             {
                 fenStringBuild += "-";
             }
 
         //To Do: convert vector2Int to ingame coordinate.
-        Vector2Int enPassantCoordinate = board.intern.enPassant.coordinate;
+        Vector2Int enPassantCoordinate = board.intern.legal.enPassant.coordinate;
         string enPassantCoordinatesString =  "";
 
         if(enPassantCoordinate != new Vector2Int(-1,-1))
@@ -510,7 +507,7 @@ public class Fen
         fenStringBuild += " ";
 
         //Check the Move Count
-        fenStringBuild += board.intern.halfMoveClockCounter.ToString();
+        fenStringBuild += board.intern.legal.halfMoveClockCounter.ToString();
         fenStringBuild += " ";
         fenStringBuild += board.intern.fullMoveCounter.ToString();
         return fenStringBuild;

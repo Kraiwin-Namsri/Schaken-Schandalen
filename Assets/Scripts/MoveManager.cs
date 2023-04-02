@@ -21,10 +21,6 @@ public class MoveManager
         moves.Add(move);
         moveQueue.Add(move);
     }
-    public Piece[,] SimulateMove(Piece[,] array, Move move)
-    {
-        return array;
-    }
     //This functions executes all moves in the list moves, and returns all the captured pieces.
     public List<Piece> ExecuteMoveQueue(Board board)
     {
@@ -46,19 +42,17 @@ public class MoveManager
                 {
                     ((dynamic) buffer1).RemoveDoublePawnPush();
                 }
-                board.intern.UpdateEnPassant(buffer1, currentMove);
-                board.intern.UpdateCastleAbility(buffer1, currentMove);
-                board.intern.UpdateHalfMove();
-                board.intern.UpdateHalfMoveClock(Legal.IsCapture(currentMove, board.intern));
-                board.intern.UpdateFullMove();
-                Debug.Log(board.intern.fenManager.BoardToFen());
+                board.intern.legal.enPassant.Update(buffer1, currentMove);
+                board.intern.legal.castleAbility.Update(buffer1, currentMove);
+                board.intern.legal.remise.UpdateHalfMove();
+                board.intern.legal.remise.UpdateHalfMoveClock(currentMove);
 
 
 
                 //Set the internal position to the endposition of the move
                 buffer1.intern.position = currentMove.endPosition;
 
-                if (Legal.IsCapture(currentMove, board.intern))
+                if (board.intern.legal.IsCapture(currentMove))
                 {
                     Piece buffer3 = new Piece.None(board);
 
@@ -87,14 +81,12 @@ public class Move
 {
     public Vector2Int startPosition;
     public Vector2Int endPosition;
-    public bool fromWhite;
     public Move appendedMove;
 
-    public Move(Vector2Int startPosition, Vector2Int endPosition, Board.Intern board, Move appendMove = null, bool fromWhite = false)
+    public Move(Vector2Int startPosition, Vector2Int endPosition, Move appendMove = null)
     {
         this.startPosition = startPosition;
         this.endPosition = endPosition;
-        this.fromWhite = fromWhite;
         this.appendedMove = appendMove;
     }
 
