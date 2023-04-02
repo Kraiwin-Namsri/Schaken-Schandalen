@@ -6,9 +6,22 @@ using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System;
 
 public static class Legal
 {
+    public static bool CheckOriginBestMove(Move bestMove, Board board, Player player1)
+    {
+        if (board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player1.isPlayingWhite == false)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+    }
     public static void Generate(Board.Intern internBoard)
     {
         internBoard.checkMoves.Clear();
@@ -83,8 +96,12 @@ public static class Legal
 
         bool legalPos = Move.Contains(GeneratePieceMoves(movedPiece, move, internBoard), move);
 
+
+
         return (endPositionFree & legalPos);
     }
+
+
     public static bool IsPositionFree(Vector2Int position, Board.Intern internBoard)
     {
         Piece piece = internBoard.array[position.x, position.y];

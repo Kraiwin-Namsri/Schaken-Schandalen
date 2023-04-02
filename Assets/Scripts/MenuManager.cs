@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuManager : MonoBehaviour
+public class MenuManager
 {
     public void LoadMainScene()
     {
@@ -16,27 +16,28 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("VS_Stockfish");
     }
 
-    public static void Backwards()
+    public void Backwards()
     {
 
     }
 
-    public static void Forwards()
+    public void Forwards()
     {
 
     }
 
-    public static void SwitchColour(Board board)
+    public void SwitchColour(Player player1, Player player2)
     {
-        board.intern.playerIsWhite = !board.intern.playerIsWhite;
+        player1.isPlayingWhite = !player1.isPlayingWhite;
+        player2.isPlayingWhite = !player2.isPlayingWhite;
     }
 
-    public static void StockfishBestMove()
+    public void StockfishBestMove()
     {
 
     }
 
-    public static void EnterFenstring()
+    public void EnterFenstring()
     {
 
     }
