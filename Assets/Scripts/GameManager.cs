@@ -70,5 +70,7 @@ public class GameManager : MonoBehaviour
             board.@extern.Update(this);
         }
     }
+
+
 }
 
