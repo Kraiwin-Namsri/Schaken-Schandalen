@@ -14,6 +14,11 @@ using Mono.Cecil;
 
 public class StockFish
 {
+    Board board;
+    public StockFish(Board board)
+    {
+        this.board = board;
+    }
     class Response
     {
         public string platform { get; set; }
@@ -21,7 +26,7 @@ public class StockFish
         public string fen { get; set; }
     }
 
-    public static IEnumerator GetBestMove(string forsythEdwardsNotationString, Board.Intern board)
+    public IEnumerator GetBestMove(string forsythEdwardsNotationString, Action<Move> callback)
     {
         yield return new WaitForSeconds(0);
         var request = (HttpWebRequest)WebRequest.Create("http://127.0.0.1:5000");
@@ -43,10 +48,11 @@ public class StockFish
 
         Response parsed = JsonConvert.DeserializeObject<Response>(json);
 
-        BestMoveToCoordinates(parsed.best_move, board);
+        Move stockFishMove = BestMoveToCoordinates(parsed.best_move);
+        callback(stockFishMove);
     }
 
-    public static void BestMoveToCoordinates(string response, Board.Intern board)
+    public Move BestMoveToCoordinates(string response)
     {
         int xCordStart = 0;
         int xCordEnd = 0;
@@ -152,10 +158,9 @@ public class StockFish
                     break;
             }
             startCordPassed = true;
-            Vector2Int startCoordinates = new Vector2Int(xCordStart, yCordStart);
-            Vector2Int endCoordinates = new Vector2Int(xCordEnd, yCordEnd);
-
-            Move bestmove = new Move(startCoordinates, endCoordinates, board);
         }
+        Vector2Int startCoordinates = new Vector2Int(xCordStart, yCordStart);
+        Vector2Int endCoordinates = new Vector2Int(xCordEnd, yCordEnd);
+        return new Move(startCoordinates, endCoordinates, board.intern);
     }
 }

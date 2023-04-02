@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     private Pedestal pedestal;
     private MarkerManager markerManager;
     private MoveManager moveManager;
+    private StockFish stockFish;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
         pedestal = new Pedestal();
         markerManager = new MarkerManager();
         moveManager = new MoveManager();
+        stockFish = new StockFish(board);
         StartCoroutine(LateStart(0.1f));
     }
     IEnumerator LateStart(float waitTime)
@@ -69,6 +71,10 @@ public class GameManager : MonoBehaviour
             }
             board.@extern.Update(this);
         }
+    }
+    public void Callback_StockFish()
+    {
+
     }
 
 
