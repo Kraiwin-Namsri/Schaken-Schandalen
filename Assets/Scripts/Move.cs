@@ -10,20 +10,23 @@ using UnityEngine;
 public class MoveManager
 {
     private List<Move> moves;
+    private List<Move> moveQueue;
     public MoveManager()
     {
         moves = new List<Move>();
+        moveQueue = new List<Move>();
     }
     public void AddMove(Move move)
     {
         moves.Add(move);
+        moveQueue.Add(move);
     }
     
     //This functions executes all moves in the list moves, and returns all the captured pieces.
     public List<Piece> ExecuteMoveQueue(Board board)
     {
         List<Piece> capturedPieces = new List<Piece>();
-        foreach (Move move in moves)
+        foreach (Move move in moveQueue)
         {
             //Buffer for appended moves.
             Move currentMove = move;
@@ -39,8 +42,8 @@ public class MoveManager
                 if (buffer1.GetType() == typeof(Piece.White.Pawn) | buffer1.GetType() == typeof(Piece.Black.Pawn))
                 {
                     ((dynamic) buffer1).RemoveDoublePawnPush();
-                    board.intern.UpdateEnPassant(move);
                 }
+                board.intern.UpdateEnPassant(buffer1, move);
                 board.intern.UpdateCastleAbility(buffer1, currentMove);
                 board.intern.UpdateHalfMove();
                 board.intern.UpdateHalfMoveClock(Legal.IsCapture(currentMove, board.intern));
@@ -70,7 +73,7 @@ public class MoveManager
                 currentMove = currentMove.appendedMove;
             } while (currentMove is not null);
         }
-        moves.Clear();
+        moveQueue.Clear();
         return capturedPieces;
     }
     

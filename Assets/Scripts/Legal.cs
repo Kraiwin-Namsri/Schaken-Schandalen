@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -148,6 +149,31 @@ public static class Legal
         }
         return legalMoves;
     }
+
+    static List<Move> GenerateEnPassant(Piece piece, Vector2Int startPosition, Board.Intern board, Board.Intern.EnPassant enPassant)
+    {
+        List<Move> legalMoves = new List<Move>();
+        bool isWhitePawn = piece.GetColor() == typeof(Piece.White);
+        if (isWhitePawn)
+        {
+            bool isPawnOnSide = enPassant.coordinate.y + 1 == startPosition.y && (enPassant.coordinate.x + 1 == startPosition.x | enPassant.coordinate.x - 1 == startPosition.x);
+            if (isPawnOnSide) 
+            {
+                Move capture = new Move(startPosition, new Vector2Int(enPassant.coordinate.x, enPassant.coordinate.y + 1), board);
+                legalMoves.Add(new Move(startPosition, enPassant.coordinate, board, capture));
+            } 
+        } else
+        {
+            bool isPawnOnSide = enPassant.coordinate.y - 1 == startPosition.y && (enPassant.coordinate.x + 1 == startPosition.x | enPassant.coordinate.x - 1 == startPosition.x);
+            if (isPawnOnSide)
+            {
+                Move capture = new Move(startPosition, new Vector2Int(enPassant.coordinate.x, enPassant.coordinate.y - 1), board);
+                legalMoves.Add(new Move(startPosition, enPassant.coordinate, board, capture));
+            }
+        }
+        return legalMoves;
+    }
+
     private static List<Move> GeneratePieceMoves(Piece piece, Move move, Board.Intern internBoard)
     {
         List<Move> pieceMoves = new List<Move>();
@@ -160,7 +186,7 @@ public static class Legal
             pieceMoves = pieceMoves.Concat(GenerateNonSliding(move.startPosition, piece, internBoard)).ToList();
         }
 
-        if (piece.GetType() == typeof(Piece.White.King) | piece.GetType() == typeof(Piece.Black.King) | piece.GetType() == typeof(Piece.White.Rook) | piece.GetType() == typeof(Piece.Black.Rook))
+        if (piece.GetType() == typeof(Piece.White.King) | piece .GetType() == typeof(Piece.Black.King) | piece.GetType() == typeof(Piece.White.Rook) | piece.GetType() == typeof(Piece.Black.Rook))
         {
             pieceMoves = pieceMoves.Concat(GenerateCastling(move.startPosition, piece, internBoard)).ToList();
         }
@@ -168,6 +194,7 @@ public static class Legal
         if (piece.GetType() == typeof(Piece.White.Pawn) | piece.GetType() == typeof(Piece.Black.Pawn))
         {
             pieceMoves = pieceMoves.Concat(GeneratePawnCapture(move.startPosition, piece, internBoard)).ToList();
+            pieceMoves = pieceMoves.Concat(GenerateEnPassant(piece, move.startPosition, internBoard, internBoard.enPassant)).ToList();
         }
         return pieceMoves;
     }
