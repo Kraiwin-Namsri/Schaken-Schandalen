@@ -215,17 +215,17 @@ public class Legal
             return false;
         }
         //if the piece is black and player1 is black 
-        else if(board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() != typeof(Piece.White) && player1.isPlayingWhite == false)
+        else if(board.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() != typeof(Piece.White) && player.isPlayingWhite == false)
         {
             return false;
         }
         //if the piece is white and player1 is black
-        else if (board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player1.isPlayingWhite != false)
+        else if (board.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() == typeof(Piece.White) && player.isPlayingWhite != false)
         {
             return true;
         }
         //if the piece is black and player1 is white
-        else if (board.intern.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() != typeof(Piece.White) && player1.isPlayingWhite == true)
+        else if (board.array[bestMove.startPosition.x, bestMove.startPosition.y].GetColor() != typeof(Piece.White) && player.isPlayingWhite == true)
         {
             return true;
         }

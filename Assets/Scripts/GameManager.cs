@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
                             moveManager.AddMove(legalMove);
                             List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
                             pedestal.AddPieces(capturedPieces);
-                            board.intern.whiteToMove = !board.intern.whiteToMove;
+                            board.intern.legal.whiteToMove = !board.intern.legal.whiteToMove;
                         }
                         break;
                     }
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
             List<Piece> capturedPieces = moveManager.ExecuteMoveQueue(board);
             pedestal.AddPieces(capturedPieces);
             board.@extern.Update(this);
-            board.intern.whiteToMove = !board.intern.whiteToMove;
+            board.intern.legal.whiteToMove = !board.intern.legal.whiteToMove;
         }
     }
 
