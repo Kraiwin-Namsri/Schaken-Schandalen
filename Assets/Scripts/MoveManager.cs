@@ -27,55 +27,51 @@ public class MoveManager
         List<Piece> capturedPieces = new List<Piece>();
         foreach (Move move in moveQueue)
         {
-            //Buffer for appended moves.
-            Move currentMove = move;
-            do
-            {
-                //Store the two pieces on the start and end position
-                Piece buffer1 = board.intern.array[currentMove.startPosition.x, currentMove.startPosition.y];
-                Piece buffer2 = board.intern.array[currentMove.endPosition.x, currentMove.endPosition.y];
-
-
-
-                //Update rules
-                if (buffer1.GetType() == typeof(Piece.White.Pawn) | buffer1.GetType() == typeof(Piece.Black.Pawn))
-                {
-                    ((dynamic) buffer1).RemoveDoublePawnPush();
-                }
-                board.intern.legal.enPassant.Update(buffer1, currentMove);
-                board.intern.legal.castleAbility.Update(buffer1, currentMove);
-                board.intern.legal.remise.UpdateHalfMove();
-                board.intern.legal.remise.UpdateHalfMoveClock(currentMove);
-                board.intern.legal.remise.UpdateFullMove();
-
-
-
-                //Set the internal position to the endposition of the move
-                buffer1.intern.position = currentMove.endPosition;
-
-                if (board.intern.legal.IsCapture(currentMove))
-                {
-                    Piece buffer3 = new Piece.None(board);
-
-                    buffer3.intern.position = currentMove.startPosition;
-
-                    board.intern.array[buffer1.intern.position.x, buffer1.intern.position.y] = buffer1;
-                    board.intern.array[buffer3.intern.position.x, buffer3.intern.position.y] = buffer3;
-                    capturedPieces.Add(buffer2);
-                }
-                else
-                {
-                    buffer2.intern.position = currentMove.startPosition;
-                    board.intern.array[buffer1.intern.position.x, buffer1.intern.position.y] = buffer1;
-                    board.intern.array[buffer2.intern.position.x, buffer2.intern.position.y] = buffer2;
-                }
+            Piece startPiece = board.intern.array[move.startPosition.x, move.startPosition.y];
                 
-                currentMove = currentMove.appendedMove;
-            } while (currentMove is not null);
+            //Update rules
+            if (startPiece.GetType() == typeof(Piece.White.Pawn) | startPiece.GetType() == typeof(Piece.Black.Pawn))
+            {
+                ((dynamic) startPiece).RemoveDoublePawnPush();
+            }
+            board.intern.legal.enPassant.Update(startPiece, move);
+            board.intern.legal.castleAbility.Update(startPiece, move);
+            board.intern.legal.remise.UpdateHalfMove();
+            board.intern.legal.remise.UpdateHalfMoveClock(move);
+            board.intern.legal.remise.UpdateFullMove();
+
+            ExecuteMove(move, board.intern.array, board);
         }
-        Debug.Log(board.intern.fenManager.BoardToFen());
         moveQueue.Clear();
         return capturedPieces;
+    }
+    public static void ExecuteMove(Move move, Piece[,] array, Board board)
+    {
+        Piece startPiece = array[move.startPosition.x, move.startPosition.y];
+        
+        Move currentMove = move;
+        do
+        {
+            Piece buffer = array[currentMove.endPosition.x, currentMove.endPosition.y];
+            startPiece.intern.position = currentMove.endPosition;
+            if (Legal.IsCapture(currentMove, array))
+            {
+                Piece buffer3 = new Piece.None(board);
+
+                buffer3.intern.position = currentMove.startPosition;
+
+                array[startPiece.intern.position.x, startPiece.intern.position.y] = startPiece;
+                array[buffer3.intern.position.x, buffer3.intern.position.y] = buffer3;
+            }
+            else
+            {
+                buffer.intern.position = currentMove.startPosition;
+                array[startPiece.intern.position.x, startPiece.intern.position.y] = startPiece;
+                array[buffer.intern.position.x, buffer.intern.position.y] = buffer;
+            }
+
+            currentMove = currentMove.appendedMove;
+        } while (currentMove is not null);
     }
     
 }

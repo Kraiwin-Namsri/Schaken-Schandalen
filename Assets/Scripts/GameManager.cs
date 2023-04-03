@@ -33,8 +33,8 @@ public class GameManager : MonoBehaviour
         Action<Player, Move> callback = new Action<Player, Move>((Player player, Move move) => SubmitMoveCallback(player, move));
         player1 = new Player(callback, true);
         player2 = new Player(callback, false);
-        player2.bot = new Bot.StockFishOnline(player2, board, "http://127.0.0.1:5000");
-        supervisor = new Bot.StockFishOnline(null, board, "http://127.0.0.1:5000");
+        player2.bot = new Bot.StockFishOnline(player2, board, "http://192.168.1.10:5000");
+        supervisor = new Bot.StockFishOnline(null, board, "http://192.168.1.10:5000");
 
         menuManager = new MenuManager();
         StartCoroutine(LateStart(0.1f));

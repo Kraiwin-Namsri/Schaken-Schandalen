@@ -32,6 +32,14 @@ public class Legal
         enPassant = new EnPassant(this);
         check = new Check(this);
     }
+    public static bool IsCapture(Move move, Piece[,] array)
+    {
+        Piece piece1 = array[move.startPosition.x, move.startPosition.y];
+        Piece piece2 = array[move.endPosition.x, move.endPosition.y];
+        bool differentColor = piece1.GetColor() != piece2.GetColor();
+        bool endPositionEmpty = piece2.GetType() == typeof(Piece.None);
+        return (!endPositionEmpty) && differentColor;
+    }
     public bool IsCapture(Move move)
     {
         Piece piece1 = board.array[move.startPosition.x, move.startPosition.y];

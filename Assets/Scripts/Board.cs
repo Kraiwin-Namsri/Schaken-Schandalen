@@ -51,6 +51,25 @@ public class Board
                     }
                 }
             }
+            // This means there is a check somewhere and a lot of moves need to be calculated
+            if (legal.check.inCheck != -1)
+            {
+                for (int y = 0; y < array.GetLength(1); y++)
+                {
+                    for (int x = 0; x < array.GetLength(0); x++)
+                    {
+                        Piece piece = array[x, y];
+                        if (piece.GetColor() == typeof(Piece.White))
+                        {
+                            foreach (Move move in piece.intern.legalMoves)
+                            {
+                                Piece[,] arrayCopy = array.Clone() as Piece[,];
+                                MoveManager.ExecuteMove(move, arrayCopy, null);
+                            }
+                        }
+                    }
+                }
+            }
         }
         public bool IsInsideBounds(Vector2Int position)
         {
