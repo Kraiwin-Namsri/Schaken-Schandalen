@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager
 {
-    int counter = 0;
+    public int counter = 0;
     public void LoadMainScene()
     {
         SceneManager.LoadScene("Main");
@@ -22,6 +22,7 @@ public class MenuManager
         Debug.Log("backwards");
         counter++;
         Legal legal = internboard.legal;
+        Debug.Log(legal.gamePositions.Count);
         internboard.fenManager.Apply(legal.gamePositions[(legal.gamePositions.Count-1) - counter]);
     }
 

@@ -514,6 +514,7 @@ public class Fen
         fenStringBuild += board.intern.legal.halfMoveClockCounter.ToString();
         fenStringBuild += " ";
         fenStringBuild += board.intern.legal.fullMoveCounter.ToString();
+
         return fenStringBuild;
         }
 }
