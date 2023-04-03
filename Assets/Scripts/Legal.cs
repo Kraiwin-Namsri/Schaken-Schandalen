@@ -352,7 +352,7 @@ public class Legal
         public void RepeatedPosition(string fenstring, Board.Intern internboard)
         {
             string newFenstring = Regex.Replace(fenstring.Split()[0], @" ", "");
-            legal.gamePositions.Add(newFenstring);
+            legal.gamePositions.Add(fenstring);
 
             int occurences = 0;
             foreach (string gamePosition in legal.gamePositions)

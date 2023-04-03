@@ -73,7 +73,6 @@ public class GameManager : MonoBehaviour
                     if (legalMove == new Move(releasedPiece.intern.position, releasePosition))
                     {
                         player1.SubmitMove(legalMove);
-
                         string fen = board.intern.fenManager.BoardToFen();
                         StartCoroutine(((Bot.StockFishOnline)player2.bot).GetBestMove(fen));
                         break;

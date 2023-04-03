@@ -62,6 +62,9 @@ public class Pedestal
 
             Vector2 size = (Vector2)pedestalPlaySurfaceGameObject.transform.localScale;
 
+            size.x /= 2.5f;
+            size.y /= 7;
+
             //First count the amount of black and white pieces that are supposed be on the pedestal
             int amountWhitePieces = 0;
             int amountWhitePawns = 0;
@@ -116,7 +119,7 @@ public class Pedestal
             }
 
             //Calculate and set the position
-            Vector2 position = new Vector3((size.x / 32) - (8 * size.x / 16) + ((x * size.x / 16)), -size.y + (y * size.y * 2));
+            Vector2 position = new Vector3(-3/2*size.y + (y * size.y * 2), (size.x / 32) - (8 * size.x / 16) + ((x * size.x / 16)));
             latestCapturedPiece.@extern.pieceGameObject.transform.localPosition = position;
         }
     }
