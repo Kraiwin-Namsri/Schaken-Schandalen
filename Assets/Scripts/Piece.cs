@@ -275,7 +275,7 @@ public class Piece
     }
     public class Intern
     {
-        Piece piece;
+        public Piece piece;
         public Vector2Int position;
         public readonly List<Vector2Int> moveOffsets;
         public List<Move> legalMoves;
@@ -286,7 +286,6 @@ public class Piece
         }
         public bool IsSliding()
         {
-            Debug.Log(GetType());
             if (piece.GetType() == typeof(White.Bischop) | piece.GetType() == typeof(Black.Bischop))
             {
                 return true;
@@ -301,18 +300,7 @@ public class Piece
             }
             return false;
         }
-        public Type GetColor()
-        {
-            if (GetType().IsSubclassOf(typeof(White)))
-            {
-                return typeof(White);
-            }
-            if (GetType().IsSubclassOf(typeof(Black)))
-            {
-                return typeof(Black);
-            }
-            return typeof(None);
-        }
+
     }
     public class Extern
     {

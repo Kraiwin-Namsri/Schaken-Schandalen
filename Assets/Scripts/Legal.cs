@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using Unity.Mathematics;
+using UnityEditor.TextCore.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Board.Intern;
@@ -44,7 +45,7 @@ public class Legal
         bool endPositionFree = IsPositionFree(move.endPosition);
 
         Piece movedPiece = board.array[move.startPosition.x, move.startPosition.y];
-        Update(movedPiece.intern, move.startPosition);
+        Update(movedPiece, move.startPosition);
         bool legalPos = Move.Contains(movedPiece.intern.legalMoves, move);
         return (endPositionFree & legalPos);
     }
@@ -54,10 +55,10 @@ public class Legal
         bool positionEmpty = piece.GetColor() == typeof(Piece.None);
         return positionEmpty;
     }
-    public void Update(Piece.Intern piece, Vector2Int startPosition)
+    public void Update(Piece piece, Vector2Int startPosition)
     {
-        piece.legalMoves = new List<Move>();
-        if (piece.IsSliding())
+        piece.intern.legalMoves = new List<Move>();
+        if (piece.intern.IsSliding())
         {
             GenerateSliding(piece, startPosition);
         }
@@ -79,100 +80,73 @@ public class Legal
 
         check.Update(piece);
     }
-    void GenerateSliding(Piece.Intern piece, Vector2Int startPosition)
+    void GenerateSliding(Piece piece, Vector2Int startPosition)
     {
-        for (int i = 0; i < piece.moveOffsets.Count; i++)
+        foreach(Vector2Int moveOffset in piece.intern.moveOffsets)
         {
-            Vector2Int moveOffset = piece.moveOffsets[i];
-            Vector2Int delta = new Vector2Int(moveOffset.x, moveOffset.y);
-
-
-            while (delta.x + startPosition.x < board.array.GetLength(0) && delta.y + startPosition.y < board.array.GetLength(1) && delta.x + startPosition.x >= 0 && delta.y + startPosition.y >= 0)
+            Vector2Int endPosition = startPosition + moveOffset;
+            while (board.IsInsideBounds(endPosition))
             {
-                Vector2Int endPosition = new Vector2Int(delta.x + startPosition.x, delta.y + startPosition.y);
+                if (board.array[endPosition.x, endPosition.y].GetColor() != piece.GetColor())
+                    piece.intern.legalMoves.Add(new Move(startPosition, endPosition));
+                if (board.array[endPosition.x, endPosition.y].GetColor() == piece.GetColor())
+                    break;
                 if (board.array[endPosition.x, endPosition.y].GetType() != typeof(Piece.None))
                     break;
-                piece.legalMoves.Add(new Move(startPosition, endPosition));
-                delta += moveOffset;
+                endPosition = endPosition + moveOffset;
             }
         }
     }
-    void GenerateNonSliding(Piece.Intern piece, Vector2Int startPosition)
+    void GenerateNonSliding(Piece piece, Vector2Int startPosition)
     {
-        for (int i = 0; i < piece.moveOffsets.Count; i++)
+        foreach (Vector2Int moveOffset in piece.intern.moveOffsets)
         {
-            Vector2Int moveOffset = piece.moveOffsets[i];
-            if (startPosition.x + moveOffset.x < board.array.GetLength(0) && startPosition.y + moveOffset.y < board.array.GetLength(1) && startPosition.x + moveOffset.x >= 0 && startPosition.y + moveOffset.y >= 0)
+            Vector2Int endPosition = startPosition + moveOffset;
+            if (board.IsInsideBounds(endPosition))
             {
-                if (board.array[startPosition.x, startPosition.y].GetColor() != board.array[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].GetColor() | board.array[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].GetType() == typeof(Piece.None))
-                {
-                    Vector2Int endPosition = new Vector2Int(startPosition.x + moveOffset.x, startPosition.y + moveOffset.y);
-
-                    if (board.array[startPosition.x, startPosition.y].GetType() == typeof(Piece.White.Pawn) || board.array[startPosition.x, startPosition.y].GetType() == typeof(Piece.Black.Pawn))
-                    {
-                        if (board.array[startPosition.x + moveOffset.x, startPosition.y + moveOffset.y].GetType() != typeof(Piece.None))
-                        {
-
-                        }
-                        else
-                        {
-                            piece.legalMoves.Add(new Move(startPosition, endPosition));
-                        }
-                    }
-                    else
-                    {
-                        piece.legalMoves.Add(new Move(startPosition, endPosition));
-                    }
-                }
+                if (board.array[endPosition.x, endPosition.y].GetColor() != piece.GetColor())
+                    piece.intern.legalMoves.Add(new Move(startPosition, endPosition));
             }
         }
     }
-    void GeneratePawnCapture(Piece.Intern piece, Vector2Int startPosition)
+
+    void GeneratePawnCapture(Piece piece, Vector2Int startPosition)
     {
         if (piece.GetType() == typeof(Piece.Black.Pawn))
         {
-            Vector2Int blackOffset1 = new Vector2Int(1, 1);
-            Vector2Int blackOffset2 = new Vector2Int(-1, 1);
-
-            Vector2Int blackEndPosition1 = startPosition + blackOffset1;
-            Vector2Int blackEndPosition2 = startPosition + blackOffset2;
-
-            if (blackEndPosition1.x >= 0 && blackEndPosition1.y >= 0 && blackEndPosition1.x < board.array.GetLength(0) && blackEndPosition1.y < board.array.GetLength(1))
+            Vector2Int blackEndPosition = startPosition + new Vector2Int(1, 1);
+            if (board.IsInsideBounds(blackEndPosition))
             {
-                if (board.array[blackEndPosition1.x, blackEndPosition1.y].GetType() != typeof(Piece.None))
-                {
-                    piece.legalMoves.Add(new Move(startPosition, blackEndPosition1));
-                }
+                if (board.array[blackEndPosition.x, blackEndPosition.y].GetColor() != piece.GetColor())
+                    if (board.array[blackEndPosition.x, blackEndPosition.y].GetType() != typeof(Piece.None))
+                        piece.intern.legalMoves.Add(new Move(startPosition, blackEndPosition));
             }
-            if (blackEndPosition2.x >= 0 && blackEndPosition2.y >= 0 && blackEndPosition2.x < board.array.GetLength(0) && blackEndPosition2.y < board.array.GetLength(1))
+            
+            blackEndPosition = startPosition + new Vector2Int(-1, 1);
+            if (board.IsInsideBounds(blackEndPosition))
             {
-                if (board.array[blackEndPosition2.x, blackEndPosition2.y].GetType() != typeof(Piece.None))
-                {
-                    piece.legalMoves.Add(new Move(startPosition, blackEndPosition2));
-                }
+                if (board.array[blackEndPosition.x, blackEndPosition.y].GetColor() != piece.GetColor())
+                    if (board.array[blackEndPosition.x, blackEndPosition.y].GetType() != typeof(Piece.None))
+                        piece.intern.legalMoves.Add(new Move(startPosition, blackEndPosition));
             }
         }
-        else if (piece.GetType() == typeof(Piece.White.Pawn))
+
+        if (piece.GetType() == typeof(Piece.White.Pawn))
         {
-            Vector2Int whiteOffset1 = new Vector2Int(-1, -1);
-            Vector2Int whiteOffset2 = new Vector2Int(1, -1);
-
-            Vector2Int whiteEndPosition1 = startPosition + whiteOffset1;
-            Vector2Int whiteEndPosition2 = startPosition + whiteOffset2;
-
-            if (whiteEndPosition1.x >= 0 && whiteEndPosition1.y >= 0 && whiteEndPosition1.x < board.array.GetLength(0) && whiteEndPosition1.y < board.array.GetLength(1))
+            Vector2Int whiteEndPosition = startPosition + new Vector2Int(-1, -1);
+            if (board.IsInsideBounds(whiteEndPosition))
             {
-                if (board.array[whiteEndPosition1.x, whiteEndPosition1.y].GetType() != typeof(Piece.None))
-                {
-                    piece.legalMoves.Add(new Move(startPosition, whiteEndPosition1));
-                }
+                if (board.array[whiteEndPosition.x, whiteEndPosition.y].GetColor() != piece.GetColor())
+                    if (board.array[whiteEndPosition.x, whiteEndPosition.y].GetType() != typeof(Piece.None))
+                        piece.intern.legalMoves.Add(new Move(startPosition, whiteEndPosition));
             }
-            if (whiteEndPosition2.x >= 0 && whiteEndPosition2.y >= 0 && whiteEndPosition2.x < board.array.GetLength(0) && whiteEndPosition2.y < board.array.GetLength(1))
-            {
-                if (board.array[whiteEndPosition2.x, whiteEndPosition2.y].GetType() != typeof(Piece.None))
-                {
-                    piece.legalMoves.Add(new Move(startPosition, whiteEndPosition2));
-                }
+
+            whiteEndPosition = startPosition + new Vector2Int(1, -1);
+            if (board.IsInsideBounds(whiteEndPosition))
+            {   
+                if (board.array[whiteEndPosition.x, whiteEndPosition.y].GetColor() != piece.GetColor())
+                    if (board.array[whiteEndPosition.x, whiteEndPosition.y].GetType() != typeof(Piece.None))
+                        piece.intern.legalMoves.Add(new Move(startPosition, whiteEndPosition));
             }
         }
     }
@@ -188,50 +162,55 @@ public class Legal
         {
             this.legal = legal;
         }
-        public void Generate(Piece.Intern piece)
+        private bool isEmptyBetween(Vector2Int position1, Vector2Int position2)
+        {
+            for (int i = position1.x+1; i < position2.x-1; i++)
+            {
+                if (legal.board.array[i, position1.y].GetType() != typeof(Piece.None))
+                    return false;
+            }
+            return true;
+        }
+        public void Generate(Piece piece)
         {
             if (whiteKingSide)
             {
                 if (piece.GetType() == typeof(Piece.White.King))
                 {
-                    piece.legalMoves.Add(new Move(new Vector2Int(4, 7), new Vector2Int(6, 7), new Move(new Vector2Int(7, 7), new Vector2Int(5, 7))));
-                }
-                else if (piece.GetType() == typeof(Piece.White.Rook))
-                {
-                    piece.legalMoves.Add(new Move(new Vector2Int(7, 7), new Vector2Int(5, 7)));
+                    Move rookMove = new Move(new Vector2Int(7, 7), new Vector2Int(5, 7));
+                    Move kingMove = new Move(new Vector2Int(4, 7), new Vector2Int(6, 7), rookMove);
+                    if (isEmptyBetween(new Vector2Int(4, 7), new Vector2Int(7, 7)))
+                        piece.intern.legalMoves.Add(kingMove);
                 }
             }
             if (whiteQueenSide)
             {
                 if (piece.GetType() == typeof(Piece.White.King))
                 {
-                    piece.legalMoves.Add(new Move(new Vector2Int(4, 7), new Vector2Int(2, 7), new Move(new Vector2Int(0, 7), new Vector2Int(3, 7))));
-                }
-                else if (piece.GetType() == typeof(Piece.White.Rook))
-                {
-                    piece.legalMoves.Add(new Move(new Vector2Int(0, 7), new Vector2Int(3, 7)));
+                    Move rookMove = new Move(new Vector2Int(0, 7), new Vector2Int(3, 7));
+                    Move kingMove = new Move(new Vector2Int(4, 7), new Vector2Int(2, 7), rookMove);
+                    if (isEmptyBetween(new Vector2Int(0, 7), new Vector2Int(4, 7)))
+                        piece.intern.legalMoves.Add(kingMove);
                 }
             }
             if (blackKingSide)
             {
                 if (piece.GetType() == typeof(Piece.Black.King))
                 {
-                    piece.legalMoves.Add(new Move(new Vector2Int(4, 0), new Vector2Int(6, 0), new Move(new Vector2Int(7, 0), new Vector2Int(5, 0))));
-                }
-                else if (piece.GetType() == typeof(Piece.Black.Rook))
-                {
-                    piece.legalMoves.Add(new Move(new Vector2Int(7, 0), new Vector2Int(5, 0)));
+                    Move rookMove = new Move(new Vector2Int(7, 0), new Vector2Int(5, 0));
+                    Move kingMove = new Move(new Vector2Int(4, 0), new Vector2Int(6, 0), rookMove);
+                    if (isEmptyBetween(new Vector2Int(4, 0), new Vector2Int(7, 0)))
+                        piece.intern.legalMoves.Add(kingMove);
                 }
             }
             if (blackQueenSide)
             {
                 if (piece.GetType() == typeof(Piece.Black.King))
                 {
-                    piece.legalMoves.Add(new Move(new Vector2Int(4, 0), new Vector2Int(2, 0), new Move(new Vector2Int(0, 0), new Vector2Int(3, 0))));
-                }
-                else if (piece.GetType() == typeof(Piece.Black.Rook))
-                {
-                    piece.legalMoves.Add(new Move(new Vector2Int(0, 0), new Vector2Int(3, 0)));
+                    Move rookMove = new Move(new Vector2Int(0, 0), new Vector2Int(3, 0));
+                    Move kingMove = new Move(new Vector2Int(4, 0), new Vector2Int(2, 0), rookMove);
+                    if (isEmptyBetween(new Vector2Int(0, 0), new Vector2Int(4, 0)))
+                        piece.intern.legalMoves.Add(kingMove);
                 }
             }
         }
@@ -269,44 +248,6 @@ public class Legal
                     blackKingSide = false;
                 }
             }
-
-        }
-        //What does this function do?
-        void Update2(Piece piece, Board.Intern internboard)
-        {
-            if (piece.GetType() == typeof(Piece.White.King))
-            {
-                whiteKingSide = false;
-                whiteQueenSide = false;
-            }
-            else if (piece.GetType() == typeof(Piece.Black.King))
-            {
-                blackKingSide = false;
-                blackQueenSide = false;
-            }
-            else if (piece.GetType() == typeof(Piece.White.Rook))
-            {
-                if (piece.intern.position == new Vector2(7, 7))
-                {
-                    whiteKingSide = false;
-                }
-                else if (piece.intern.position == new Vector2(0, 7))
-                {
-                    whiteQueenSide = false;
-                }
-            }
-            else if (piece.GetType() == typeof(Piece.Black.Rook))
-            {
-                if (piece.intern.position == new Vector2(0, 0))
-                {
-                    blackQueenSide = false;
-                }
-                else if (piece.intern.position == new Vector2(7, 0))
-                {
-                    blackKingSide = false;
-                }
-            }
-
         }
     }
     public class EnPassant
@@ -317,29 +258,26 @@ public class Legal
         {
             this.legal = legal;
         }
-        public List<Move> Generate(Piece.Intern piece, Vector2Int startPosition)
+        public void Generate(Piece piece, Vector2Int startPosition)
         {
-            List<Move> legalMoves = new List<Move>();
-            bool isWhitePawn = piece.GetColor() == typeof(Piece.White);
-            if (isWhitePawn)
+            if (piece.GetType() == typeof(Piece.White.Pawn))
             {
                 bool isPawnOnSide = coordinate.y + 1 == startPosition.y && (coordinate.x + 1 == startPosition.x | coordinate.x - 1 == startPosition.x);
                 if (isPawnOnSide)
                 {
                     Move capture = new Move(startPosition, new Vector2Int(coordinate.x, coordinate.y + 1));
-                    legalMoves.Add(new Move(startPosition, coordinate, capture));
+                    piece.intern.legalMoves.Add(new Move(startPosition, coordinate, capture));
                 }
             }
-            else
+            else if (piece.GetType() == typeof(Piece.Black.Pawn))
             {
                 bool isPawnOnSide = coordinate.y - 1 == startPosition.y && (coordinate.x + 1 == startPosition.x | coordinate.x - 1 == startPosition.x);
                 if (isPawnOnSide)
                 {
                     Move capture = new Move(startPosition, new Vector2Int(coordinate.x, coordinate.y - 1));
-                    legalMoves.Add(new Move(startPosition, coordinate, capture));
+                    piece.intern.legalMoves.Add(new Move(startPosition, coordinate, capture));
                 }
             }
-            return legalMoves;
         }
 
         public void Update(Piece piece, Move move)
@@ -450,11 +388,11 @@ public class Legal
         {
             this.legal = legal;
         }
-        public void Update(Piece.Intern piece)
+        public void Update(Piece piece)
         {
             if (piece.GetColor() == typeof(Piece.White)) {
-                Move kingCapture = new Move(piece.position, legal.board.blackKing.intern.position);
-                if (piece.legalMoves.Contains(kingCapture))
+                Move kingCapture = new Move(piece.intern.position, legal.board.blackKing.intern.position);
+                if (piece.intern.legalMoves.Contains(kingCapture))
                 {
                     inCheck = 1;
                 } else
@@ -464,8 +402,8 @@ public class Legal
             }
             else
             {
-                Move kingCapture = new Move(piece.position, legal.board.whiteKing.intern.position);
-                if (piece.legalMoves.Contains(kingCapture))
+                Move kingCapture = new Move(piece.intern.position, legal.board.whiteKing.intern.position);
+                if (piece.intern.legalMoves.Contains(kingCapture))
                 {
                     inCheck = 0;
                 } else
