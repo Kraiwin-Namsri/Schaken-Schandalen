@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using Unity.Mathematics;
-using UnityEditor.TextCore.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Board.Intern;
