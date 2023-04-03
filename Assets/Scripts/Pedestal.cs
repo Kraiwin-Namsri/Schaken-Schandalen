@@ -120,5 +120,4 @@ public class Pedestal
             latestCapturedPiece.@extern.pieceGameObject.transform.localPosition = position;
         }
     }
-    
 }

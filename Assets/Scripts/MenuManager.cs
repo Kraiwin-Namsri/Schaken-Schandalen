@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager
 {
+    int counter = 0;
     public void LoadMainScene()
     {
         SceneManager.LoadScene("Main");
@@ -16,14 +17,20 @@ public class MenuManager
         SceneManager.LoadScene("VS_Stockfish");
     }
 
-    public void Backwards(Board.Intern internbaord)
+    public void Backwards(Board.Intern internboard)
     {
-
+        Debug.Log("backwards");
+        counter++;
+        Legal legal = internboard.legal;
+        internboard.fenManager.Apply(legal.gamePositions[(legal.gamePositions.Count-1) - counter]);
     }
 
-    public void Forwards(Board.Intern internbaord)
+    public void Forwards(Board.Intern internboard)
     {
-
+        Debug.Log("forewards");
+        counter--;
+        Legal legal = internboard.legal;
+        internboard.fenManager.Apply(legal.gamePositions[(legal.gamePositions.Count - 1) - counter]);
     }
 
     public void SwitchColour(Player player1, Player player2)
